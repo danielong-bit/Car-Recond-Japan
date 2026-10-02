@@ -1,85 +1,148 @@
-const vehicleViews=[
-  {src:"assets/audi-s5/front-view.webp",name:"Front",alt:"Audi S5 Avant front view"},
-  {src:"assets/audi-s5/front-three-quarter.webp",name:"Front 3/4",alt:"Audi S5 Avant front three-quarter view"},
-  {src:"assets/audi-s5/rear-three-quarter.webp",name:"Rear 3/4",alt:"Audi S5 Avant rear three-quarter view"},
-  {src:"assets/audi-s5/rear-view.webp",name:"Rear",alt:"Audi S5 Avant rear view"}
-];
-
-const detailViews={
-  engine:{src:"assets/audi-s5/engine.webp",alt:"Audi S5 Avant engine bay"},
-  wheel:{src:"assets/audi-s5/wheel-brake.webp",alt:"Audi S5 Avant wheel and red S brake caliper"},
-  cockpit:{src:"assets/audi-s5/cockpit.webp",alt:"Audi S5 Avant right-hand-drive cockpit"},
-  audio:{src:"assets/audi-s5/bang-olufsen.webp",alt:"Audi S5 Avant Bang and Olufsen speaker"},
-  cargo:{src:"assets/audi-s5/cargo.webp",alt:"Audi S5 Avant cargo area"}
+const details={
+  engine:{
+    title:"ENGINE",
+    subtitle:"Performance hardware beneath the bonnet.",
+    description:"A closer look at the vehicle's actual engine compartment and visible mechanical components. Engine output and other specifications remain unverified until stock documentation is supplied.",
+    src:"assets/audi-s5/engine.webp",
+    alt:"Audi S5 Avant engine bay",
+    x:"35%",y:"45%"
+  },
+  cockpit:{
+    title:"COCKPIT",
+    subtitle:"Driver-focused digital cabin.",
+    description:"Explore the actual right-hand-drive cockpit, steering controls, digital displays and centre console fitted to this vehicle.",
+    src:"assets/audi-s5/cockpit.webp",
+    alt:"Audi S5 Avant right-hand-drive cockpit",
+    x:"57%",y:"34%"
+  },
+  wheel:{
+    title:"WHEELS & BRAKES",
+    subtitle:"S-design wheel and performance braking detail.",
+    description:"Inspect the actual wheel design, tyre area and red S-branded front brake caliper visible on this vehicle. Wheel size and brake specifications remain to verify.",
+    src:"assets/audi-s5/wheel-brake.webp",
+    alt:"Audi S5 Avant wheel and red S-branded brake caliper",
+    x:"31%",y:"69%"
+  },
+  audio:{
+    title:"BANG & OLUFSEN",
+    subtitle:"Premium cabin audio detail.",
+    description:"A close look at the Bang & Olufsen speaker treatment visible in the photographed vehicle. Speaker count, wattage and package level are not stated without verification.",
+    src:"assets/audi-s5/bang-olufsen.webp",
+    alt:"Audi S5 Avant Bang and Olufsen speaker detail",
+    x:"67%",y:"50%"
+  }
 };
 
-const viewerCanvas=document.getElementById("viewerCanvas");
-const viewerImage=document.getElementById("viewerImage");
-const viewerAngleName=document.getElementById("viewerAngleName");
-const viewerCount=document.getElementById("viewerCount");
-const angleButtons=[...document.querySelectorAll("[data-angle]")];
-let currentAngle=1;
-let viewerZoom=1;
-let pointerStartX=null;
-let pointerStartY=null;
+const state={scene:"overview",activeDetail:null,transitioning:false,lastHotspot:null};
+const shell=document.getElementById("experienceShell");
+const frame=document.getElementById("experienceFrame");
+const overviewImage=document.getElementById("overviewImage");
+const detailImage=document.getElementById("detailImage");
+const detailBack=document.getElementById("detailBack");
+const sceneLabel=document.getElementById("sceneLabel");
+const detailTitle=document.getElementById("detailTitle");
+const detailEyebrow=document.getElementById("detailEyebrow");
+const detailDescription=document.getElementById("detailDescription");
+const detailCopy=document.getElementById("detailCopy");
+const hotspotButtons=[...document.querySelectorAll(".vehicle-hotspot")];
+const prefersReduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const transitionMs=prefersReduced?140:640;
 
-function renderVehicleView(index){
-  currentAngle=(index+vehicleViews.length)%vehicleViews.length;
-  const view=vehicleViews[currentAngle];
-  viewerCanvas.classList.add("changing");
-  viewerZoom=1;
-  viewerCanvas.style.setProperty("--viewer-zoom","1");
-  const preloader=new Image();
-  preloader.onload=()=>{
-    viewerImage.src=view.src;
-    viewerImage.alt=view.alt;
-    viewerAngleName.textContent=view.name;
-    viewerCount.textContent=(currentAngle+1)+" / "+vehicleViews.length;
-    angleButtons.forEach((button,i)=>button.classList.toggle("active",i===currentAngle));
-    requestAnimationFrame(()=>viewerCanvas.classList.remove("changing"));
-  };
-  preloader.onerror=()=>viewerCanvas.classList.remove("changing");
-  preloader.src=view.src;
+function preloadDetail(key){
+  const detail=details[key];
+  if(!detail||detail.preloaded)return;
+  const img=new Image();
+  img.src=detail.src;
+  detail.preloader=img;
+  detail.preloaded=true;
 }
 
-document.getElementById("viewerPrev").addEventListener("click",e=>{
-  e.stopPropagation();
-  renderVehicleView(currentAngle-1);
-});
-document.getElementById("viewerNext").addEventListener("click",e=>{
-  e.stopPropagation();
-  renderVehicleView(currentAngle+1);
-});
-angleButtons.forEach(button=>{
-  button.addEventListener("click",()=>renderVehicleView(Number(button.dataset.angle)));
+async function ensureLoaded(detail){
+  const img=detail.preloader||new Image();
+  if(!detail.preloader)img.src=detail.src;
+  if(img.complete&&img.naturalWidth)return;
+  try{await img.decode();}catch{
+    await new Promise(resolve=>{
+      img.onload=resolve;
+      img.onerror=resolve;
+    });
+  }
+}
+
+function setHotspotsDisabled(disabled){
+  hotspotButtons.forEach(button=>button.disabled=disabled);
+}
+
+async function enterDetail(key,trigger){
+  if(state.transitioning||state.scene!=="overview"||!details[key])return;
+  const detail=details[key];
+  state.transitioning=true;
+  state.scene="entering";
+  state.activeDetail=key;
+  state.lastHotspot=trigger;
+  setHotspotsDisabled(true);
+  shell.dataset.scene="entering";
+  frame.style.setProperty("--focus-x",detail.x);
+  frame.style.setProperty("--focus-y",detail.y);
+  sceneLabel.textContent="LOADING DETAIL";
+  preloadDetail(key);
+  await ensureLoaded(detail);
+
+  detailImage.src=detail.src;
+  detailImage.alt=detail.alt;
+  detailImage.removeAttribute("aria-hidden");
+  detailEyebrow.textContent=detail.title;
+  detailTitle.textContent=detail.subtitle;
+  detailDescription.textContent=detail.description;
+  sceneLabel.textContent=detail.title;
+
+  requestAnimationFrame(()=>{
+    shell.dataset.scene="detail";
+    state.scene="detail";
+    window.setTimeout(()=>{
+      state.transitioning=false;
+      detailBack.focus({preventScroll:true});
+    },transitionMs);
+  });
+}
+
+function returnOverview(){
+  if(state.transitioning||state.scene!=="detail")return;
+  state.transitioning=true;
+  state.scene="returning";
+  shell.dataset.scene="returning";
+  sceneLabel.textContent="OVERVIEW";
+
+  window.setTimeout(()=>{
+    detailImage.src="";
+    detailImage.alt="";
+    detailImage.setAttribute("aria-hidden","true");
+    detailEyebrow.textContent="REAL VEHICLE DETAIL";
+    detailTitle.textContent="Choose a vehicle detail.";
+    detailDescription.textContent="Engine, cockpit, wheel and audio views open inside the same vehicle scene, using photographs of this actual car.";
+    shell.dataset.scene="overview";
+    state.scene="overview";
+    state.activeDetail=null;
+    state.transitioning=false;
+    setHotspotsDisabled(false);
+    if(state.lastHotspot)state.lastHotspot.focus({preventScroll:true});
+  },transitionMs);
+}
+
+hotspotButtons.forEach(button=>{
+  const key=button.dataset.detail;
+  button.addEventListener("mouseenter",()=>preloadDetail(key));
+  button.addEventListener("focus",()=>preloadDetail(key));
+  button.addEventListener("click",()=>enterDetail(key,button));
 });
 
-viewerCanvas.addEventListener("pointerdown",e=>{
-  if(e.target.closest(".viewer-arrow")) return;
-  pointerStartX=e.clientX;
-  pointerStartY=e.clientY;
-  viewerCanvas.classList.add("dragging");
-  viewerCanvas.setPointerCapture?.(e.pointerId);
-});
-viewerCanvas.addEventListener("pointerup",e=>{
-  if(pointerStartX===null) return;
-  const dx=e.clientX-pointerStartX;
-  const dy=e.clientY-pointerStartY;
-  viewerCanvas.classList.remove("dragging");
-  pointerStartX=null;
-  pointerStartY=null;
-  if(Math.abs(dx)>45 && Math.abs(dx)>Math.abs(dy)){
-    renderVehicleView(dx<0?currentAngle+1:currentAngle-1);
+detailBack.addEventListener("click",returnOverview);
+document.addEventListener("keydown",event=>{
+  if(event.key==="Escape"&&state.scene==="detail"){
+    event.preventDefault();
+    returnOverview();
   }
 });
-viewerCanvas.addEventListener("pointercancel",()=>{
-  pointerStartX=null;pointerStartY=null;viewerCanvas.classList.remove("dragging");
-});
-viewerCanvas.addEventListener("wheel",e=>{
-  e.preventDefault();
-  viewerZoom=Math.min(1.65,Math.max(1,viewerZoom+(e.deltaY<0?.08:-.08)));
-  viewerCanvas.style.setProperty("--viewer-zoom",viewerZoom.toFixed(2));
-},{passive:false});
 
 const lightbox=document.getElementById("lightbox");
 const lightboxImg=document.getElementById("lightboxImg");
@@ -88,13 +151,6 @@ function openLightbox(src,alt){
   lightboxImg.alt=alt||"Audi S5 Avant detail";
   lightbox.showModal();
 }
-
-document.querySelectorAll(".detail-hotspot").forEach(button=>{
-  button.addEventListener("click",()=>{
-    const detail=detailViews[button.dataset.detail];
-    if(detail) openLightbox(detail.src,detail.alt);
-  });
-});
 
 document.querySelectorAll("[data-filter]").forEach(btn=>{
   btn.addEventListener("click",()=>{
@@ -107,18 +163,16 @@ document.querySelectorAll("[data-filter]").forEach(btn=>{
 
 document.querySelectorAll(".tile").forEach(tile=>{
   tile.addEventListener("click",()=>{
-    if(tile.classList.contains("missing")) return;
+    if(tile.classList.contains("missing"))return;
     const image=tile.querySelector("img");
-    if(image) openLightbox(image.src,image.alt);
+    if(image)openLightbox(image.src,image.alt);
   });
 });
 
 document.getElementById("closeLightbox").addEventListener("click",()=>lightbox.close());
-lightbox.addEventListener("click",e=>{if(e.target===lightbox)lightbox.close()});
+lightbox.addEventListener("click",event=>{if(event.target===lightbox)lightbox.close()});
 
 const enquiry=document.getElementById("enquiry");
 document.getElementById("demoEnquiry").addEventListener("click",()=>enquiry.showModal());
 document.getElementById("closeEnquiry").addEventListener("click",()=>enquiry.close());
-enquiry.addEventListener("click",e=>{if(e.target===enquiry)enquiry.close()});
-
-renderVehicleView(1);
+enquiry.addEventListener("click",event=>{if(event.target===enquiry)enquiry.close()});

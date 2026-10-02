@@ -8,11 +8,12 @@
   <link rel="stylesheet" href="audi.css">
 </head>
 <body>
-  <div class="demo"><b>EXAMPLE LISTING</b> · Audi S5 Avant · Interactive real-vehicle viewer + actual photo gallery · Unverified fields are marked</div>
+  <div class="demo"><b>EXAMPLE LISTING</b> · Audi S5 Avant · Interactive real-vehicle experience · Unverified fields are marked</div>
 
   <header class="wrap top">
     <a class="brand" href="./">JAPAN RECON CAR GALLERY<span>INTERACTIVE VEHICLE EXPERIENCE</span></a>
     <nav>
+      <a href="#experience">Experience</a>
       <a href="#gallery">Gallery</a>
       <a href="#features">Features</a>
       <a href="#verify">Specification</a>
@@ -20,52 +21,79 @@
   </header>
 
   <main>
-    <section class="wrap hero">
-      <div>
+    <section class="wrap hero" id="experience">
+      <div class="hero-copy">
         <p class="kicker">AUDI · PERFORMANCE AVANT</p>
         <h1>S5<br><span>Avant</span></h1>
-        <p class="lede">Explore this actual Audi S5 Avant through an interactive multi-angle viewer. Drag or swipe to move between photographed exterior angles, zoom in, then inspect the real details in the photo gallery below.</p>
+        <p class="lede">Explore the actual vehicle through key details. Select a point to begin.</p>
         <div class="chips">
           <span class="chip">Right-hand drive</span>
           <span class="chip">S sport interior</span>
           <span class="chip">Bang & Olufsen</span>
           <span class="chip">Powered tailgate</span>
         </div>
+        <p class="experience-note">Interactive presentation built from photographs of this vehicle.</p>
       </div>
 
-      <div class="vehicle-viewer" id="vehicleViewer">
-        <div class="viewer-badge">REAL VEHICLE · INTERACTIVE VIEW</div>
-        <div class="viewer-canvas" id="viewerCanvas">
-          <img id="viewerImage" src="assets/audi-s5/front-three-quarter.webp" alt="Audi S5 Avant front three-quarter view" draggable="false">
-          <button class="viewer-arrow prev" id="viewerPrev" type="button" aria-label="Previous angle">‹</button>
-          <button class="viewer-arrow next" id="viewerNext" type="button" aria-label="Next angle">›</button>
-          <div class="viewer-counter"><span id="viewerAngleName">Front 3/4</span><span id="viewerCount">2 / 4</span></div>
-          <div class="drag-hint"><strong>DRAG TO ROTATE</strong><span>Swipe on mobile · wheel to zoom</span></div>
+      <div class="experience-shell" id="experienceShell" data-scene="overview">
+        <div class="experience-frame" id="experienceFrame" aria-live="polite">
+          <img
+            class="experience-overview"
+            id="overviewImage"
+            src="assets/audi-s5/front-three-quarter.webp"
+            alt="Audi S5 Avant front three-quarter view">
+
+          <img
+            class="experience-detail-image"
+            id="detailImage"
+            src=""
+            alt=""
+            aria-hidden="true">
+
+          <div class="experience-topline">
+            <span>INTERACTIVE VEHICLE EXPERIENCE</span>
+            <span id="sceneLabel">OVERVIEW</span>
+          </div>
+
+          <div class="hotspots" id="hotspots">
+            <button class="vehicle-hotspot engine-hotspot" type="button" data-detail="engine" aria-label="Explore engine">
+              <span class="hotspot-dot">+</span><span class="hotspot-label">Engine</span>
+            </button>
+            <button class="vehicle-hotspot cockpit-hotspot" type="button" data-detail="cockpit" aria-label="Explore cockpit">
+              <span class="hotspot-dot">+</span><span class="hotspot-label">Cockpit</span>
+            </button>
+            <button class="vehicle-hotspot wheel-hotspot" type="button" data-detail="wheel" aria-label="Explore wheels and brakes">
+              <span class="hotspot-dot">+</span><span class="hotspot-label">Wheels & Brakes</span>
+            </button>
+            <button class="vehicle-hotspot audio-hotspot" type="button" data-detail="audio" aria-label="Explore Bang and Olufsen audio">
+              <span class="hotspot-dot">+</span><span class="hotspot-label">B&O Audio</span>
+            </button>
+          </div>
+
+          <button class="detail-back" id="detailBack" type="button" aria-label="Back to vehicle overview">
+            <span>←</span> Back to overview
+          </button>
+
+          <div class="detail-status" id="detailStatus">
+            <span>SELECT A POINT</span>
+            <strong>Explore the actual S5 Avant.</strong>
+          </div>
         </div>
 
-        <div class="angle-tabs" id="angleTabs" aria-label="Vehicle angles">
-          <button type="button" data-angle="0"><span>01</span>Front</button>
-          <button class="active" type="button" data-angle="1"><span>02</span>Front 3/4</button>
-          <button type="button" data-angle="2"><span>03</span>Rear 3/4</button>
-          <button type="button" data-angle="3"><span>04</span>Rear</button>
+        <div class="detail-copy" id="detailCopy" tabindex="-1">
+          <div>
+            <p class="kicker" id="detailEyebrow">REAL VEHICLE DETAIL</p>
+            <h2 id="detailTitle">Choose a vehicle detail.</h2>
+          </div>
+          <p id="detailDescription">Engine, cockpit, wheel and audio views open inside the same vehicle scene, using photographs of this actual car.</p>
         </div>
-
-        <div class="detail-strip" aria-label="Vehicle detail photos">
-          <button class="detail-hotspot" type="button" data-detail="engine"><span>+</span>Engine</button>
-          <button class="detail-hotspot" type="button" data-detail="wheel"><span>+</span>Wheel & Brake</button>
-          <button class="detail-hotspot" type="button" data-detail="cockpit"><span>+</span>Cockpit</button>
-          <button class="detail-hotspot" type="button" data-detail="audio"><span>+</span>B&O Audio</button>
-          <button class="detail-hotspot" type="button" data-detail="cargo"><span>+</span>Cargo</button>
-        </div>
-
-        <p class="viewer-note">Built from photos of this actual vehicle. Dragging switches between photographed angles; this is an interactive real-car viewer, not a reconstructed 3D mesh.</p>
       </div>
     </section>
 
     <section class="wrap section" id="gallery">
       <div class="heading">
         <div><p class="kicker">PHOTO GALLERY</p><h2>Exterior. Interior. Details.</h2></div>
-        <p>Instead of one long photo dump, the customer can filter the supplied images by what they want to inspect.</p>
+        <p>The interactive scene gives a guided experience. The gallery keeps the complete photographic evidence available to inspect.</p>
       </div>
 
       <div class="tabs">
