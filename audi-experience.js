@@ -3,33 +3,33 @@ const details={
     title:"ENGINE",
     subtitle:"Performance hardware beneath the bonnet.",
     description:"A closer look at the vehicle's actual engine compartment and visible mechanical components. Engine output and other specifications remain unverified until stock documentation is supplied.",
-    src:"assets/audi-s5/engine.webp",
+    src:"https://raw.githubusercontent.com/danielong-bit/Car-Recond-Japan/main/assets/audi-s5/engine.webp",
     alt:"Audi S5 Avant engine bay",
-    x:"68%",y:"57%"
+    x:"73%",y:"34%"
   },
   cockpit:{
     title:"COCKPIT",
     subtitle:"Driver-focused digital cabin.",
     description:"Explore the actual right-hand-drive cockpit, steering controls, digital displays and centre console fitted to this vehicle.",
-    src:"assets/audi-s5/cockpit.webp",
+    src:"https://raw.githubusercontent.com/danielong-bit/Car-Recond-Japan/main/assets/audi-s5/cockpit.webp",
     alt:"Audi S5 Avant right-hand-drive cockpit",
-    x:"58%",y:"48%"
+    x:"58%",y:"23%"
   },
   wheel:{
     title:"WHEELS & BRAKES",
     subtitle:"S-design wheel and performance braking detail.",
     description:"Inspect the actual wheel design, tyre area and red S-branded front brake caliper visible on this vehicle. Wheel size and brake specifications remain to verify.",
-    src:"assets/audi-s5/wheel-brake.webp",
+    src:"https://raw.githubusercontent.com/danielong-bit/Car-Recond-Japan/main/assets/audi-s5/wheel-brake.webp",
     alt:"Audi S5 Avant wheel and red S-branded brake caliper",
-    x:"72%",y:"73%"
+    x:"77%",y:"67%"
   },
   audio:{
     title:"BANG & OLUFSEN",
     subtitle:"Premium cabin audio detail.",
     description:"A close look at the Bang & Olufsen speaker treatment visible in the photographed vehicle. Speaker count, wattage and package level are not stated without verification.",
-    src:"assets/audi-s5/bang-olufsen.webp",
+    src:"https://raw.githubusercontent.com/danielong-bit/Car-Recond-Japan/main/assets/audi-s5/bang-olufsen.webp",
     alt:"Audi S5 Avant Bang and Olufsen speaker detail",
-    x:"45%",y:"65%"
+    x:"51%",y:"47%"
   }
 };
 
