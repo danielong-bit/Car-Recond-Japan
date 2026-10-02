@@ -1,0 +1,222 @@
+const vehicles = [
+  {
+    id: 'alphard-z', brand: 'Toyota', model: 'Alphard Z', body: 'MPV', year: 2024, mileage: '8,240 km', power: '205 hp', engine: '2.5L Hybrid', torque: '250 Nm', color: 'Pearl White',
+    cardA:'#748a99', cardB:'#314754', sub:'Executive lounge · Japan import concept',
+    features:{
+      engine:['Hybrid powertrain','Demo data: a quiet 2.5L hybrid setup is highlighted here to show how engine information can be explained in plain language.'],
+      brakes:['4-piston front brakes','A performance-focused brake callout can surface caliper specification, rotor size and daily-driving benefit.'],
+      aero:['Premium aero package','This point can explain bumper design, side skirts and roof spoiler without forcing customers to read a long spec sheet.'],
+      interior:['Executive captain seats','Interior interaction can surface seat colour, materials, seat functions and cabin configuration.'],
+      hud:['Head-up display','HUD information can be explained where the customer expects it: directly around the driver area.']
+    },
+    specs:{
+      'Powertrain':[['Engine','2.5L Hybrid (demo)'],['Power','205 hp (demo)'],['Torque','250 Nm (demo)'],['Drive','FWD (demo)']],
+      'Exterior & chassis':[['Colour','Pearl White'],['Wheels','19-inch multi-spoke'],['Tyres','225/55 R19'],['Brakes','4-piston front (demo)'],['Aero kit','Executive aero package']],
+      'Interior & equipment':[['Interior','Warm Sand'],['Seats','Executive captain seats'],['Speakers','14-speaker premium audio'],['HUD','Equipped (demo)']]
+    }
+  },
+  {
+    id:'rx500h', brand:'Lexus', model:'RX 500h F Sport', body:'SUV', year:2024, mileage:'11,600 km', power:'371 hp', engine:'2.4L Turbo Hybrid', torque:'460 Nm', color:'Sonic Chrome',
+    cardA:'#6b7f83', cardB:'#25363b', sub:'F Sport · Japan import concept',
+    features:{
+      engine:['Turbo hybrid system','A visual hotspot can explain how turbo and hybrid assistance work together, using demo figures and simple language.'],
+      brakes:['6-piston front calipers','A brake hotspot can help customers understand hardware that is otherwise buried in a specification table.'],
+      aero:['F Sport exterior','Customers can discover grille treatment, bumper shape and lower aero pieces directly on the vehicle image.'],
+      interior:['F Sport cabin','Seat colour, trim, audio and comfort equipment can be explored from one cabin hotspot.'],
+      hud:['Wide HUD','The interface can show driver-display equipment without requiring a separate brochure.']
+    },
+    specs:{
+      'Powertrain':[['Engine','2.4L Turbo Hybrid (demo)'],['Power','371 hp (demo)'],['Torque','460 Nm (demo)'],['Drive','AWD (demo)']],
+      'Exterior & chassis':[['Colour','Sonic Chrome'],['Wheels','21-inch F Sport'],['Tyres','235/50 R21'],['Brakes','6-piston front (demo)'],['Aero kit','F Sport package']],
+      'Interior & equipment':[['Interior','Dark Rose'],['Seats','F Sport leather'],['Speakers','21-speaker premium audio'],['HUD','Wide HUD (demo)']]
+    }
+  },
+  {
+    id:'gtr-premium', brand:'Nissan', model:'GT-R Premium', body:'Coupe', year:2023, mileage:'18,900 km', power:'565 hp', engine:'3.8L Twin-Turbo V6', torque:'633 Nm', color:'Stealth Grey',
+    cardA:'#59676d', cardB:'#1e272b', sub:'Performance coupe · Japan import concept',
+    features:{
+      engine:['Twin-turbo V6','The hotspot format is ideal for explaining engine layout, output and why a customer might care about it.'],
+      brakes:['Performance braking','Caliper piston count, rotor size and cooling can be revealed with one tap near the wheel.'],
+      aero:['Functional aero','Highlight front splitter, underbody treatment and rear spoiler as customer-readable feature stories.'],
+      interior:['Driver-focused cabin','Use the cabin point to reveal seat, trim and sound-system details.'],
+      hud:['Driver information','If a car does not have a feature, the same hotspot system can clearly state that instead of hiding it.']
+    },
+    specs:{
+      'Powertrain':[['Engine','3.8L Twin-Turbo V6 (demo)'],['Power','565 hp (demo)'],['Torque','633 Nm (demo)'],['Drive','AWD (demo)']],
+      'Exterior & chassis':[['Colour','Stealth Grey'],['Wheels','20-inch forged'],['Tyres','Performance set (demo)'],['Brakes','6-piston front / 4 rear'],['Aero kit','Premium aero package']],
+      'Interior & equipment':[['Interior','Black / Red'],['Seats','Sport leather'],['Speakers','11-speaker premium audio'],['HUD','Not equipped (demo)']]
+    }
+  },
+  {
+    id:'civic-type-r', brand:'Honda', model:'Civic Type R', body:'Sedan', year:2023, mileage:'21,450 km', power:'315 hp', engine:'2.0L Turbo', torque:'420 Nm', color:'Championship White',
+    cardA:'#737f86', cardB:'#2f3940', sub:'Performance sedan · Japan import concept',
+    features:{
+      engine:['2.0L turbo','Customers can tap the engine bay region to understand output, torque and drivetrain at a glance.'],
+      brakes:['Track-focused brakes','A wheel-area point makes Brembo-style hardware and cooling easier to discover visually.'],
+      aero:['Type R aero','The website can connect wing, diffuser and vent details to their functional role.'],
+      interior:['Red sport cabin','Seat colour and driver-focused details can be shown without opening a separate spec PDF.'],
+      hud:['Digital driver display','Instrumentation and driver data can be explained as part of the same interactive story.']
+    },
+    specs:{
+      'Powertrain':[['Engine','2.0L Turbo (demo)'],['Power','315 hp (demo)'],['Torque','420 Nm (demo)'],['Drive','FWD (demo)']],
+      'Exterior & chassis':[['Colour','Championship White'],['Wheels','19-inch sport'],['Tyres','265/30 R19'],['Brakes','4-piston front (demo)'],['Aero kit','Type R aero']],
+      'Interior & equipment':[['Interior','Red / Black'],['Seats','Sport bucket seats'],['Speakers','12-speaker audio'],['HUD','Digital display concept']]
+    }
+  },
+  {
+    id:'crown-crossover', brand:'Toyota', model:'Crown Crossover RS', body:'Sedan', year:2022, mileage:'29,800 km', power:'340 hp', engine:'2.4L Turbo Hybrid', torque:'460 Nm', color:'Bi-tone Bronze',
+    cardA:'#806e60', cardB:'#392f2a', sub:'Luxury crossover sedan · Japan import concept',
+    features:{
+      engine:['Turbo hybrid','The powertrain hotspot turns technical information into a short customer-facing explanation.'],
+      brakes:['Adaptive braking package','The wheel point can reveal hardware and assist-system context.'],
+      aero:['Crossover body form','Aero and styling details can be attached to the exact part of the silhouette.'],
+      interior:['Premium cabin','Seat colour, material, audio and comfort features can be grouped into a visual cabin story.'],
+      hud:['Driver HUD','A short explanation can show what information the HUD presents and why it is useful.']
+    },
+    specs:{
+      'Powertrain':[['Engine','2.4L Turbo Hybrid (demo)'],['Power','340 hp (demo)'],['Torque','460 Nm (demo)'],['Drive','AWD (demo)']],
+      'Exterior & chassis':[['Colour','Bi-tone Bronze'],['Wheels','21-inch alloy'],['Tyres','225/45 R21'],['Brakes','Performance package (demo)'],['Aero kit','Factory styling package']],
+      'Interior & equipment':[['Interior','Black / Bronze'],['Seats','Premium leather'],['Speakers','11-speaker premium audio'],['HUD','Equipped (demo)']]
+    }
+  },
+  {
+    id:'lm500h', brand:'Lexus', model:'LM 500h Executive', body:'MPV', year:2024, mileage:'5,950 km', power:'366 hp', engine:'2.4L Turbo Hybrid', torque:'460 Nm', color:'Graphite Black',
+    cardA:'#454e55', cardB:'#181d21', sub:'Luxury four-seat MPV · Japan import concept',
+    features:{
+      engine:['Turbo hybrid AWD','Interactive explanation can show the relationship between engine, electric assistance and driven wheels.'],
+      brakes:['Premium brake system','Customers can inspect the wheel area and understand the stopping hardware immediately.'],
+      aero:['Executive exterior','Aero and appearance details can be highlighted without turning the page into a brochure.'],
+      interior:['Four-seat lounge','The cabin hotspot can reveal seat colour, rear lounge equipment and audio.'],
+      hud:['Head-up display','A driver-position hotspot can explain HUD availability and key information.']
+    },
+    specs:{
+      'Powertrain':[['Engine','2.4L Turbo Hybrid (demo)'],['Power','366 hp (demo)'],['Torque','460 Nm (demo)'],['Drive','AWD (demo)']],
+      'Exterior & chassis':[['Colour','Graphite Black'],['Wheels','19-inch luxury alloy'],['Tyres','225/55 R19'],['Brakes','4-piston front (demo)'],['Aero kit','Executive styling']],
+      'Interior & equipment':[['Interior','Solace Cream'],['Seats','Four-seat executive lounge'],['Speakers','23-speaker premium audio'],['HUD','Equipped (demo)']]
+    }
+  }
+];
+
+const inventoryGrid = document.getElementById('inventoryGrid');
+const brandFilter = document.getElementById('brandFilter');
+const bodyFilter = document.getElementById('bodyFilter');
+const yearFilter = document.getElementById('yearFilter');
+const resultCount = document.getElementById('resultCount');
+const vehicleDialog = document.getElementById('vehicleDialog');
+const demoDialog = document.getElementById('demoDialog');
+let currentVehicle = vehicles[0];
+
+function carMarkup() {
+  return `<div class="car-visual" aria-hidden="true"><div class="shadow"></div><div class="car-shell"><div class="window window-a"></div><div class="window window-b"></div><div class="front-light"></div><div class="rear-light"></div><div class="wheel wheel-front"><i></i></div><div class="wheel wheel-rear"><i></i></div><div class="body-line"></div></div></div>`;
+}
+
+function renderInventory() {
+  const minYear = yearFilter.value === 'all' ? 0 : Number(yearFilter.value);
+  const filtered = vehicles.filter(v =>
+    (brandFilter.value === 'all' || v.brand === brandFilter.value) &&
+    (bodyFilter.value === 'all' || v.body === bodyFilter.value) &&
+    v.year >= minYear
+  );
+  resultCount.textContent = `${filtered.length} demo vehicle${filtered.length === 1 ? '' : 's'}`;
+  inventoryGrid.innerHTML = filtered.map(v => `
+    <article class="car-card" tabindex="0" role="button" data-id="${v.id}" aria-label="Open ${v.brand} ${v.model} demo details">
+      <div class="card-visual" style="--card-a:${v.cardA};--card-b:${v.cardB}">${carMarkup()}</div>
+      <div class="card-info">
+        <div class="card-top"><h3>${v.brand}<br>${v.model}</h3><span class="card-year">${v.year}</span></div>
+        <p class="card-sub">${v.sub}</p>
+        <div class="card-specs">
+          <div><small>Mileage</small><strong>${v.mileage}</strong></div>
+          <div><small>Engine</small><strong>${v.engine}</strong></div>
+          <div><small>Power</small><strong>${v.power}</strong></div>
+        </div>
+        <div class="card-open">Open interactive details →</div>
+      </div>
+    </article>`).join('');
+
+  inventoryGrid.querySelectorAll('.car-card').forEach(card => {
+    card.addEventListener('click', () => openVehicle(card.dataset.id));
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openVehicle(card.dataset.id); }
+    });
+  });
+}
+
+function openVehicle(id) {
+  currentVehicle = vehicles.find(v => v.id === id) || vehicles[0];
+  document.getElementById('vehicleMeta').textContent = `${currentVehicle.year} · ${currentVehicle.body.toUpperCase()} · DEMO SPEC`;
+  document.getElementById('vehicleTitle').textContent = `${currentVehicle.brand} ${currentVehicle.model}`;
+  document.getElementById('vehicleSub').textContent = `${currentVehicle.sub}. All specifications and mileage shown are fictional demonstration data.`;
+  document.getElementById('quickSpecs').innerHTML = [
+    ['Mileage',currentVehicle.mileage],['Engine',currentVehicle.engine],['Power',currentVehicle.power],['Torque',currentVehicle.torque]
+  ].map(([k,v]) => `<div><small>${k}</small><strong>${v}</strong></div>`).join('');
+  document.getElementById('specGroups').innerHTML = Object.entries(currentVehicle.specs).map(([group,rows]) => `
+    <section class="spec-group"><h4>${group}</h4>${rows.map(([k,v])=>`<div class="spec-row"><span>${k}</span><strong>${v}</strong></div>`).join('')}</section>`).join('');
+  document.getElementById('featureTitle').textContent = 'Select a hotspot';
+  document.getElementById('featureText').textContent = 'Tap a point on the vehicle to reveal a customer-friendly explanation.';
+  document.getElementById('detailCar').style.setProperty('--vehicle-color', currentVehicle.color);
+  setGallery('exterior');
+  document.querySelectorAll('.detail-hotspot').forEach(h => h.classList.remove('active'));
+  vehicleDialog.showModal();
+  document.body.style.overflow='hidden';
+}
+
+function closeVehicle(){
+  if (vehicleDialog.open) vehicleDialog.close();
+  document.body.style.overflow='';
+}
+
+document.getElementById('closeDialog').addEventListener('click', closeVehicle);
+vehicleDialog.addEventListener('click', e => { if (e.target === vehicleDialog) closeVehicle(); });
+vehicleDialog.addEventListener('cancel', e => { e.preventDefault(); closeVehicle(); });
+
+document.querySelectorAll('.detail-hotspot').forEach(h => {
+  h.addEventListener('click', () => {
+    const key = h.dataset.feature;
+    const [title,text] = currentVehicle.features[key];
+    document.getElementById('featureTitle').textContent = title;
+    document.getElementById('featureText').textContent = text;
+    document.querySelectorAll('.detail-hotspot').forEach(x => x.classList.toggle('active', x === h));
+  });
+});
+
+function setGallery(mode){
+  const overlay = document.getElementById('galleryOverlay');
+  const carWrap = document.getElementById('detailCarWrap');
+  document.querySelectorAll('[data-gallery]').forEach(btn => btn.classList.toggle('active',btn.dataset.gallery===mode));
+  if(mode==='exterior'){
+    overlay.className='gallery-overlay'; overlay.innerHTML=''; carWrap.style.opacity='1'; carWrap.style.transform='scale(1)';
+  } else if(mode==='interior'){
+    carWrap.style.opacity='0'; carWrap.style.transform='scale(.96)';
+    overlay.innerHTML='<div class="interior-visual" aria-label="Stylized demo interior visualization"></div>'; overlay.className='gallery-overlay visible';
+  } else {
+    carWrap.style.opacity='0'; carWrap.style.transform='scale(.96)';
+    overlay.innerHTML='<div class="detail-visual"><div>Wheel + Brake</div><div>Headlamp</div><div>Seat Finish</div><div>HUD + Audio</div></div>'; overlay.className='gallery-overlay visible';
+  }
+}
+document.querySelectorAll('[data-gallery]').forEach(btn => btn.addEventListener('click',()=>setGallery(btn.dataset.gallery)));
+
+[brandFilter,bodyFilter,yearFilter].forEach(el=>el.addEventListener('change',renderInventory));
+document.getElementById('resetFilters').addEventListener('click',()=>{ brandFilter.value='all'; bodyFilter.value='all'; yearFilter.value='all'; renderInventory(); });
+
+document.querySelectorAll('[data-demo-action]').forEach(btn=>btn.addEventListener('click',()=>demoDialog.showModal()));
+document.querySelectorAll('[data-close-demo]').forEach(btn=>btn.addEventListener('click',()=>demoDialog.close()));
+demoDialog.addEventListener('click',e=>{ if(e.target===demoDialog) demoDialog.close(); });
+
+const heroData = {
+  Powertrain:['Powertrain','Reveal engine type, output, torque and drivetrain through a hotspot instead of a dense brochure.'],
+  Brakes:['Braking hardware','Tap near the wheel to explain caliper specification, rotor setup and why it matters.'],
+  Cabin:['Cabin equipment','Explore seat colour, sound system, HUD and comfort equipment directly from the vehicle.']
+};
+document.querySelectorAll('[data-hero-hotspot]').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('[data-hero-hotspot]').forEach(x=>x.classList.toggle('active',x===btn));
+  const [title,text]=heroData[btn.dataset.heroHotspot];
+  const info=document.getElementById('stageInfo');
+  info.innerHTML=`<small>INTERACTIVE PREVIEW</small><strong>${title}</strong><p>${text}</p>`;
+}));
+
+document.getElementById('heroExplore').addEventListener('click',()=>{
+  document.querySelector('[data-hero-hotspot="Powertrain"]').click();
+  document.getElementById('experience').scrollIntoView({behavior:'smooth',block:'center'});
+});
+
+renderInventory();
