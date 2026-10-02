@@ -1,1 +1,151 @@
-<!doctype html><meta charset="utf-8"><title>Audi S5 Avant</title><h1>Audi S5 Avant</h1><p>Japan Recon Car Gallery example page.</p>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Interactive Audi S5 Avant example for Japan Recon Car Gallery">
+  <title>Audi S5 Avant | Japan Recon Car Gallery</title>
+  <link rel="stylesheet" href="audi.css">
+</head>
+<body>
+  <div class="demo"><b>EXAMPLE LISTING</b> · Audi S5 Avant · Photo-based demo · Unverified fields are marked</div>
+
+  <header class="wrap top">
+    <a class="brand" href="./">JAPAN RECON CAR GALLERY<span>INTERACTIVE VEHICLE EXPERIENCE</span></a>
+    <nav>
+      <a href="#gallery">Gallery</a>
+      <a href="#features">Features</a>
+      <a href="#verify">Specification</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="wrap hero">
+      <div>
+        <p class="kicker">AUDI · PERFORMANCE AVANT</p>
+        <h1>S5<br><span>Avant</span></h1>
+        <p class="lede">A single-car example built around your supplied Audi photo set. Customers can explore the body, cabin and mechanical details visually before reading the full listing.</p>
+        <div class="chips">
+          <span class="chip">Right-hand drive</span>
+          <span class="chip">S sport interior</span>
+          <span class="chip">Bang & Olufsen</span>
+          <span class="chip">Powered tailgate</span>
+        </div>
+      </div>
+
+      <div class="stage">
+        <div class="fallback"><div><strong>Audi S5 Avant</strong>Photo slot prepared for your front 3/4 image.</div></div>
+        <img src="assets/audi-s5/front-three-quarter.webp" alt="Audi S5 Avant front three-quarter" onerror="this.style.display='none'">
+        <button class="hot engine" type="button" data-info="engine" aria-label="Show engine information">+</button>
+        <button class="hot wheel" type="button" data-info="wheel" aria-label="Show wheel and brake information">+</button>
+        <button class="hot cabin" type="button" data-info="cabin" aria-label="Show cabin information">+</button>
+        <div class="pop" id="featurePop">
+          <small>TAP A HOTSPOT</small>
+          <strong>Explore the actual car.</strong>
+          <p>The interaction is tied to details visible in your supplied photo set.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap section" id="gallery">
+      <div class="heading">
+        <div><p class="kicker">PHOTO GALLERY</p><h2>Exterior. Interior. Details.</h2></div>
+        <p>Instead of one long photo dump, the customer can filter the supplied images by what they want to inspect.</p>
+      </div>
+
+      <div class="tabs">
+        <button class="active" type="button" data-filter="all">All</button>
+        <button type="button" data-filter="exterior">Exterior</button>
+        <button type="button" data-filter="interior">Interior</button>
+        <button type="button" data-filter="detail">Details</button>
+      </div>
+
+      <div class="gallery">
+        <button class="tile" type="button" data-kind="exterior">
+          <img src="assets/audi-s5/front-three-quarter.webp" alt="Audi S5 Avant front three-quarter" onerror="this.parentElement.classList.add('missing');this.style.display='none'"><span>Front 3/4</span>
+        </button>
+        <button class="tile" type="button" data-kind="exterior">
+          <img src="assets/audi-s5/rear-three-quarter.webp" alt="Audi S5 Avant rear three-quarter" onerror="this.parentElement.classList.add('missing');this.style.display='none'"><span>Rear 3/4</span>
+        </button>
+        <button class="tile" type="button" data-kind="interior">
+          <img src="assets/audi-s5/cockpit.webp" alt="Audi S5 Avant right-hand-drive cockpit" onerror="this.parentElement.classList.add('missing');this.style.display='none'"><span>Cockpit</span>
+        </button>
+        <button class="tile" type="button" data-kind="detail">
+          <img src="assets/audi-s5/engine.webp" alt="Audi S5 Avant engine bay" onerror="this.parentElement.classList.add('missing');this.style.display='none'"><span>Engine bay</span>
+        </button>
+        <button class="tile" type="button" data-kind="detail">
+          <img src="assets/audi-s5/wheel-brake.webp" alt="Audi S5 Avant wheel and S-branded red brake caliper" onerror="this.parentElement.classList.add('missing');this.style.display='none'"><span>Wheel + brake</span>
+        </button>
+        <button class="tile" type="button" data-kind="interior">
+          <img src="assets/audi-s5/bang-olufsen.webp" alt="Bang and Olufsen speaker in Audi S5 Avant" onerror="this.parentElement.classList.add('missing');this.style.display='none'"><span>Bang & Olufsen</span>
+        </button>
+        <button class="tile" type="button" data-kind="interior">
+          <img src="assets/audi-s5/rear-climate.webp" alt="Audi S5 Avant rear climate controls" onerror="this.parentElement.classList.add('missing');this.style.display='none'"><span>Rear climate</span>
+        </button>
+        <button class="tile" type="button" data-kind="interior">
+          <img src="assets/audi-s5/cargo.webp" alt="Audi S5 Avant open cargo area" onerror="this.parentElement.classList.add('missing');this.style.display='none'"><span>Cargo area</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="wrap section" id="features">
+      <div class="heading">
+        <div><p class="kicker">OBSERVED FROM YOUR PHOTOS</p><h2>What the customer can see.</h2></div>
+        <p>These are photo-supported observations. They are kept separate from vehicle data that still needs documentation.</p>
+      </div>
+
+      <div class="info-grid">
+        <article class="box">
+          <h3>Visible equipment</h3>
+          <div class="row"><span>Body style</span><b>Avant / wagon</b></div>
+          <div class="row"><span>Steering layout</span><b>Right-hand drive</b></div>
+          <div class="row"><span>Interior</span><b>Black S sport seats</b></div>
+          <div class="row"><span>Audio</span><b>Bang & Olufsen branding visible</b></div>
+          <div class="row"><span>Rear comfort</span><b>Rear climate controls visible</b></div>
+          <div class="row"><span>Brakes</span><b>Red S-branded front caliper visible</b></div>
+          <div class="row"><span>Driver display</span><b>Digital instrument cluster</b></div>
+          <div class="row"><span>Cargo access</span><b>Powered tailgate controls visible</b></div>
+        </article>
+
+        <article class="box" id="verify">
+          <h3>Stock data to verify</h3>
+          <p class="lede">I have not filled these from guesses. When you give me the auction sheet, registration information or exact vehicle spec, these can become the real listing data.</p>
+          <div class="row"><span>Model year</span><b class="pending">To verify</b></div>
+          <div class="row"><span>Mileage</span><b class="pending">To verify</b></div>
+          <div class="row"><span>Engine / output</span><b class="pending">To verify</b></div>
+          <div class="row"><span>Torque</span><b class="pending">To verify</b></div>
+          <div class="row"><span>Wheel / tyre size</span><b class="pending">To verify</b></div>
+          <div class="row"><span>HUD</span><b class="pending">Not confirmed from photos</b></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="wrap cta">
+      <div>
+        <h3>Want to know more about this S5 Avant?</h3>
+        <p>Demo interaction only — no real enquiry is submitted yet.</p>
+      </div>
+      <button id="demoEnquiry" type="button">Preview enquiry flow</button>
+    </section>
+  </main>
+
+  <footer class="wrap"><span>JAPAN RECON CAR GALLERY</span><span>AUDI S5 AVANT · EXAMPLE VEHICLE PAGE</span></footer>
+
+  <dialog id="lightbox">
+    <div class="light">
+      <button class="close" id="closeLightbox" type="button" aria-label="Close image">×</button>
+      <img id="lightboxImg" alt="">
+    </div>
+  </dialog>
+
+  <dialog id="enquiry">
+    <div class="note">
+      <h3>Demo enquiry</h3>
+      <p>This is where the production site can later connect to your real WhatsApp, lead form or CRM. Nothing is submitted in this example.</p>
+      <button id="closeEnquiry" type="button">Close</button>
+    </div>
+  </dialog>
+
+  <script src="audi.js"></script>
+</body>
+</html>
