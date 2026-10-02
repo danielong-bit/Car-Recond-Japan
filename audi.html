@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Interactive Audi S5 Avant example for Japan Recon Car Gallery">
   <title>Audi S5 Avant | Japan Recon Car Gallery</title>
-  <link rel="stylesheet" href="audi.css">
+  <link rel="stylesheet" href="audi-experience.css">
 </head>
 <body>
   <div class="demo"><b>EXAMPLE LISTING</b> · Audi S5 Avant · Interactive real-vehicle experience · Unverified fields are marked</div>
@@ -37,37 +37,38 @@
 
       <div class="experience-shell" id="experienceShell" data-scene="overview">
         <div class="experience-frame" id="experienceFrame" aria-live="polite">
-          <img
-            class="experience-overview"
-            id="overviewImage"
-            src="assets/audi-s5/front-three-quarter.webp"
-            alt="Audi S5 Avant front three-quarter view">
+          <div class="media-plane" id="mediaPlane">
+            <img
+              class="experience-overview"
+              id="overviewImage"
+              src="assets/audi-s5/front-three-quarter.webp"
+              alt="Audi S5 Avant front three-quarter view">
 
-          <img
-            class="experience-detail-image"
-            id="detailImage"
-            src=""
-            alt=""
-            aria-hidden="true">
+            <img
+              class="experience-detail-image"
+              id="detailImage"
+              alt=""
+              aria-hidden="true">
+
+            <div class="hotspots" id="hotspots">
+              <button class="vehicle-hotspot engine-hotspot" type="button" data-detail="engine" aria-label="Explore engine">
+                <span class="hotspot-dot">+</span><span class="hotspot-label">Engine</span>
+              </button>
+              <button class="vehicle-hotspot cockpit-hotspot" type="button" data-detail="cockpit" aria-label="Explore cockpit">
+                <span class="hotspot-dot">+</span><span class="hotspot-label">Cockpit</span>
+              </button>
+              <button class="vehicle-hotspot wheel-hotspot" type="button" data-detail="wheel" aria-label="Explore wheels and brakes">
+                <span class="hotspot-dot">+</span><span class="hotspot-label">Wheels & Brakes</span>
+              </button>
+              <button class="vehicle-hotspot audio-hotspot" type="button" data-detail="audio" aria-label="Explore Bang and Olufsen audio">
+                <span class="hotspot-dot">+</span><span class="hotspot-label">B&O Audio</span>
+              </button>
+            </div>
+          </div>
 
           <div class="experience-topline">
             <span>INTERACTIVE VEHICLE EXPERIENCE</span>
             <span id="sceneLabel">OVERVIEW</span>
-          </div>
-
-          <div class="hotspots" id="hotspots">
-            <button class="vehicle-hotspot engine-hotspot" type="button" data-detail="engine" aria-label="Explore engine">
-              <span class="hotspot-dot">+</span><span class="hotspot-label">Engine</span>
-            </button>
-            <button class="vehicle-hotspot cockpit-hotspot" type="button" data-detail="cockpit" aria-label="Explore cockpit">
-              <span class="hotspot-dot">+</span><span class="hotspot-label">Cockpit</span>
-            </button>
-            <button class="vehicle-hotspot wheel-hotspot" type="button" data-detail="wheel" aria-label="Explore wheels and brakes">
-              <span class="hotspot-dot">+</span><span class="hotspot-label">Wheels & Brakes</span>
-            </button>
-            <button class="vehicle-hotspot audio-hotspot" type="button" data-detail="audio" aria-label="Explore Bang and Olufsen audio">
-              <span class="hotspot-dot">+</span><span class="hotspot-label">B&O Audio</span>
-            </button>
           </div>
 
           <button class="detail-back" id="detailBack" type="button" aria-label="Back to vehicle overview">
@@ -189,6 +190,6 @@
     </div>
   </dialog>
 
-  <script src="audi.js"></script>
+  <script src="audi-experience.js"></script>
 </body>
 </html>
