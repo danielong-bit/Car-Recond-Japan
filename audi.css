@@ -23,3 +23,39 @@ footer{padding:26px 0 40px;border-top:1px solid var(--line);display:flex;justify
 .model-credit{margin:9px 2px 0;color:#69767d;font-size:8px;line-height:1.5}
 @media(max-width:900px){.model-stage,.model-frame{min-height:520px}}
 @media(max-width:600px){.model-stage,.model-frame{min-height:430px}.model-disclaimer{left:10px;right:10px;bottom:10px;max-width:none;padding-right:120px}.model-help{right:10px;bottom:10px}.model-badge{top:10px;left:10px}}
+
+
+/* Real vehicle interactive viewer */
+.vehicle-viewer{min-width:0}
+.viewer-canvas{--viewer-zoom:1;min-height:600px;position:relative;overflow:hidden;border:1px solid var(--line);border-radius:22px;background:radial-gradient(circle at 50% 40%,#1a2329 0,#0c1115 58%,#07090b 100%);box-shadow:0 24px 70px rgba(0,0,0,.28);cursor:grab;touch-action:pan-y}
+.viewer-canvas.dragging{cursor:grabbing}
+.viewer-canvas img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;transform:scale(var(--viewer-zoom));transition:opacity .16s ease,transform .12s ease;user-select:none;pointer-events:none;background:#0b0f12}
+.viewer-canvas.changing img{opacity:.28}
+.viewer-badge{position:absolute;z-index:6;top:16px;left:16px;padding:8px 11px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:rgba(7,10,12,.78);backdrop-filter:blur(8px);font-size:8px;letter-spacing:.14em;color:var(--accent);pointer-events:none}
+.viewer-arrow{position:absolute;z-index:6;top:50%;width:46px;height:46px;margin-top:-23px;border:1px solid rgba(255,255,255,.2);border-radius:50%;background:rgba(7,10,12,.72);backdrop-filter:blur(8px);font-size:30px;line-height:1;cursor:pointer;transition:.2s}
+.viewer-arrow:hover{background:var(--accent);border-color:var(--accent);color:#111;transform:scale(1.06)}
+.viewer-arrow.prev{left:16px}.viewer-arrow.next{right:16px}
+.viewer-counter{position:absolute;z-index:6;left:16px;bottom:16px;display:flex;gap:8px;align-items:center;padding:9px 11px;border:1px solid rgba(255,255,255,.15);border-radius:999px;background:rgba(7,10,12,.78);backdrop-filter:blur(8px);font-size:9px;pointer-events:none}
+.viewer-counter span:first-child{color:#fff}.viewer-counter span:last-child{color:var(--accent)}
+.drag-hint{position:absolute;z-index:6;right:16px;bottom:16px;display:grid;gap:3px;text-align:right;padding:9px 11px;border:1px solid rgba(255,255,255,.14);border-radius:11px;background:rgba(7,10,12,.76);backdrop-filter:blur(8px);pointer-events:none}
+.drag-hint strong{font-size:9px;letter-spacing:.12em}.drag-hint span{font-size:8px;color:#9ca9af}
+.angle-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+.angle-tabs button{display:flex;align-items:center;justify-content:center;gap:8px;min-height:42px;border:1px solid var(--line);border-radius:12px;background:#0d1216;color:#b8c2c7;font-size:10px;cursor:pointer;transition:.2s}
+.angle-tabs button span{font-size:8px;color:#6f7d84}
+.angle-tabs button:hover,.angle-tabs button.active{border-color:var(--accent);background:rgba(217,255,67,.08);color:#fff}
+.angle-tabs button.active span{color:var(--accent)}
+.detail-strip{display:flex;gap:8px;margin-top:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.detail-strip::-webkit-scrollbar{display:none}
+.detail-hotspot{flex:0 0 auto;display:flex;align-items:center;gap:7px;padding:9px 12px;border:1px solid var(--line);border-radius:999px;background:#0d1216;color:#c2cbcf;font-size:9px;cursor:pointer;transition:.2s}
+.detail-hotspot span{display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--accent);color:#111;font-size:13px;font-weight:700}
+.detail-hotspot:hover{border-color:var(--accent);transform:translateY(-1px)}
+.viewer-note{margin:9px 2px 0;color:#6f7c83;font-size:8px;line-height:1.55}
+@media(max-width:900px){.viewer-canvas{min-height:520px}}
+@media(max-width:600px){
+  .viewer-canvas{min-height:430px}
+  .viewer-badge{top:10px;left:10px}
+  .viewer-arrow{width:40px;height:40px;margin-top:-20px;font-size:26px}.viewer-arrow.prev{left:9px}.viewer-arrow.next{right:9px}
+  .viewer-counter{left:10px;bottom:10px}
+  .drag-hint{right:10px;bottom:10px}.drag-hint span{display:none}
+  .angle-tabs{grid-template-columns:repeat(2,1fr)}
+}
