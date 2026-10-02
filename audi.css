@@ -14,3 +14,12 @@ dialog{padding:0;border:0;border-radius:18px;background:#0c1115;color:#fff;max-w
 footer{padding:26px 0 40px;border-top:1px solid var(--line);display:flex;justify-content:space-between;color:#758189;font-size:9px;letter-spacing:.1em}
 @media(max-width:900px){.hero{grid-template-columns:1fr}.stage{min-height:520px}.gallery{grid-template-columns:1fr 1fr;grid-template-rows:380px 220px 220px}.tile:first-child{grid-column:1/3;grid-row:auto}.info-grid{grid-template-columns:1fr}}
 @media(max-width:600px){.top nav a{display:none}.stage{min-height:430px}.gallery{grid-template-columns:1fr;grid-template-rows:420px repeat(5,240px)}.tile:first-child{grid-column:auto}.heading{display:block}.heading>p{margin-top:12px}.cta{display:block}.cta button{width:100%;margin-top:18px}}
+.model-stage{min-height:600px;border:1px solid var(--line);border-radius:22px;overflow:hidden;position:relative;background:radial-gradient(circle at 50% 35%,#26343e 0,#11181d 55%,#090d10 100%);box-shadow:0 24px 70px rgba(0,0,0,.28)}
+.model-frame{position:absolute;inset:0;width:100%;height:100%;min-height:600px;border:0;display:block;background:#11181d}
+.model-badge{position:absolute;z-index:5;top:16px;left:16px;padding:8px 11px;border:1px solid rgba(255,255,255,.18);border-radius:999px;background:rgba(7,10,12,.78);backdrop-filter:blur(8px);font-size:8px;letter-spacing:.14em;color:var(--accent);pointer-events:none}
+.model-help{position:absolute;z-index:5;right:16px;bottom:16px;display:grid;gap:3px;text-align:right;padding:10px 12px;border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(7,10,12,.76);backdrop-filter:blur(8px);pointer-events:none}
+.model-help strong{font-size:9px;letter-spacing:.12em;color:#fff}.model-help span{font-size:9px;color:#9ca9af}
+.model-disclaimer{position:absolute;z-index:5;left:16px;bottom:16px;max-width:340px;padding:10px 12px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:rgba(7,10,12,.76);backdrop-filter:blur(8px);font-size:9px;line-height:1.45;color:#9ca9af;pointer-events:none}
+.model-credit{margin:9px 2px 0;color:#69767d;font-size:8px;line-height:1.5}
+@media(max-width:900px){.model-stage,.model-frame{min-height:520px}}
+@media(max-width:600px){.model-stage,.model-frame{min-height:430px}.model-disclaimer{left:10px;right:10px;bottom:10px;max-width:none;padding-right:120px}.model-help{right:10px;bottom:10px}.model-badge{top:10px;left:10px}}

@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="audi.css">
 </head>
 <body>
-  <div class="demo"><b>EXAMPLE LISTING</b> · Audi S5 Avant · Photo-based demo · Unverified fields are marked</div>
+  <div class="demo"><b>EXAMPLE LISTING</b> · Audi S5 Avant · Interactive 3D + actual photo gallery · Unverified fields are marked</div>
 
   <header class="wrap top">
     <a class="brand" href="./">JAPAN RECON CAR GALLERY<span>INTERACTIVE VEHICLE EXPERIENCE</span></a>
@@ -24,7 +24,7 @@
       <div>
         <p class="kicker">AUDI · PERFORMANCE AVANT</p>
         <h1>S5<br><span>Avant</span></h1>
-        <p class="lede">A single-car example built around your supplied Audi photo set. Customers can explore the body, cabin and mechanical details visually before reading the full listing.</p>
+        <p class="lede">A single-car demo with an interactive 3D vehicle preview above and your actual Audi photo set below. Customers can rotate and zoom the car, then verify the real vehicle through the photo gallery.</p>
         <div class="chips">
           <span class="chip">Right-hand drive</span>
           <span class="chip">S sport interior</span>
@@ -33,18 +33,20 @@
         </div>
       </div>
 
-      <div class="stage">
-        <div class="fallback"><div><strong>Audi S5 Avant</strong>Photo slot prepared for your front 3/4 image.</div></div>
-        <img src="assets/audi-s5/front-three-quarter.webp" alt="Audi S5 Avant front three-quarter" onerror="this.style.display='none'">
-        <button class="hot engine" type="button" data-info="engine" aria-label="Show engine information">+</button>
-        <button class="hot wheel" type="button" data-info="wheel" aria-label="Show wheel and brake information">+</button>
-        <button class="hot cabin" type="button" data-info="cabin" aria-label="Show cabin information">+</button>
-        <div class="pop" id="featurePop">
-          <small>TAP A HOTSPOT</small>
-          <strong>Explore the actual car.</strong>
-          <p>The interaction is tied to details visible in your supplied photo set.</p>
-        </div>
+      <div class="model-stage">
+        <div class="model-badge">INTERACTIVE 3D PREVIEW</div>
+        <iframe
+          class="model-frame"
+          title="Interactive representative Audi Avant 3D model"
+          src="https://sketchfab.com/models/6cc1eaf2f9e74d4dbf52feab93385134/embed?autostart=1&ui_theme=dark&ui_infos=0&ui_controls=1&ui_watermark_link=1"
+          frameborder="0"
+          allow="autoplay; fullscreen; xr-spatial-tracking"
+          allowfullscreen
+          loading="eager"></iframe>
+        <div class="model-help"><strong>DRAG TO ROTATE</strong><span>Scroll / pinch to zoom</span></div>
+        <div class="model-disclaimer">Representative Audi Avant 3D model — not the exact vehicle. Confirm actual condition and equipment using the photo gallery below.</div>
       </div>
+      <p class="model-credit">3D preview: Audi RS6-R C8 Avant ABT by DR1KING100K, CC Attribution via Sketchfab.</p>
     </section>
 
     <section class="wrap section" id="gallery">
