@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#07090b" />
+  <title>Japan Recon Car Gallery — Interactive Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="demo-banner" role="note">
+    <span class="demo-dot"></span>
+    DEMO WEBSITE · FICTIONAL INVENTORY & SPECIFICATIONS · NO REAL ENQUIRY, BOOKING OR PAYMENT
+  </div>
+
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Japan Recon Car Gallery home">
+      <span class="brand-mark">JRCG</span>
+      <span class="brand-copy"><strong>Japan Recon</strong><small>Car Gallery</small></span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="#inventory">Inventory</a>
+      <a href="#experience">Experience</a>
+      <button class="ghost-button" type="button" data-demo-action>Demo enquiry</button>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">JAPANESE RECON · INTERACTIVE SHOWROOM</p>
+        <h1 id="hero-title">Explore the car.<br><span>Not just the listing.</span></h1>
+        <p class="hero-lede">A premium demo gallery where customers can interact with the vehicle, reveal key components, compare specs and understand features before taking the next step.</p>
+        <div class="hero-actions">
+          <a class="primary-button" href="#inventory">Explore demo inventory</a>
+          <button class="text-button" type="button" id="heroExplore">Try interactive view <span>↗</span></button>
+        </div>
+        <div class="hero-stats" aria-label="Demo highlights">
+          <div><strong>06</strong><span>demo vehicles</span></div>
+          <div><strong>05</strong><span>interactive hotspots</span></div>
+          <div><strong>100%</strong><span>fictional data</span></div>
+        </div>
+      </div>
+
+      <div class="hero-stage" id="experience" aria-label="Interactive vehicle preview">
+        <div class="stage-label"><span>INTERACTIVE PREVIEW</span><span>MOVE · TAP · EXPLORE</span></div>
+        <div class="car-visual hero-car" aria-hidden="true">
+          <div class="shadow"></div>
+          <div class="car-shell">
+            <div class="window window-a"></div><div class="window window-b"></div>
+            <div class="front-light"></div><div class="rear-light"></div>
+            <div class="wheel wheel-front"><i></i></div><div class="wheel wheel-rear"><i></i></div>
+            <div class="body-line"></div>
+          </div>
+        </div>
+        <button class="hotspot hero-hotspot h-engine" type="button" data-hero-hotspot="Powertrain" aria-label="Show powertrain information"><span>+</span><b>Powertrain</b></button>
+        <button class="hotspot hero-hotspot h-brake" type="button" data-hero-hotspot="Brakes" aria-label="Show brake information"><span>+</span><b>Brakes</b></button>
+        <button class="hotspot hero-hotspot h-cabin" type="button" data-hero-hotspot="Cabin" aria-label="Show cabin information"><span>+</span><b>Cabin</b></button>
+        <div class="stage-info" id="stageInfo" aria-live="polite">
+          <small>SELECT A POINT</small>
+          <strong>Explore beneath the surface.</strong>
+          <p>Tap a hotspot to reveal what a customer could learn from the final vehicle detail experience.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="inventory-section" id="inventory" aria-labelledby="inventory-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">DEMO INVENTORY</p>
+          <h2 id="inventory-title">Browse the gallery</h2>
+        </div>
+        <p>Every vehicle, mileage figure and specification below is fictional demo content for interface preview only.</p>
+      </div>
+
+      <div class="filters" aria-label="Inventory filters">
+        <label>Brand
+          <select id="brandFilter">
+            <option value="all">All brands</option>
+            <option value="Toyota">Toyota</option>
+            <option value="Lexus">Lexus</option>
+            <option value="Nissan">Nissan</option>
+            <option value="Honda">Honda</option>
+          </select>
+        </label>
+        <label>Body
+          <select id="bodyFilter">
+            <option value="all">All body types</option>
+            <option value="MPV">MPV</option>
+            <option value="SUV">SUV</option>
+            <option value="Coupe">Coupe</option>
+            <option value="Sedan">Sedan</option>
+          </select>
+        </label>
+        <label>Year
+          <select id="yearFilter">
+            <option value="all">Any year</option>
+            <option value="2024">2024+</option>
+            <option value="2023">2023+</option>
+            <option value="2022">2022+</option>
+          </select>
+        </label>
+        <button class="filter-reset" id="resetFilters" type="button">Reset</button>
+        <span id="resultCount" class="result-count" aria-live="polite"></span>
+      </div>
+
+      <div class="inventory-grid" id="inventoryGrid"></div>
+    </section>
+
+    <section class="how-section" aria-labelledby="how-title">
+      <div class="section-heading compact">
+        <div>
+          <p class="eyebrow">CUSTOMER EXPERIENCE</p>
+          <h2 id="how-title">Learn by interacting</h2>
+        </div>
+      </div>
+      <div class="how-grid">
+        <article><span>01</span><h3>Browse</h3><p>Filter demo stock by brand, body style and year without information overload.</p></article>
+        <article><span>02</span><h3>Open</h3><p>Enter a focused vehicle view with large visuals instead of a dense specification page.</p></article>
+        <article><span>03</span><h3>Interact</h3><p>Tap hotspots on the vehicle to understand engine, braking, aero, cabin and HUD equipment.</p></article>
+        <article><span>04</span><h3>Understand</h3><p>Switch between highlights and full specs, then preview what an enquiry flow could look like.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div><strong>JAPAN RECON CAR GALLERY</strong><span>Interactive showroom prototype</span></div>
+    <div><span>Demo only</span><span>Not real inventory</span></div>
+  </footer>
+
+  <dialog id="vehicleDialog" class="vehicle-dialog" aria-labelledby="vehicleTitle">
+    <div class="dialog-shell">
+      <button class="dialog-close" id="closeDialog" type="button" aria-label="Close vehicle details">×</button>
+      <div class="dialog-topline"><span>DEMO VEHICLE DETAIL</span><span>FICTIONAL DATA</span></div>
+
+      <div class="vehicle-layout">
+        <div class="vehicle-media">
+          <div class="gallery-main" id="galleryMain">
+            <div class="detail-car-wrap" id="detailCarWrap">
+              <div class="car-visual detail-car" id="detailCar" aria-hidden="true">
+                <div class="shadow"></div>
+                <div class="car-shell">
+                  <div class="window window-a"></div><div class="window window-b"></div>
+                  <div class="front-light"></div><div class="rear-light"></div>
+                  <div class="wheel wheel-front"><i></i></div><div class="wheel wheel-rear"><i></i></div>
+                  <div class="body-line"></div>
+                </div>
+              </div>
+              <button class="hotspot detail-hotspot d-engine" data-feature="engine" type="button"><span>+</span><b>Engine</b></button>
+              <button class="hotspot detail-hotspot d-brake" data-feature="brakes" type="button"><span>+</span><b>Brakes</b></button>
+              <button class="hotspot detail-hotspot d-aero" data-feature="aero" type="button"><span>+</span><b>Aero</b></button>
+              <button class="hotspot detail-hotspot d-seat" data-feature="interior" type="button"><span>+</span><b>Interior</b></button>
+              <button class="hotspot detail-hotspot d-hud" data-feature="hud" type="button"><span>+</span><b>HUD</b></button>
+            </div>
+            <div class="gallery-overlay" id="galleryOverlay"></div>
+          </div>
+          <div class="gallery-tabs" role="tablist" aria-label="Vehicle gallery">
+            <button type="button" class="active" data-gallery="exterior">Exterior</button>
+            <button type="button" data-gallery="interior">Interior</button>
+            <button type="button" data-gallery="details">Details</button>
+          </div>
+        </div>
+
+        <div class="vehicle-copy">
+          <p class="eyebrow" id="vehicleMeta">2024 · DEMO SPEC</p>
+          <h2 id="vehicleTitle">Vehicle</h2>
+          <p class="vehicle-sub" id="vehicleSub"></p>
+
+          <div class="feature-panel" id="featurePanel" aria-live="polite">
+            <small>INTERACTIVE FEATURE</small>
+            <h3 id="featureTitle">Select a hotspot</h3>
+            <p id="featureText">Tap a point on the vehicle to reveal a customer-friendly explanation.</p>
+          </div>
+
+          <div class="quick-specs" id="quickSpecs"></div>
+
+          <details class="spec-details">
+            <summary>View complete demo specification <span>+</span></summary>
+            <div class="spec-groups" id="specGroups"></div>
+          </details>
+
+          <div class="demo-action-box">
+            <p><strong>Demo boundary:</strong> this prototype does not submit a real enquiry, reservation or payment.</p>
+            <button class="primary-button wide" type="button" data-demo-action>Preview demo enquiry</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="demoDialog" class="demo-dialog" aria-labelledby="demoTitle">
+    <div class="demo-dialog-box">
+      <button class="dialog-close" data-close-demo type="button" aria-label="Close">×</button>
+      <p class="eyebrow">DEMONSTRATION ONLY</p>
+      <h2 id="demoTitle">No real enquiry is submitted.</h2>
+      <p>This button only demonstrates how the customer journey could continue. A production version could later connect to WhatsApp, a CRM or a booking flow after you decide the real business process.</p>
+      <button class="primary-button" data-close-demo type="button">Got it</button>
+    </div>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
