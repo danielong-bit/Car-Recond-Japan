@@ -129,6 +129,41 @@ const hotspotButtons=[...document.querySelectorAll("[data-tour]")];
 const prefersReduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const transitionMs=prefersReduced?120:560;
 
+const HERO_CHUNKS = Array.from({length:10},(_,i)=>
+  `assets/audi-s5-hq/chunks/front-${String(i).padStart(2,"0")}.txt?v=10`
+);
+
+async function loadHighQualityHero(){
+  try{
+    const parts=await Promise.all(
+      HERO_CHUNKS.map(async url=>{
+        const response=await fetch(url,{cache:"no-store"});
+        if(!response.ok) throw new Error(`Hero chunk failed: ${url}`);
+        return response.text();
+      })
+    );
+    const base64=parts.join("").replace(/\s+/g,"");
+    const src=`data:image/jpeg;base64,${base64}`;
+
+    const image=new Image();
+    image.src=src;
+    if(image.decode) await image.decode();
+    else await new Promise((resolve,reject)=>{
+      image.onload=resolve;
+      image.onerror=reject;
+    });
+
+    overviewImage.src=src;
+    const galleryHero=document.querySelector("[data-hq-hero]");
+    if(galleryHero) galleryHero.src=src;
+  }catch(error){
+    console.error("HQ Audi hero failed to load",error);
+  }
+}
+
+loadHighQualityHero();
+
+
 function delay(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
 
 function preload(src){
