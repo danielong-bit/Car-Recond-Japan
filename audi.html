@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Interactive Audi S5 Avant example for Japan Recon Car Gallery">
   <title>Audi S5 Avant | Japan Recon Car Gallery</title>
-  <link rel="stylesheet" href="audi-experience.css?v=4">
+  <link rel="stylesheet" href="audi-experience.css?v=5">
 </head>
 <body>
   <div class="demo"><b>EXAMPLE LISTING</b> · Audi S5 Avant · Interactive real-vehicle experience · Unverified fields are marked</div>
@@ -35,58 +35,55 @@
         <p class="experience-note">Interactive presentation built from photographs of this vehicle.</p>
       </div>
 
-      <div class="experience-shell" id="experienceShell" data-scene="overview">
-        <div class="experience-frame" id="experienceFrame" aria-live="polite">
+      <div class="experience-shell" id="experienceShell" data-scene="overview" data-category="overview">
+        <div class="experience-frame tour-frame" id="experienceFrame" aria-live="polite">
           <div class="media-plane" id="mediaPlane">
-            <img
-              class="experience-overview"
-              id="overviewImage"
-              src="assets/audi-s5-v2/hero.jpg"
-              alt="Audi S5 Avant front three-quarter view">
-
-            <img
-              class="experience-detail-image"
-              id="detailImage"
-              alt=""
-              aria-hidden="true">
+            <img class="experience-overview" id="overviewImage" src="assets/audi-s5-v2/hero.jpg" alt="Audi S5 Avant front three-quarter view">
+            <img class="experience-detail-image" id="detailImage" alt="" aria-hidden="true">
 
             <div class="hotspots" id="hotspots">
-              <button class="vehicle-hotspot engine-hotspot" type="button" data-detail="engine" aria-label="Explore engine">
+              <button class="vehicle-hotspot engine-hotspot" type="button" data-tour="engine" aria-label="Explore engine">
                 <span class="hotspot-dot">+</span><span class="hotspot-label">Engine</span>
               </button>
-              <button class="vehicle-hotspot cockpit-hotspot" type="button" data-detail="cockpit" aria-label="Explore cockpit">
-                <span class="hotspot-dot">+</span><span class="hotspot-label">Cockpit</span>
+              <button class="vehicle-hotspot interior-hotspot" type="button" data-tour="interior" aria-label="Explore interior">
+                <span class="hotspot-dot">+</span><span class="hotspot-label">Interior</span>
               </button>
-              <button class="vehicle-hotspot wheel-hotspot" type="button" data-detail="wheel" aria-label="Explore wheels and brakes">
-                <span class="hotspot-dot">+</span><span class="hotspot-label">Wheels & Brakes</span>
+              <button class="vehicle-hotspot wheel-hotspot" type="button" data-tour="wheel" aria-label="Explore wheel and brakes">
+                <span class="hotspot-dot">+</span><span class="hotspot-label">Wheel & Brakes</span>
               </button>
-              <button class="vehicle-hotspot audio-hotspot" type="button" data-detail="audio" aria-label="Explore Bang and Olufsen audio">
-                <span class="hotspot-dot">+</span><span class="hotspot-label">B&O Audio</span>
+              <button class="vehicle-hotspot audio-hotspot" type="button" data-tour="audio" aria-label="Explore Bang and Olufsen audio">
+                <span class="hotspot-dot">+</span><span class="hotspot-label">Audio</span>
               </button>
+              <button class="vehicle-hotspot cargo-hotspot" type="button" data-tour="cargo" aria-label="Explore cargo area">
+                <span class="hotspot-dot">+</span><span class="hotspot-label">Cargo</span>
+              </button>
+            </div>
+
+            <div class="experience-topline">
+              <span>INTERACTIVE VEHICLE TOUR</span>
+              <span id="sceneLabel">OVERVIEW</span>
+            </div>
+
+            <div class="detail-status" id="detailStatus">
+              <span>SELECT A PART</span>
+              <strong>Click the car to inspect it.</strong>
             </div>
           </div>
 
-          <div class="experience-topline">
-            <span>INTERACTIVE VEHICLE EXPERIENCE</span>
-            <span id="sceneLabel">OVERVIEW</span>
-          </div>
+          <aside class="tour-panel" id="tourPanel">
+            <div>
+              <p class="kicker" id="detailEyebrow">VEHICLE OVERVIEW</p>
+              <h2 id="detailTitle">Choose what you want to inspect.</h2>
+              <p class="tour-description" id="detailDescription">Open the engine bay, move into the cabin, inspect the wheel and brake hardware, view the audio detail or check the cargo area.</p>
+            </div>
 
-          <button class="detail-back" id="detailBack" type="button" aria-label="Back to vehicle overview">
-            <span>←</span> Back to overview
-          </button>
+            <div class="tour-subnav" id="tourSubnav" aria-label="Detail options"></div>
+            <div class="tour-specs" id="tourSpecs"></div>
 
-          <div class="detail-status" id="detailStatus">
-            <span>SELECT A POINT</span>
-            <strong>Explore the actual S5 Avant.</strong>
-          </div>
-        </div>
-
-        <div class="detail-copy" id="detailCopy" tabindex="-1">
-          <div>
-            <p class="kicker" id="detailEyebrow">REAL VEHICLE DETAIL</p>
-            <h2 id="detailTitle">Choose a vehicle detail.</h2>
-          </div>
-          <p id="detailDescription">Engine, cockpit, wheel and audio views open inside the same vehicle scene, using photographs of this actual car.</p>
+            <button class="detail-back" id="detailBack" type="button" aria-label="Back to vehicle overview">
+              <span>←</span> Push back to vehicle
+            </button>
+          </aside>
         </div>
       </div>
     </section>
@@ -190,6 +187,6 @@
     </div>
   </dialog>
 
-  <script src="audi-experience.js?v=4"></script>
+  <script src="audi-experience.js?v=5"></script>
 </body>
 </html>

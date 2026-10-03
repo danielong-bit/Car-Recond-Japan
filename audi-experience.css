@@ -144,3 +144,139 @@ footer{padding:26px 0 40px;border-top:1px solid var(--line);display:flex;justify
   .wheel-hotspot{left:76%;top:69%}
   .audio-hotspot{left:48%;top:54%}
 }
+
+
+/* v5 — hierarchical interactive vehicle tour */
+.hero{grid-template-columns:.52fr 1.48fr}
+.tour-frame{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 310px;
+  aspect-ratio:auto!important;
+  min-height:610px!important;
+  background:#0a0e11!important;
+}
+.tour-frame .media-plane{
+  position:relative!important;
+  inset:auto!important;
+  left:auto!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:610px;
+  transform:none!important;
+  overflow:hidden;
+  background:#10171b;
+}
+.tour-frame .experience-overview,
+.tour-frame .experience-detail-image{
+  width:100%;height:100%;object-fit:cover;
+  object-position:50% 70%;
+}
+.tour-frame .experience-overview{
+  transition:transform .62s var(--ease),opacity .45s var(--ease),filter .45s var(--ease);
+  transform-origin:var(--focus-x,50%) var(--focus-y,50%);
+}
+.tour-frame .experience-detail-image{
+  z-index:2;
+  opacity:0;
+  transform:scale(1.05);
+  transition:opacity .48s var(--ease),transform .62s var(--ease),clip-path .62s var(--ease);
+}
+.experience-shell[data-scene="entering"] .experience-overview,
+.experience-shell[data-scene="detail"] .experience-overview{
+  transform:scale(1.28);
+  opacity:.08;
+  filter:blur(1px);
+}
+.experience-shell[data-scene="detail"] .experience-detail-image{
+  opacity:1;
+  transform:scale(1);
+}
+.experience-shell[data-scene="returning"] .experience-detail-image{
+  opacity:0;
+  transform:scale(1.04);
+}
+.experience-shell[data-category="engine"][data-scene="entering"] .experience-detail-image,
+.experience-shell[data-category="cargo"][data-scene="entering"] .experience-detail-image{
+  clip-path:inset(42% 0 0 0 round 20px);
+}
+.experience-shell[data-category="engine"][data-scene="detail"] .experience-detail-image,
+.experience-shell[data-category="cargo"][data-scene="detail"] .experience-detail-image{
+  clip-path:inset(0 0 0 0 round 0);
+}
+.child-switching .experience-detail-image{opacity:.22!important;transform:scale(1.035)!important}
+.experience-detail-image.focus-rim{object-position:50% 50%}
+.experience-detail-image.focus-brake{object-position:64% 53%;transform:scale(1.14)!important}
+.experience-detail-image.focus-tyre{object-position:40% 55%;transform:scale(1.12)!important}
+
+.tour-panel{
+  position:relative;
+  z-index:12;
+  display:flex;
+  flex-direction:column;
+  gap:22px;
+  padding:72px 22px 22px;
+  border-left:1px solid var(--line);
+  background:linear-gradient(180deg,#10161a,#0b1013);
+}
+.tour-panel h2{margin:0;font-size:30px;line-height:1.05;font-weight:500;letter-spacing:-.035em}
+.tour-description{margin:13px 0 0;color:var(--muted);font-size:11px;line-height:1.7}
+.tour-subnav{display:flex;flex-wrap:wrap;gap:7px}
+.tour-subnav:empty{display:none}
+.tour-subnav button{
+  min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:999px;
+  background:#0b1013;color:#9eabb1;font-size:8px;letter-spacing:.1em;cursor:pointer
+}
+.tour-subnav button:hover,.tour-subnav button.active{border-color:var(--accent);color:#111;background:var(--accent)}
+.tour-specs{border-top:1px solid var(--line)}
+.tour-specs:empty{display:none}
+.tour-spec-row{display:grid;grid-template-columns:1fr 1.15fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:9px}
+.tour-spec-row span{color:#738087}
+.tour-spec-row strong{font-weight:500;color:#dce2e5;text-align:right}
+.tour-frame .detail-back{
+  position:static!important;
+  margin-top:auto;
+  width:100%;
+  justify-content:center;
+  min-height:42px;
+  opacity:0;
+  transform:translateY(4px);
+  pointer-events:none;
+}
+.experience-shell[data-scene="detail"] .tour-frame .detail-back{
+  opacity:1;transform:none;pointer-events:auto
+}
+
+.tour-frame .hotspots{position:absolute;inset:0;z-index:6}
+.engine-hotspot{left:73%!important;top:34%!important}
+.interior-hotspot{left:58%;top:24%}
+.wheel-hotspot{left:77%!important;top:69%!important}
+.audio-hotspot{left:50%!important;top:48%!important}
+.cargo-hotspot{left:23%;top:39%}
+.experience-shell:not([data-scene="overview"]) .hotspots{opacity:0;pointer-events:none}
+.tour-frame .experience-topline{right:326px}
+.tour-frame .detail-status{left:16px;bottom:16px}
+.experience-shell:not([data-scene="overview"]) .detail-status{opacity:0}
+
+@media(max-width:1050px){
+  .hero{grid-template-columns:1fr}
+  .tour-frame{grid-template-columns:minmax(0,1fr) 285px}
+  .tour-frame .experience-topline{right:301px}
+}
+@media(max-width:760px){
+  .tour-frame{display:block;min-height:0!important}
+  .tour-frame .media-plane{min-height:0;height:auto;aspect-ratio:4/5}
+  .tour-panel{border-left:0;border-top:1px solid var(--line);padding:22px}
+  .tour-frame .experience-topline{right:10px}
+  .tour-frame .detail-back{margin-top:8px}
+  .tour-frame .experience-overview,.tour-frame .experience-detail-image{object-position:50% 66%}
+  .engine-hotspot{left:70%!important;top:42%!important}
+  .interior-hotspot{left:57%;top:34%}
+  .wheel-hotspot{left:75%!important;top:70%!important}
+  .audio-hotspot{left:47%!important;top:54%!important}
+  .cargo-hotspot{left:22%;top:45%}
+}
+@media(prefers-reduced-motion:reduce){
+  .tour-frame .experience-overview,.tour-frame .experience-detail-image{transition-duration:.12s!important}
+  .experience-shell[data-scene="entering"] .experience-overview,
+  .experience-shell[data-scene="detail"] .experience-overview{transform:none!important;filter:none!important}
+}

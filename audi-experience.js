@@ -1,139 +1,269 @@
-const details={
+const ROOT="assets/audi-s5/";
+
+const tour={
   engine:{
-    title:"ENGINE",
-    subtitle:"Performance hardware beneath the bonnet.",
-    description:"A closer look at the vehicle's actual engine compartment and visible mechanical components. Engine output and other specifications remain unverified until stock documentation is supplied.",
-    src:"https://raw.githubusercontent.com/danielong-bit/Car-Recond-Japan/main/assets/audi-s5/engine.webp",
+    label:"ENGINE",
+    title:"Engine bay",
+    description:"Move toward the bonnet and reveal the actual engine compartment. Exact engine output, torque and drivetrain remain unverified until the stock documents are supplied.",
+    src:ROOT+"engine.webp",
     alt:"Audi S5 Avant engine bay",
-    x:"73%",y:"34%"
+    x:"73%",y:"34%",
+    specs:[
+      ["Engine type","To verify"],
+      ["Power","To verify"],
+      ["Torque","To verify"],
+      ["Transmission","To verify"]
+    ]
   },
-  cockpit:{
-    title:"COCKPIT",
-    subtitle:"Driver-focused digital cabin.",
-    description:"Explore the actual right-hand-drive cockpit, steering controls, digital displays and centre console fitted to this vehicle.",
-    src:"https://raw.githubusercontent.com/danielong-bit/Car-Recond-Japan/main/assets/audi-s5/cockpit.webp",
+  interior:{
+    label:"INTERIOR",
+    title:"Inside the S5 Avant",
+    description:"Push into the cabin, then choose a specific interior area to inspect.",
+    src:ROOT+"cockpit.webp",
     alt:"Audi S5 Avant right-hand-drive cockpit",
-    x:"58%",y:"23%"
+    x:"58%",y:"23%",
+    children:{
+      cockpit:{
+        label:"COCKPIT",
+        title:"Driver-focused cockpit",
+        description:"Actual right-hand-drive cockpit with steering controls, digital instrument cluster and centre display visible.",
+        src:ROOT+"cockpit.webp",
+        alt:"Audi S5 Avant right-hand-drive cockpit",
+        specs:[["Steering","Right-hand drive"],["Driver display","Digital instrument cluster"],["Centre display","Visible in photo"],["Other equipment","To verify"]]
+      },
+      climate:{
+        label:"REAR CLIMATE",
+        title:"Rear climate controls",
+        description:"Move deeper into the cabin to inspect the rear climate-control area photographed in this vehicle.",
+        src:ROOT+"rear-climate.webp",
+        alt:"Audi S5 Avant rear climate controls",
+        specs:[["Rear climate","Controls visible"],["Zones","To verify"],["Seat functions","To verify"],["Rear comfort spec","To verify"]]
+      },
+      audio:{
+        label:"BANG & OLUFSEN",
+        title:"Premium cabin audio detail",
+        description:"Inspect the Bang & Olufsen branded speaker treatment visible on the photographed vehicle.",
+        src:ROOT+"bang-olufsen.webp",
+        alt:"Audi S5 Avant Bang and Olufsen speaker",
+        specs:[["Brand","Bang & Olufsen"],["Speaker count","To verify"],["Output","To verify"],["Package level","To verify"]]
+      }
+    }
   },
   wheel:{
-    title:"WHEELS & BRAKES",
-    subtitle:"S-design wheel and performance braking detail.",
-    description:"Inspect the actual wheel design, tyre area and red S-branded front brake caliper visible on this vehicle. Wheel size and brake specifications remain to verify.",
-    src:"https://raw.githubusercontent.com/danielong-bit/Car-Recond-Japan/main/assets/audi-s5/wheel-brake.webp",
-    alt:"Audi S5 Avant wheel and red S-branded brake caliper",
-    x:"77%",y:"67%"
+    label:"WHEEL & BRAKES",
+    title:"Wheel, brake and tyre",
+    description:"Zoom into the front wheel area, then inspect the rim, brake caliper or tyre detail.",
+    src:ROOT+"wheel-brake.webp",
+    alt:"Audi S5 Avant wheel and red S brake caliper",
+    x:"77%",y:"67%",
+    children:{
+      rim:{
+        label:"RIM",
+        title:"Wheel design",
+        description:"Focus on the alloy-wheel design and centre-cap area. Exact wheel dimensions remain to verify.",
+        src:ROOT+"wheel-brake.webp",
+        alt:"Audi S5 Avant alloy wheel",
+        focus:"rim",
+        specs:[["Rim design","Multi-spoke alloy"],["Wheel size","To verify"],["Finish","Visible in photo"],["Centre cap","Audi"]]
+      },
+      brake:{
+        label:"BRAKE",
+        title:"S-branded brake caliper",
+        description:"Zoom closer to the visible red S-branded front brake caliper and brake hardware.",
+        src:ROOT+"wheel-brake.webp",
+        alt:"Audi S5 Avant red S brake caliper",
+        focus:"brake",
+        specs:[["Caliper","Red S-branded front caliper"],["Brake disc","Visible in photo"],["Caliper piston count","To verify"],["Brake package","To verify"]]
+      },
+      tyre:{
+        label:"TYRE",
+        title:"Tyre detail",
+        description:"Inspect the tyre sidewall area. Brand, size and specification should only be filled when they can be read or confirmed from stock information.",
+        src:ROOT+"wheel-brake.webp",
+        alt:"Audi S5 Avant tyre and wheel",
+        focus:"tyre",
+        specs:[["Tyre brand","To verify"],["Tyre size","To verify"],["Profile","To verify"],["Condition","Inspect photo / verify"]]
+      }
+    }
   },
   audio:{
-    title:"BANG & OLUFSEN",
-    subtitle:"Premium cabin audio detail.",
-    description:"A close look at the Bang & Olufsen speaker treatment visible in the photographed vehicle. Speaker count, wattage and package level are not stated without verification.",
-    src:"https://raw.githubusercontent.com/danielong-bit/Car-Recond-Japan/main/assets/audi-s5/bang-olufsen.webp",
-    alt:"Audi S5 Avant Bang and Olufsen speaker detail",
-    x:"51%",y:"47%"
+    label:"AUDIO",
+    title:"Bang & Olufsen",
+    description:"Move into the cabin audio detail and inspect the Bang & Olufsen branded speaker treatment.",
+    src:ROOT+"bang-olufsen.webp",
+    alt:"Audi S5 Avant Bang and Olufsen speaker",
+    x:"51%",y:"47%",
+    specs:[["Brand","Bang & Olufsen"],["Speaker count","To verify"],["System output","To verify"],["Package","To verify"]]
+  },
+  cargo:{
+    label:"CARGO",
+    title:"Cargo and powered tailgate",
+    description:"Push toward the rear of the car and reveal the photographed cargo compartment. The vehicle also shows powered tailgate controls.",
+    src:ROOT+"cargo.webp",
+    alt:"Audi S5 Avant cargo area with tailgate open",
+    x:"24%",y:"38%",
+    specs:[["Body style","Avant / wagon"],["Tailgate","Powered controls visible"],["Cargo capacity","To verify"],["Rear seat split","To verify"]]
   }
 };
 
-const state={scene:"overview",activeDetail:null,transitioning:false,lastHotspot:null};
+const state={
+  scene:"overview",
+  category:null,
+  child:null,
+  transitioning:false,
+  lastTrigger:null
+};
+
 const shell=document.getElementById("experienceShell");
-const frame=document.getElementById("experienceFrame");\nconst mediaPlane=document.getElementById("mediaPlane");
+const mediaPlane=document.getElementById("mediaPlane");
 const overviewImage=document.getElementById("overviewImage");
 const detailImage=document.getElementById("detailImage");
-const detailBack=document.getElementById("detailBack");
 const sceneLabel=document.getElementById("sceneLabel");
-const detailTitle=document.getElementById("detailTitle");
 const detailEyebrow=document.getElementById("detailEyebrow");
+const detailTitle=document.getElementById("detailTitle");
 const detailDescription=document.getElementById("detailDescription");
-const detailCopy=document.getElementById("detailCopy");
-const hotspotButtons=[...document.querySelectorAll(".vehicle-hotspot")];
+const tourSubnav=document.getElementById("tourSubnav");
+const tourSpecs=document.getElementById("tourSpecs");
+const detailBack=document.getElementById("detailBack");
+const hotspotButtons=[...document.querySelectorAll("[data-tour]")];
 const prefersReduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const transitionMs=prefersReduced?140:640;
+const transitionMs=prefersReduced?120:560;
 
-function preloadDetail(key){
-  const detail=details[key];
-  if(!detail||detail.preloaded)return;
+function delay(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
+
+function preload(src){
+  if(!src)return;
   const img=new Image();
-  img.src=detail.src;
-  detail.preloader=img;
-  detail.preloaded=true;
+  img.src=src;
 }
 
-async function ensureLoaded(detail){
-  const img=detail.preloader||new Image();
-  if(!detail.preloader)img.src=detail.src;
-  if(img.complete&&img.naturalWidth)return;
-  try{await img.decode();}catch{
-    await new Promise(resolve=>{
-      img.onload=resolve;
-      img.onerror=resolve;
-    });
+function renderSpecs(rows=[]){
+  tourSpecs.innerHTML=rows.map(([key,value])=>`
+    <div class="tour-spec-row"><span>${key}</span><strong>${value}</strong></div>
+  `).join("");
+}
+
+function renderChildren(category){
+  const children=tour[category]?.children;
+  if(!children){
+    tourSubnav.innerHTML="";
+    return;
   }
-}
-
-function setHotspotsDisabled(disabled){
-  hotspotButtons.forEach(button=>button.disabled=disabled);
-}
-
-async function enterDetail(key,trigger){
-  if(state.transitioning||state.scene!=="overview"||!details[key])return;
-  const detail=details[key];
-  state.transitioning=true;
-  state.scene="entering";
-  state.activeDetail=key;
-  state.lastHotspot=trigger;
-  setHotspotsDisabled(true);
-  shell.dataset.scene="entering";
-  frame.style.setProperty("--focus-x",detail.x);
-  frame.style.setProperty("--focus-y",detail.y);
-  sceneLabel.textContent="LOADING DETAIL";
-  preloadDetail(key);
-  await ensureLoaded(detail);
-
-  detailImage.src=detail.src;
-  detailImage.alt=detail.alt;
-  detailImage.removeAttribute("aria-hidden");
-  detailEyebrow.textContent=detail.title;
-  detailTitle.textContent=detail.subtitle;
-  detailDescription.textContent=detail.description;
-  sceneLabel.textContent=detail.title;
-
-  requestAnimationFrame(()=>{
-    shell.dataset.scene="detail";
-    state.scene="detail";
-    window.setTimeout(()=>{
-      state.transitioning=false;
-      detailBack.focus({preventScroll:true});
-    },transitionMs);
+  tourSubnav.innerHTML=Object.entries(children).map(([key,item])=>`
+    <button type="button" data-child="${key}" class="${state.child===key?"active":""}">${item.label}</button>
+  `).join("");
+  tourSubnav.querySelectorAll("[data-child]").forEach(button=>{
+    button.addEventListener("click",()=>selectChild(category,button.dataset.child));
   });
 }
 
-function returnOverview(){
+function applyCopy(item){
+  detailEyebrow.textContent=item.label;
+  detailTitle.textContent=item.title;
+  detailDescription.textContent=item.description;
+  renderSpecs(item.specs||[]);
+  sceneLabel.textContent=item.label;
+}
+
+async function setDetailImage(item,category){
+  const src=item.src;
+  if(!src)return;
+  preload(src);
+  detailImage.className="experience-detail-image";
+  if(item.focus) detailImage.classList.add("focus-"+item.focus);
+  detailImage.alt=item.alt||"Audi S5 Avant detail";
+  detailImage.src=src;
+  detailImage.removeAttribute("aria-hidden");
+  shell.dataset.category=category;
+}
+
+async function enterCategory(category,trigger){
+  if(state.transitioning||state.scene!=="overview"||!tour[category])return;
+  const item=tour[category];
+  state.transitioning=true;
+  state.scene="entering";
+  state.category=category;
+  state.child=null;
+  state.lastTrigger=trigger;
+
+  shell.dataset.scene="entering";
+  shell.dataset.category=category;
+  mediaPlane.style.setProperty("--focus-x",item.x||"50%");
+  mediaPlane.style.setProperty("--focus-y",item.y||"50%");
+  sceneLabel.textContent="MOVING IN";
+
+  await setDetailImage(item,category);
+  applyCopy(item);
+
+  if(item.children){
+    state.child=Object.keys(item.children)[0];
+    const first=item.children[state.child];
+    await setDetailImage(first,category);
+    applyCopy(first);
+  }
+  renderChildren(category);
+
+  await delay(prefersReduced?20:120);
+  shell.dataset.scene="detail";
+  state.scene="detail";
+  await delay(transitionMs);
+  state.transitioning=false;
+  detailBack.focus({preventScroll:true});
+}
+
+async function selectChild(category,key){
+  if(state.transitioning||state.scene!=="detail")return;
+  const item=tour[category]?.children?.[key];
+  if(!item)return;
+  state.transitioning=true;
+  state.child=key;
+  shell.classList.add("child-switching");
+  renderChildren(category);
+  await delay(prefersReduced?30:170);
+  await setDetailImage(item,category);
+  applyCopy(item);
+  shell.classList.remove("child-switching");
+  renderChildren(category);
+  await delay(prefersReduced?20:180);
+  state.transitioning=false;
+}
+
+async function returnOverview(){
   if(state.transitioning||state.scene!=="detail")return;
   state.transitioning=true;
   state.scene="returning";
   shell.dataset.scene="returning";
+  sceneLabel.textContent="PUSHING BACK";
+  await delay(transitionMs);
+
+  detailImage.src="";
+  detailImage.alt="";
+  detailImage.setAttribute("aria-hidden","true");
+  detailImage.className="experience-detail-image";
+
+  detailEyebrow.textContent="VEHICLE OVERVIEW";
+  detailTitle.textContent="Choose what you want to inspect.";
+  detailDescription.textContent="Open the engine bay, move into the cabin, inspect the wheel and brake hardware, view the audio detail or check the cargo area.";
+  tourSubnav.innerHTML="";
+  tourSpecs.innerHTML="";
+  shell.dataset.category="overview";
+  shell.dataset.scene="overview";
   sceneLabel.textContent="OVERVIEW";
 
-  window.setTimeout(()=>{
-    detailImage.src="";
-    detailImage.alt="";
-    detailImage.setAttribute("aria-hidden","true");
-    detailEyebrow.textContent="REAL VEHICLE DETAIL";
-    detailTitle.textContent="Choose a vehicle detail.";
-    detailDescription.textContent="Engine, cockpit, wheel and audio views open inside the same vehicle scene, using photographs of this actual car.";
-    shell.dataset.scene="overview";
-    state.scene="overview";
-    state.activeDetail=null;
-    state.transitioning=false;
-    setHotspotsDisabled(false);
-    if(state.lastHotspot)state.lastHotspot.focus({preventScroll:true});
-  },transitionMs);
+  state.scene="overview";
+  state.category=null;
+  state.child=null;
+  state.transitioning=false;
+
+  if(state.lastTrigger)state.lastTrigger.focus({preventScroll:true});
 }
 
 hotspotButtons.forEach(button=>{
-  const key=button.dataset.detail;
-  button.addEventListener("mouseenter",()=>preloadDetail(key));
-  button.addEventListener("focus",()=>preloadDetail(key));
-  button.addEventListener("click",()=>enterDetail(key,button));
+  const category=button.dataset.tour;
+  const item=tour[category];
+  button.addEventListener("mouseenter",()=>preload(item?.src));
+  button.addEventListener("focus",()=>preload(item?.src));
+  button.addEventListener("click",()=>enterCategory(category,button));
 });
 
 detailBack.addEventListener("click",returnOverview);
@@ -144,6 +274,7 @@ document.addEventListener("keydown",event=>{
   }
 });
 
+// Gallery + lightbox
 const lightbox=document.getElementById("lightbox");
 const lightboxImg=document.getElementById("lightboxImg");
 function openLightbox(src,alt){
