@@ -280,3 +280,17 @@ footer{padding:26px 0 40px;border-top:1px solid var(--line);display:flex;justify
   .experience-shell[data-scene="entering"] .experience-overview,
   .experience-shell[data-scene="detail"] .experience-overview{transform:none!important;filter:none!important}
 }
+
+/* v6 — use full-resolution vehicle image without softening */
+.tour-frame .experience-overview{
+  object-position:50% 69%!important;
+  filter:none!important;
+  image-rendering:auto;
+  transform:translateZ(0);
+  backface-visibility:hidden;
+}
+.experience-shell[data-scene="entering"] .experience-overview,
+.experience-shell[data-scene="detail"] .experience-overview{
+  transform:scale(1.12)!important;
+  filter:none!important;
+}

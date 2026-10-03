@@ -1,6 +1,6 @@
 const vehicles = [
   {
-    id:'audi-s5', brand:'Audi', model:'S5 Avant', body:'Sedan', year:2025, mileage:'To verify', power:'To verify', engine:'To verify', torque:'To verify', color:'Daytona Grey', price:'RM 438,000', image:'assets/audi-s5-v2/hero.jpg', sub:'Actual photographed example · interactive detail page',
+    id:'audi-s5', brand:'Audi', model:'S5 Avant', body:'Sedan', year:2025, mileage:'To verify', power:'To verify', engine:'To verify', torque:'To verify', color:'Daytona Grey', price:'RM 438,000', image:'assets/audi-s5-hq/front-three-quarter.webp', sub:'Actual photographed example · interactive detail page',
     actualPage:'audi.html',
     features:{
       engine:['Engine bay','Open the dedicated Audi page to inspect the real photographed engine bay.'],
