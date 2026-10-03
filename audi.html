@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Interactive Audi S5 Avant example for Japan Recon Car Gallery">
   <title>Audi S5 Avant | Japan Recon Car Gallery</title>
-  <link rel="stylesheet" href="audi-experience.css?v=10">
+  <link rel="stylesheet" href="audi-experience.css?v=8">
 </head>
 <body>
   <div class="demo"><b>EXAMPLE LISTING</b> · Audi S5 Avant · Interactive real-vehicle experience · Unverified fields are marked</div>
@@ -38,7 +38,7 @@
       <div class="experience-shell" id="experienceShell" data-scene="overview" data-category="overview">
         <div class="experience-frame tour-frame" id="experienceFrame" aria-live="polite">
           <div class="media-plane" id="mediaPlane">
-            <img class="experience-overview" id="overviewImage" src="assets/audi-s5/front-view.webp" alt="Audi S5 Avant front three-quarter view" width="810" height="1080" decoding="async">
+            <img class="experience-overview" id="overviewImage" src="assets/audi-s5-v2/hero.jpg" alt="Audi S5 Avant front three-quarter view" width="520" height="693" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='assets/audi-s5/front-view.webp'">
             <img class="experience-detail-image" id="detailImage" alt="" aria-hidden="true">
 
             <div class="hotspots" id="hotspots">
@@ -103,7 +103,7 @@
 
       <div class="gallery">
         <button class="tile" type="button" data-kind="exterior">
-          <img data-hq-hero src="assets/audi-s5/front-view.webp" alt="Audi S5 Avant front three-quarter"><span>Front 3/4</span>
+          <img data-hq-hero src="assets/audi-s5-v2/hero.jpg" alt="Audi S5 Avant front three-quarter" onerror="this.onerror=null;this.src='assets/audi-s5/front-view.webp'"><span>Front 3/4</span>
         </button>
         <button class="tile" type="button" data-kind="exterior">
           <img src="assets/audi-s5/rear-three-quarter.webp" alt="Audi S5 Avant rear three-quarter" onerror="this.parentElement.classList.add('missing');this.style.display='none'"><span>Rear 3/4</span>
@@ -187,6 +187,6 @@
     </div>
   </dialog>
 
-  <script src="audi-experience.js?v=10"></script>
+  <script src="audi-experience.js?v=8"></script>
 </body>
 </html>

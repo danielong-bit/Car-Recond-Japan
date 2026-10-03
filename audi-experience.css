@@ -315,3 +315,60 @@ footer{padding:26px 0 40px;border-top:1px solid var(--line);display:flex;justify
 .experience-detail-image.focus-rim{object-position:50% 50%;transform:scale(1.08)!important}
 .experience-detail-image.focus-brake{object-position:64% 53%;transform:scale(1.14)!important}
 .experience-detail-image.focus-tyre{object-position:40% 55%;transform:scale(1.12)!important}
+
+
+/* v8 — code-only photo presentation; no Canva, no blur, no image re-rendering */
+.tour-frame{
+  grid-template-columns:minmax(0,1fr) 310px;
+  align-items:stretch;
+}
+.tour-frame .media-plane{
+  position:relative!important;
+  inset:auto!important;
+  left:auto!important;
+  justify-self:center;
+  align-self:stretch;
+  width:auto!important;
+  max-width:100%;
+  height:610px!important;
+  aspect-ratio:520/693;
+  min-height:0!important;
+  transform:none!important;
+  overflow:hidden;
+  background:#10171b;
+}
+.tour-frame .experience-overview{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover!important;
+  object-position:center center!important;
+  opacity:1!important;
+  filter:none!important;
+  transform:none!important;
+  image-rendering:auto;
+  backface-visibility:hidden;
+}
+.experience-shell[data-scene="overview"] .experience-overview{
+  opacity:1!important;
+  filter:none!important;
+  transform:none!important;
+}
+.experience-shell[data-scene="entering"] .experience-overview,
+.experience-shell[data-scene="detail"] .experience-overview{
+  transform:scale(1.08)!important;
+  opacity:.08!important;
+  filter:none!important;
+}
+.tour-frame .experience-detail-image{
+  object-fit:cover!important;
+  filter:none!important;
+}
+@media(max-width:760px){
+  .tour-frame .media-plane{
+    width:100%!important;
+    height:auto!important;
+    aspect-ratio:520/693!important;
+  }
+}
