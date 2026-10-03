@@ -294,3 +294,24 @@ footer{padding:26px 0 40px;border-top:1px solid var(--line);display:flex;justify
   transform:scale(1.12)!important;
   filter:none!important;
 }
+
+
+/* v6 — preserve original photo clarity */
+.tour-frame .experience-overview{
+  object-fit:cover;
+  object-position:50% 69%;
+  filter:none!important;
+  image-rendering:auto;
+  transform:translateZ(0);
+  backface-visibility:hidden;
+  transition:transform .62s cubic-bezier(.22,.8,.25,1),opacity .42s ease!important;
+}
+.experience-shell[data-scene="entering"] .experience-overview,
+.experience-shell[data-scene="detail"] .experience-overview{
+  transform:scale(1.12)!important;
+  opacity:.08;
+  filter:none!important;
+}
+.experience-detail-image.focus-rim{object-position:50% 50%;transform:scale(1.08)!important}
+.experience-detail-image.focus-brake{object-position:64% 53%;transform:scale(1.14)!important}
+.experience-detail-image.focus-tyre{object-position:40% 55%;transform:scale(1.12)!important}
