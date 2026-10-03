@@ -235,9 +235,105 @@ document.querySelectorAll('[data-hero-hotspot]').forEach(btn=>btn.addEventListen
   info.innerHTML=`<small>INTERACTIVE PREVIEW</small><strong>${title}</strong><p>${text}</p>`;
 }));
 
-document.getElementById('heroExplore').addEventListener('click',()=>{
-  document.querySelector('[data-hero-hotspot="Powertrain"]').click();
-  document.getElementById('experience').scrollIntoView({behavior:'smooth',block:'center'});
+
+
+
+const showroomStage = document.getElementById('showroomStage');
+const showroomImage = document.getElementById('showroomImage');
+const showroomImageWrap = document.getElementById('showroomImageWrap');
+const showroomThumbs = document.getElementById('showroomThumbs');
+const showroomName = document.getElementById('showroomName');
+const showroomMeta = document.getElementById('showroomMeta');
+const showroomSub = document.getElementById('showroomSub');
+const showroomPrice = document.getElementById('showroomPrice');
+const showroomCounter = document.getElementById('showroomCounter');
+const showroomSpecs = document.getElementById('showroomSpecs');
+const showroomSpecNote = document.getElementById('showroomSpecNote');
+const showroomCta = document.getElementById('showroomCta');
+let showroomIndex = 0;
+let showroomBusy = false;
+
+function showroomImageMarkup(v){
+  return v.image
+    ? `<img src="${v.image}" alt="${v.brand} ${v.model}" loading="eager">`
+    : '<div class="showroom-generated-car">'+carMarkup()+'</div>';
+}
+
+function renderShowroomThumbs(){
+  showroomThumbs.innerHTML = vehicles.map((v,i)=>`
+    <button type="button" class="showroom-thumb ${i===showroomIndex?'active':''}" data-showroom-index="${i}" aria-label="Show ${v.brand} ${v.model}">
+      ${showroomImageMarkup(v)}
+      <span>${v.brand}</span>
+    </button>
+  `).join('');
+  showroomThumbs.querySelectorAll('[data-showroom-index]').forEach(btn=>{
+    btn.addEventListener('click',()=>selectShowroomVehicle(Number(btn.dataset.showroomIndex)));
+  });
+}
+
+function showroomSpecValues(v){
+  return [
+    ['Year',String(v.year || 'To verify')],
+    ['Mileage',v.mileage || 'To verify'],
+    ['Engine',v.engine || 'To verify'],
+    ['Power',v.power || 'To verify']
+  ];
+}
+
+function updateShowroomText(v,index){
+  showroomName.textContent = v.brand+' '+v.model;
+  showroomMeta.textContent = (v.brand+' · '+v.body).toUpperCase();
+  showroomSub.textContent = v.sub || 'Demo gallery vehicle';
+  showroomPrice.textContent = v.price || 'Price on request';
+  showroomCounter.textContent = String(index+1).padStart(2,'0')+' / '+String(vehicles.length).padStart(2,'0');
+  showroomSpecNote.textContent = v.actualPage ? 'Actual photographed vehicle · unverified fields stay marked' : 'Fictional demo specifications';
+  showroomSpecs.innerHTML = showroomSpecValues(v).map(([k,val])=>`
+    <div><small>${k}</small><strong>${val}</strong></div>
+  `).join('');
+  showroomCta.textContent = v.actualPage ? 'View interactive S5 →' : 'Open demo details →';
+}
+
+async function swapShowroomImage(v){
+  showroomImageWrap.classList.add('sweeping-out');
+  await new Promise(r=>setTimeout(r,280));
+  const next = new Image();
+  if(v.image){
+    next.src=v.image;
+    try{ await next.decode(); }catch(e){}
+    showroomImage.src=v.image;
+    showroomImage.alt=v.brand+' '+v.model;
+  } else {
+    showroomImage.removeAttribute('src');
+    showroomImage.alt='';
+  }
+  showroomImageWrap.classList.remove('sweeping-out');
+  showroomImageWrap.classList.add('sweeping-in');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>showroomImageWrap.classList.remove('sweeping-in')));
+}
+
+async function selectShowroomVehicle(index,instant=false){
+  if(showroomBusy || index===showroomIndex && !instant) return;
+  showroomBusy=true;
+  showroomIndex=index;
+  const v=vehicles[index];
+  document.querySelectorAll('.showroom-thumb').forEach((b,i)=>b.classList.toggle('active',i===index));
+  if(!instant) await swapShowroomImage(v);
+  else {
+    showroomImage.src=v.image || '';
+    showroomImage.alt=v.brand+' '+v.model;
+  }
+  updateShowroomText(v,index);
+  showroomBusy=false;
+}
+
+showroomCta?.addEventListener('click',()=>{
+  const v=vehicles[showroomIndex];
+  if(v.actualPage) window.location.href=v.actualPage;
+  else openVehicle(v.id);
 });
+
+renderShowroomThumbs();
+selectShowroomVehicle(0,true);
+
 
 renderInventory();

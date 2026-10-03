@@ -29,41 +29,45 @@
   </header>
 
   <main id="top">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="hero-copy">
-        <p class="eyebrow">JAPANESE RECON · INTERACTIVE SHOWROOM</p>
-        <h1 id="hero-title">Explore the car.<br><span>Not just the listing.</span></h1>
-        <p class="hero-lede">A premium demo gallery where customers can interact with the vehicle, reveal key components, compare specs and understand features before taking the next step.</p>
-        <div class="hero-actions">
-          <a class="primary-button" href="audi.html">View Audi S5 Avant example</a>
-          <a class="primary-button" href="#inventory">Explore demo inventory</a>
-          <button class="text-button" type="button" id="heroExplore">Try interactive view <span>↗</span></button>
+    <section class="showroom-hero" id="experience" aria-labelledby="showroomTitle">
+      <div class="showroom-topline">
+        <div>
+          <p class="eyebrow">JAPANESE RECON · DIGITAL SHOWROOM</p>
+          <h1 id="showroomTitle">Find your next<br><span>recon car.</span></h1>
         </div>
-        <div class="hero-stats" aria-label="Demo highlights">
-          <div><strong>07</strong><span>demo vehicles</span></div>
-          <div><strong>05</strong><span>interactive hotspots</span></div>
-          <div><strong>100%</strong><span>fictional data</span></div>
-        </div>
+        <p class="showroom-intro">Choose a vehicle below. The selected car becomes the main showroom view, with price and key details immediately visible.</p>
       </div>
 
-      <div class="hero-stage" id="experience" aria-label="Interactive vehicle preview">
-        <div class="stage-label"><span>INTERACTIVE PREVIEW</span><span>MOVE · TAP · EXPLORE</span></div>
-        <div class="car-visual hero-car" aria-hidden="true">
-          <div class="shadow"></div>
-          <div class="car-shell">
-            <div class="window window-a"></div><div class="window window-b"></div>
-            <div class="front-light"></div><div class="rear-light"></div>
-            <div class="wheel wheel-front"><i></i></div><div class="wheel wheel-rear"><i></i></div>
-            <div class="body-line"></div>
+      <div class="showroom-stage" id="showroomStage">
+        <div class="showroom-media">
+          <div class="showroom-media-label"><span>SELECTED VEHICLE</span><span id="showroomCounter">01 / 07</span></div>
+          <div class="showroom-image-wrap" id="showroomImageWrap">
+            <img id="showroomImage" class="showroom-image" src="assets/audi-s5-v2/hero.jpg" alt="Audi S5 Avant">
+          </div>
+          <div class="showroom-shade"></div>
+        </div>
+
+        <div class="showroom-thumbs" id="showroomThumbs" aria-label="Choose a demo vehicle"></div>
+
+        <div class="showroom-info">
+          <div class="showroom-name">
+            <small id="showroomMeta">AUDI · PERFORMANCE AVANT</small>
+            <h2 id="showroomName">Audi S5 Avant</h2>
+            <p id="showroomSub">Actual photographed example · interactive detail page</p>
+          </div>
+          <div class="showroom-price">
+            <small>DEMO PRICE</small>
+            <strong id="showroomPrice">RM 438,000</strong>
+            <button class="primary-button showroom-cta" id="showroomCta" type="button">View vehicle <span>→</span></button>
           </div>
         </div>
-        <button class="hotspot hero-hotspot h-engine" type="button" data-hero-hotspot="Powertrain" aria-label="Show powertrain information"><span>+</span><b>Powertrain</b></button>
-        <button class="hotspot hero-hotspot h-brake" type="button" data-hero-hotspot="Brakes" aria-label="Show brake information"><span>+</span><b>Brakes</b></button>
-        <button class="hotspot hero-hotspot h-cabin" type="button" data-hero-hotspot="Cabin" aria-label="Show cabin information"><span>+</span><b>Cabin</b></button>
-        <div class="stage-info" id="stageInfo" aria-live="polite">
-          <small>SELECT A POINT</small>
-          <strong>Explore beneath the surface.</strong>
-          <p>Tap a hotspot to reveal what a customer could learn from the final vehicle detail experience.</p>
+
+        <div class="showroom-specs">
+          <div class="showroom-spec-title">
+            <span>KEY SPECIFICATIONS</span>
+            <small id="showroomSpecNote">Actual vehicle · unverified fields stay marked</small>
+          </div>
+          <div class="showroom-spec-grid" id="showroomSpecs"></div>
         </div>
       </div>
     </section>
