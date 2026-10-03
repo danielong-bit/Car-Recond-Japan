@@ -219,3 +219,12 @@ footer div { display:flex; gap:18px; } footer strong { color:#dce2e5; font-weigh
 @media (prefers-reduced-motion: reduce) {
   *, *:before, *:after { scroll-behavior:auto !important; transition:none !important; animation:none !important; }
 }
+
+/* Photo + price inventory cards */
+.card-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .35s ease,filter .35s ease}
+.car-card:hover .card-photo{transform:scale(1.035);filter:brightness(1.05)}
+.card-photo-fallback{position:absolute;inset:0}
+.card-meta{display:grid;justify-items:end;gap:7px}
+.card-price{font:500 15px/1 Space Grotesk;color:var(--accent);white-space:nowrap}
+.card-visual:before{content:"DEMO IMAGE";position:absolute;left:14px;top:14px;z-index:3;padding:6px 8px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(7,9,11,.52);backdrop-filter:blur(8px);font-size:7px;letter-spacing:.14em;color:#fff}
+.card-visual:after{z-index:3}

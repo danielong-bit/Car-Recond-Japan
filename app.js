@@ -1,6 +1,21 @@
 const vehicles = [
   {
-    id: 'alphard-z', brand: 'Toyota', model: 'Alphard Z', body: 'MPV', year: 2024, mileage: '8,240 km', power: '205 hp', engine: '2.5L Hybrid', torque: '250 Nm', color: 'Pearl White',
+    id:'audi-s5', brand:'Audi', model:'S5 Avant', body:'Sedan', year:2025, mileage:'To verify', power:'To verify', engine:'To verify', torque:'To verify', color:'Daytona Grey', price:'RM 438,000', image:'assets/audi-s5-v2/hero.jpg', sub:'Actual photographed example · interactive detail page',
+    actualPage:'audi.html',
+    features:{
+      engine:['Engine bay','Open the dedicated Audi page to inspect the real photographed engine bay.'],
+      brakes:['S brake hardware','The real photographed car shows a red S-branded front brake caliper.'],
+      aero:['Avant exterior','Explore the photographed exterior on the dedicated vehicle page.'],
+      interior:['S sport cabin','The actual right-hand-drive cockpit and S sport seats are shown on the Audi page.'],
+      hud:['Driver display','The photographed vehicle has a digital instrument cluster; other display equipment remains to verify.']
+    },
+    specs:{
+      'Vehicle status':[['Model','Audi S5 Avant'],['Year','To verify'],['Mileage','To verify'],['Price','Demo price only']],
+      'Observed':[['Steering','Right-hand drive'],['Audio','Bang & Olufsen branding visible'],['Brakes','Red S-branded front caliper visible'],['Cargo','Powered tailgate controls visible']]
+    }
+  },
+  {
+    id: 'alphard-z', price:'RM 329,000', image:'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=1200&q=80', brand: 'Toyota', model: 'Alphard Z', body: 'MPV', year: 2024, mileage: '8,240 km', power: '205 hp', engine: '2.5L Hybrid', torque: '250 Nm', color: 'Pearl White',
     cardA:'#748a99', cardB:'#314754', sub:'Executive lounge · Japan import concept',
     features:{
       engine:['Hybrid powertrain','Demo data: a quiet 2.5L hybrid setup is highlighted here to show how engine information can be explained in plain language.'],
@@ -16,7 +31,7 @@ const vehicles = [
     }
   },
   {
-    id:'rx500h', brand:'Lexus', model:'RX 500h F Sport', body:'SUV', year:2024, mileage:'11,600 km', power:'371 hp', engine:'2.4L Turbo Hybrid', torque:'460 Nm', color:'Sonic Chrome',
+    id:'rx500h', price:'RM 468,000', image:'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1200&q=80', brand:'Lexus', model:'RX 500h F Sport', body:'SUV', year:2024, mileage:'11,600 km', power:'371 hp', engine:'2.4L Turbo Hybrid', torque:'460 Nm', color:'Sonic Chrome',
     cardA:'#6b7f83', cardB:'#25363b', sub:'F Sport · Japan import concept',
     features:{
       engine:['Turbo hybrid system','A visual hotspot can explain how turbo and hybrid assistance work together, using demo figures and simple language.'],
@@ -32,7 +47,7 @@ const vehicles = [
     }
   },
   {
-    id:'gtr-premium', brand:'Nissan', model:'GT-R Premium', body:'Coupe', year:2023, mileage:'18,900 km', power:'565 hp', engine:'3.8L Twin-Turbo V6', torque:'633 Nm', color:'Stealth Grey',
+    id:'gtr-premium', price:'RM 598,000', image:'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80', brand:'Nissan', model:'GT-R Premium', body:'Coupe', year:2023, mileage:'18,900 km', power:'565 hp', engine:'3.8L Twin-Turbo V6', torque:'633 Nm', color:'Stealth Grey',
     cardA:'#59676d', cardB:'#1e272b', sub:'Performance coupe · Japan import concept',
     features:{
       engine:['Twin-turbo V6','The hotspot format is ideal for explaining engine layout, output and why a customer might care about it.'],
@@ -48,7 +63,7 @@ const vehicles = [
     }
   },
   {
-    id:'civic-type-r', brand:'Honda', model:'Civic Type R', body:'Sedan', year:2023, mileage:'21,450 km', power:'315 hp', engine:'2.0L Turbo', torque:'420 Nm', color:'Championship White',
+    id:'civic-type-r', price:'RM 328,000', image:'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=80', brand:'Honda', model:'Civic Type R', body:'Sedan', year:2023, mileage:'21,450 km', power:'315 hp', engine:'2.0L Turbo', torque:'420 Nm', color:'Championship White',
     cardA:'#737f86', cardB:'#2f3940', sub:'Performance sedan · Japan import concept',
     features:{
       engine:['2.0L turbo','Customers can tap the engine bay region to understand output, torque and drivetrain at a glance.'],
@@ -64,7 +79,7 @@ const vehicles = [
     }
   },
   {
-    id:'crown-crossover', brand:'Toyota', model:'Crown Crossover RS', body:'Sedan', year:2022, mileage:'29,800 km', power:'340 hp', engine:'2.4L Turbo Hybrid', torque:'460 Nm', color:'Bi-tone Bronze',
+    id:'crown-crossover', price:'RM 278,000', image:'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=1200&q=80', brand:'Toyota', model:'Crown Crossover RS', body:'Sedan', year:2022, mileage:'29,800 km', power:'340 hp', engine:'2.4L Turbo Hybrid', torque:'460 Nm', color:'Bi-tone Bronze',
     cardA:'#806e60', cardB:'#392f2a', sub:'Luxury crossover sedan · Japan import concept',
     features:{
       engine:['Turbo hybrid','The powertrain hotspot turns technical information into a short customer-facing explanation.'],
@@ -80,7 +95,7 @@ const vehicles = [
     }
   },
   {
-    id:'lm500h', brand:'Lexus', model:'LM 500h Executive', body:'MPV', year:2024, mileage:'5,950 km', power:'366 hp', engine:'2.4L Turbo Hybrid', torque:'460 Nm', color:'Graphite Black',
+    id:'lm500h', price:'RM 518,000', image:'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=1200&q=80', brand:'Lexus', model:'LM 500h Executive', body:'MPV', year:2024, mileage:'5,950 km', power:'366 hp', engine:'2.4L Turbo Hybrid', torque:'460 Nm', color:'Graphite Black',
     cardA:'#454e55', cardB:'#181d21', sub:'Luxury four-seat MPV · Japan import concept',
     features:{
       engine:['Turbo hybrid AWD','Interactive explanation can show the relationship between engine, electric assistance and driven wheels.'],
@@ -120,9 +135,11 @@ function renderInventory() {
   resultCount.textContent = `${filtered.length} demo vehicle${filtered.length === 1 ? '' : 's'}`;
   inventoryGrid.innerHTML = filtered.map(v => `
     <article class="car-card" tabindex="0" role="button" data-id="${v.id}" aria-label="Open ${v.brand} ${v.model} demo details">
-      <div class="card-visual" style="--card-a:${v.cardA};--card-b:${v.cardB}">${carMarkup()}</div>
+      <div class="card-visual" style="--card-a:${v.cardA || '#61727c'};--card-b:${v.cardB || '#202a30'}">
+        ${v.image ? `<img class="card-photo" src="${v.image}" alt="${v.brand} ${v.model} demo vehicle image" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="card-photo-fallback" style="display:none">${carMarkup()}</div>` : carMarkup()}
+      </div>
       <div class="card-info">
-        <div class="card-top"><h3>${v.brand}<br>${v.model}</h3><span class="card-year">${v.year}</span></div>
+        <div class="card-top"><h3>${v.brand}<br>${v.model}</h3><div class="card-meta"><span class="card-year">${v.year}</span><strong class="card-price">${v.price || 'Price on request'}</strong></div></div>
         <p class="card-sub">${v.sub}</p>
         <div class="card-specs">
           <div><small>Mileage</small><strong>${v.mileage}</strong></div>
@@ -143,6 +160,10 @@ function renderInventory() {
 
 function openVehicle(id) {
   currentVehicle = vehicles.find(v => v.id === id) || vehicles[0];
+  if (currentVehicle.actualPage) {
+    window.location.href = currentVehicle.actualPage;
+    return;
+  }
   document.getElementById('vehicleMeta').textContent = `${currentVehicle.year} · ${currentVehicle.body.toUpperCase()} · DEMO SPEC`;
   document.getElementById('vehicleTitle').textContent = `${currentVehicle.brand} ${currentVehicle.model}`;
   document.getElementById('vehicleSub').textContent = `${currentVehicle.sub}. All specifications and mileage shown are fictional demonstration data.`;
