@@ -4,7 +4,7 @@ An interactive demo showroom based on the latest Gemini build. All inventory, pr
 
 ## GitHub Pages
 
-Open `index.html` for a compact photo-only inventory gallery and `audi.html` for the interactive Audi tour. The homepage has no car hotspots, video playback, or zoom. Share the dedicated `audi.html` URL directly with customers, or use its **Copy link** button. Pages are static; the demo editor saves changes in the current browser only. Shared uploads and settings require the Node server. The editor is linked as **Manage demo** in the footer.
+Open `index.html` for a compact photo-only inventory gallery and `audi.html` for the interactive Audi tour. The homepage has no car hotspots, video playback, or zoom. Share the dedicated `audi.html` URL directly with customers. On phones, the photo stays clear of hotspot and text overlays; large part buttons below the photo open each view. Optional part specifications are collapsed. Pages are static; the demo editor saves changes in the current browser only. Shared uploads and settings require the Node server. The editor is linked as **Manage demo** in the footer.
 
 ## Run locally
 
@@ -24,4 +24,4 @@ Open http://localhost:3000/. The server provides `/audi`, `/admin`, config persi
 
 ## Verification
 
-`npm test` checks JavaScript syntax and referenced local assets. Browser regression checks in `tests/browser-smoke.cjs` cover searching, comparisons, media cancellation/recovery, gallery navigation and mobile layout.
+`npm test` checks JavaScript syntax and referenced local assets. Browser regression checks in `tests/browser-smoke.cjs` cover searching, comparisons, media cancellation/recovery, gallery navigation and mobile layout. `tests/phone-tour.cjs` checks real touch taps, unobscured media, nearby 60px part controls and returning to the car on five small-screen widths.

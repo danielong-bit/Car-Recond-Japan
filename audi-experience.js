@@ -219,7 +219,17 @@ function renderSpecs(rows = []) {
 function applyCopy(item) {
   if (detailEyebrow) detailEyebrow.textContent = item.eyebrow || "SPECIFICATION";
   if (detailTitle) detailTitle.textContent = item.title || item.label || "";
-  if (detailDescription) detailDescription.textContent = item.description || "";
+  const descriptions = {
+    engine: 'View the engine bay opening.',
+    interior: 'View the cabin and driver controls.',
+    boot: 'See the tailgate opening and cargo space.',
+    wheel: 'Take a closer look at the wheel and red brake caliper.',
+    dashboard: 'View the dashboard and digital instrument display.',
+    seats: 'See the seat shape, upholstery and stitching.',
+    audio: 'View the Bang & Olufsen speaker detail.',
+    climate: 'View the rear-seat climate controls.'
+  };
+  if (detailDescription) detailDescription.textContent = descriptions[item.id] || item.description || '';
   renderSpecs(item.specs || []);
 }
 
@@ -378,7 +388,7 @@ function showStaticImage(item) {
   setTimeout(() => {
     if (state.activeItem !== item) return;
     viewerBackBtn.classList.add("is-visible");
-    viewerBackBtn.focus({ preventScroll: true });
+    if (!window.matchMedia('(max-width: 820px)').matches) viewerBackBtn.focus({ preventScroll: true });
     if (detailBack) detailBack.classList.add("is-visible");
     state.isAnimating = false;
     renderExperienceSubHotspots(item);
@@ -455,7 +465,7 @@ viewerVideo.addEventListener("ended", () => {
   if (state.mode === "video" && state.activeItem) {
     state.isAnimating = false;
     viewerBackBtn.classList.add("is-visible");
-    viewerBackBtn.focus({ preventScroll: true });
+    if (!window.matchMedia('(max-width: 820px)').matches) viewerBackBtn.focus({ preventScroll: true });
     if (detailBack) detailBack.classList.add("is-visible");
     if (sceneLabel) sceneLabel.textContent = state.activeItem.label.toUpperCase() + " · COMPLETED";
     if (detailStatus) detailStatus.innerHTML = `<span>COMPLETED</span><strong>Use Back to car to return</strong>`;

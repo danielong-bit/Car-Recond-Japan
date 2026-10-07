@@ -278,3 +278,62 @@ button:active,.primary-button:active{transform:none;filter:brightness(.92)}
 .inventory-empty p{color:var(--muted)}
 .compare-card-btn-enquire{background:var(--accent);color:var(--ink);min-height:44px}
 .skip-link{background:var(--accent);color:var(--ink)}
+
+/* Phone-first tour: photo, finger-sized part controls, then optional detail. */
+.vehicle-tour .hero{grid-template-columns:1fr;gap:20px;padding-top:24px}
+.vehicle-tour .hero-copy{display:block;max-width:700px}
+.vehicle-tour .hero h1{font-size:40px;line-height:1.1;margin:0}
+.vehicle-tour .hero-copy .lede{margin:8px 0 0;font-size:16px;line-height:1.5}
+.vehicle-tour .tour-frame{grid-template-columns:minmax(0,1fr) 260px;gap:0;overflow:hidden}
+.vehicle-tour .media-plane{grid-column:1;grid-row:1;touch-action:pan-y;scroll-margin-top:16px}
+.vehicle-tour .media-plane.is-zoomed{touch-action:none}
+.vehicle-tour .tour-frame>.viewer-tools{grid-column:1;grid-row:2;margin:0;border:0;border-top:1px solid var(--line);border-radius:0;padding:20px;background:var(--panel)}
+.vehicle-tour .tour-panel{grid-column:2;grid-row:1/3;max-height:none;padding:24px;border-left:1px solid var(--line)}
+.vehicle-tour .tour-frame:has(.tour-panel[hidden]){grid-template-columns:1fr}
+.vehicle-tour .tour-panel .kicker,.vehicle-tour .detail-back,.experience-topline,.detail-status,.viewer-back-btn,.showroom-zoom-pill,.viewer-help{display:none!important}
+.feature-shortcuts{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.feature-shortcuts button{min-height:56px;font-size:16px;padding:12px;line-height:1.35;text-wrap:balance}
+.feature-shortcuts button[aria-pressed=true]{box-shadow:inset 0 0 0 2px var(--ui-accent);font-weight:700}
+.viewer-controls{margin-top:16px;gap:10px}
+.viewer-controls button{min-height:52px;font-size:15px}
+.viewer-controls [data-zoom=in],.viewer-controls [data-zoom=out]{min-width:52px;width:52px;min-height:52px}
+.viewer-controls output{font-size:14px;min-width:44px}
+.viewer-controls [data-viewer-back]{flex:1 1 100%;background:var(--panel-2);font-size:16px}
+.viewer-controls [data-viewer-back]:disabled{display:none}
+.part-specification{margin-top:16px;border-top:1px solid var(--line)}
+.part-specification summary{padding:14px 0;min-height:48px;color:var(--text);font-size:15px}
+.tour-panel h2{font-size:24px;line-height:1.2}
+.tour-description{font-size:16px;line-height:1.5;margin:12px 0 0}
+.media-feedback{font-size:14px;line-height:1.5;margin-top:12px}
+.vehicle-tour .section{padding-top:28px}
+.vehicle-tour .heading h2{font-size:28px}
+.vehicle-tour .heading>p{font-size:15px}
+.vehicle-tour .tabs{display:flex;flex-wrap:wrap;gap:8px}
+.vehicle-tour .tabs button{min-height:48px;font-size:15px;padding:10px 16px}
+.vehicle-tour .gallery .tile span{font-size:14px;padding:12px}
+@media(max-width:820px),(hover:none) and (pointer:coarse){
+ .vehicle-tour .hero{gap:16px;padding:20px 0 0}
+ .vehicle-tour .hero h1{font-size:32px}
+ .vehicle-tour .hero-copy .lede{font-size:15px;margin-top:8px}
+ .vehicle-tour .tour-frame{display:flex;flex-direction:column;border-radius:12px}
+ .vehicle-tour .media-plane{width:100%;flex:none}
+ .vehicle-tour .viewer-hotspots,.vehicle-tour .viewer-sub-hotspots{display:none!important}
+ .vehicle-tour .tour-frame>.viewer-tools{width:100%;padding:16px}
+ .feature-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+ .feature-shortcuts button{min-height:60px;font-size:16px;border-radius:10px}
+ .vehicle-tour .tour-panel{width:100%;border-left:0;border-top:1px solid var(--line);padding:20px}
+ .vehicle-tour .tour-description{font-size:16px;line-height:1.5}
+ .vehicle-tour .brand{font-size:12px;max-width:calc(100% - 78px)}
+ .vehicle-tour .brand span{display:none}
+ .vehicle-tour .demo{padding:6px 16px;font-size:11px}
+ .vehicle-tour .top{min-height:60px}
+ .vehicle-tour .section{padding:28px 0}
+ .vehicle-tour .heading{margin-bottom:16px}
+ .vehicle-tour .heading h2{font-size:25px}
+ .vehicle-tour footer{padding-block:24px;gap:16px}
+ .vehicle-tour .lightbox-controls button,.vehicle-tour .light .close{min-width:52px;min-height:52px}
+}
+
+@media(hover:none) and (pointer:coarse) and (orientation:landscape){
+ .vehicle-tour .media-plane{width:min(100%,106.66svh)!important;max-height:60svh!important;margin-inline:auto}
+}

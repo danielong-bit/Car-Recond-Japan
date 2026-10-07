@@ -6,14 +6,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Interactive Audi S5 Avant example for Japan Recon Car Gallery">
   <title>Audi S5 Avant | Japan Recon Car Gallery</title>
-  <link rel="stylesheet" href="audi-experience.css?v=20261007-3">
-  <link rel="stylesheet" href="enhancements.css?v=20261007-3">
+  <link rel="stylesheet" href="audi-experience.css?v=20261007-4">
+  <link rel="stylesheet" href="enhancements.css?v=20261007-4">
   <link rel="preload" href="assets/fonts/nimbus-sans-regular.woff" as="font" type="font/woff" crossorigin>
-  <link rel="stylesheet" href="showroom.css?v=20261007-3">
+  <link rel="stylesheet" href="showroom.css?v=20261007-4">
 </head>
 <body class="vehicle-tour">
   <a class="skip-link" href="#mainContent">Skip to content</a>
-  <div class="demo"><b>DEMO SHOWROOM</b> · Audi S5 Avant · Sample images and specifications · No real booking or payment</div>
+  <div class="demo">Demo vehicle · Photos and specifications are unverified</div>
 
   <header class="wrap top">
     <a class="brand" href="./">JAPAN RECON CAR GALLERY<span>INTERACTIVE VEHICLE EXPERIENCE</span></a>
@@ -21,30 +21,21 @@
     <nav id="primaryNav" aria-label="Primary navigation">
       <a href="#experience">Experience</a>
       <a href="#gallery">Gallery</a>
-      <a href="#features">Features</a>
-      <a href="#verify">Specification</a>
+      <a href="./#inventory">All cars</a>
     </nav>
   </header>
 
   <main id="mainContent" tabindex="-1">
     <section class="wrap hero" id="experience">
       <div class="hero-copy">
-        <p class="kicker">AUDI · PERFORMANCE AVANT</p>
-        <h1>S5 <span>Avant</span></h1>
-        <p class="lede">Get to know the S5 Avant. Tap a feature on the car or choose a button below.</p>
-        <div class="share-actions"><button class="primary-button" type="button" data-copy-link>Copy link ↗</button><span data-share-status role="status"></span><input class="share-url" data-share-url type="url" aria-label="Customer tour link" readonly hidden></div>
-        <div class="chips">
-          <span class="chip">Right-hand drive</span>
-          <span class="chip">S sport interior</span>
-          <span class="chip">Bang & Olufsen</span>
-          <span class="chip">Powered tailgate</span>
-        </div>
-        <p class="experience-note">Photo and video demonstration · vehicle details are unverified.</p>
+
+        <h1>Audi S5 <span>Avant</span></h1>
+        <p class="lede">Choose a part below the photo.</p>
       </div>
 
       <div class="experience-shell" id="experienceShell" data-scene="overview" data-category="overview">
-        <div class="experience-frame tour-frame" id="experienceFrame" aria-live="polite">
-          <div class="media-plane" id="mediaPlane" role="region" aria-label="16:9 Interactive Car Viewer">
+        <div class="experience-frame tour-frame" id="experienceFrame">
+          <div class="media-plane" id="mediaPlane" role="region" aria-label="Car photos and feature videos">
             <div class="media-zoom-canvas" id="mediaZoomCanvas">
               <img class="experience-overview viewer-main-image" id="overviewImage" src="assets/audi-s5/main-car-16x9.jpg" alt="Audi S5 Avant in Daytona Grey metallic - 16:9 interactive viewer" width="1280" height="720" decoding="async" fetchpriority="high">
               <video class="viewer-video" id="viewerVideo" playsinline muted preload="none" aria-hidden="true"></video>
@@ -75,15 +66,27 @@
             </div>
           </div>
 
+      <div class="viewer-tools" aria-label="Car viewer controls">
+  <div class="feature-shortcuts" data-feature-shortcuts role="group" aria-label="Explore vehicle features"></div>
+  <div class="viewer-controls" role="group" aria-label="Zoom and return controls">
+    <button type="button" data-viewer-back disabled>← Whole car</button>
+    <button type="button" data-zoom="out" aria-label="Zoom out">−</button>
+    <output data-zoom-value aria-label="Zoom level">1.0×</output>
+    <button type="button" data-zoom="in" aria-label="Zoom in">+</button>
+    <button type="button" data-zoom="reset">Reset zoom</button>
+  </div>
+  <p class="viewer-help" data-viewer-help></p>
+  <div class="media-feedback" data-media-status role="status" hidden><span></span><button type="button" data-media-retry hidden>Retry video</button></div>
+</div>
           <aside class="tour-panel" id="tourPanel">
             <div>
               <p class="kicker" id="detailEyebrow">VEHICLE OVERVIEW</p>
-              <h2 id="detailTitle">Choose what you want to inspect.</h2>
+              <h2 id="detailTitle" aria-live="polite">Choose what you want to inspect.</h2>
               <p class="tour-description" id="detailDescription">Open the engine bay, move into the cabin, inspect the wheel and brake hardware, view the audio detail or check the cargo area.</p>
             </div>
 
             <div class="tour-subnav" id="tourSubnav" aria-label="Detail options"></div>
-            <div class="tour-specs" id="tourSpecs"></div>
+            <details class="part-specification"><summary>Part details</summary><div class="tour-specs" id="tourSpecs"></div></details>
 
             <button class="detail-back" id="detailBack" type="button" aria-label="Back to vehicle overview">
               <span>←</span> Back to car
@@ -91,24 +94,12 @@
           </aside>
         </div>
       </div>
-      <div class="viewer-tools" aria-label="Car viewer controls">
-  <div class="feature-shortcuts" data-feature-shortcuts role="group" aria-label="Explore vehicle features"></div>
-  <div class="viewer-controls" role="group" aria-label="Zoom and return controls">
-    <button type="button" data-viewer-back disabled>← Back to car</button>
-    <button type="button" data-zoom="out" aria-label="Zoom out">−</button>
-    <output data-zoom-value aria-label="Zoom level">1.0×</output>
-    <button type="button" data-zoom="in" aria-label="Zoom in">+</button>
-    <button type="button" data-zoom="reset">Reset view</button>
-  </div>
-  <p class="viewer-help" data-viewer-help>Tap a feature to explore. Use + / − to zoom, then drag to look around.</p>
-  <div class="media-feedback" data-media-status role="status" hidden><span></span><button type="button" data-media-retry hidden>Retry video</button></div>
-</div>
     </section>
 
     <section class="wrap section" id="gallery">
       <div class="heading">
-        <div><h2>Exterior. Interior. Details.</h2></div>
-        <p>The interactive scene gives a guided experience. The gallery keeps the complete photographic evidence available to inspect.</p>
+        <div><h2>More photos</h2></div>
+        <p>Tap a photo to view it full screen.</p>
       </div>
 
       <div class="tabs">
@@ -146,45 +137,6 @@
       </div>
     </section>
 
-    <section class="wrap section" id="features">
-      <div class="heading">
-        <div><h2>Explore the equipment.</h2></div>
-        <p>The equipment below illustrates how a listing can be presented. Confirm the actual specification against vehicle documents.</p>
-      </div>
-
-      <div class="info-grid">
-        <article class="box">
-          <h3>Demo equipment</h3>
-          <div class="row"><span>Body style</span><b>Avant / wagon</b></div>
-          <div class="row"><span>Steering layout</span><b>Right-hand drive</b></div>
-          <div class="row"><span>Interior</span><b>Black S sport seats</b></div>
-          <div class="row"><span>Audio</span><b>Bang & Olufsen branding visible</b></div>
-          <div class="row"><span>Rear comfort</span><b>Rear climate controls visible</b></div>
-          <div class="row"><span>Brakes</span><b>Red S-branded front caliper visible</b></div>
-          <div class="row"><span>Driver display</span><b>Digital instrument cluster</b></div>
-          <div class="row"><span>Cargo access</span><b>Powered tailgate controls visible</b></div>
-        </article>
-
-        <article class="box" id="verify">
-          <h3>Stock data to verify</h3>
-          <p class="lede">Confirm these details with the auction sheet, registration documents and exact vehicle specification before considering a purchase.</p>
-          <div class="row"><span>Model year</span><b class="pending">To verify</b></div>
-          <div class="row"><span>Mileage</span><b class="pending">To verify</b></div>
-          <div class="row"><span>Engine / output</span><b class="pending">To verify</b></div>
-          <div class="row"><span>Torque</span><b class="pending">To verify</b></div>
-          <div class="row"><span>Wheel / tyre size</span><b class="pending">To verify</b></div>
-          <div class="row"><span>HUD</span><b class="pending">Not confirmed from photos</b></div>
-        </article>
-      </div>
-    </section>
-
-    <section class="wrap cta">
-      <div>
-        <h3>Want to know more about this S5 Avant?</h3>
-        <p>Demo interaction only - no real enquiry is submitted yet.</p>
-      </div>
-      <button id="demoEnquiry" type="button">Preview enquiry flow</button>
-    </section>
   </main>
 
   <footer class="wrap"><span>JAPAN RECON CAR GALLERY</span><a href="./#inventory">← Browse all cars</a><a class="manage-link" href="admin.html">Manage demo</a></footer>
@@ -196,15 +148,7 @@
     </div>
   </dialog>
 
-  <dialog id="enquiry">
-    <div class="note">
-      <h3>Demo enquiry</h3>
-      <p>This is where the production site can later connect to your real WhatsApp, lead form or CRM. Nothing is submitted in this example.</p>
-      <button id="closeEnquiry" type="button">Close</button>
-    </div>
-  </dialog>
-
-  <script src="audi-experience.js?v=20261007-3"></script>
-  <script src="site-ui.js?v=20261007-3"></script>
+  <script src="audi-experience.js?v=20261007-4"></script>
+  <script src="site-ui.js?v=20261007-4"></script>
 </body>
 </html>

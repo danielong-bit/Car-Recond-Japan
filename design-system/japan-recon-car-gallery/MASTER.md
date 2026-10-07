@@ -17,4 +17,7 @@ Static recon-car photo catalog for customers. Keep the homepage compact with a s
 The generator proposed a large hero and futuristic display/monospace typography. These do not fit the approved compact photo catalog, so the layout remains catalog-first and uses its existing local sans-serif font. The automotive palette and minimal style are verified matches; the automatic hero pattern is not applied. A stack search did not return a verified match for this native CSS filter layout; implementation uses general CSS guidance from the skill's Quick Reference rather than adding Tailwind.
 
 ## Source
-`showroom.css` contains shared catalog and tour styling. Homepage car media stays non-interactive. The Audi viewer and Copy link keep the dedicated customer route.
+`showroom.css` contains shared catalog and tour styling. Homepage car media stays non-interactive. The Audi viewer keeps the dedicated customer route; share the browser URL directly.
+
+## Phone tour update
+Remove all text overlays and on-image hotspots from the phone viewer. Place the two-column part selection directly below the photo, with minimum 60px target height and 12px gaps. Keep controls at 16px and return/zoom at 52px minimum. Selecting a part keeps its photo visible. Omit sharing controls and repeated demo equipment tables; disclose part specifications only on demand. Preserve vertical touch scrolling on unzoomed media.

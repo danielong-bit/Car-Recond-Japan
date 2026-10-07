@@ -59,9 +59,7 @@ async function run() {
     assert.match(page.url(), /audi\.html$/);
     await page.goto(new URL('audi.html', base).href, {waitUntil: 'domcontentloaded'});
     await page.waitForSelector('[data-feature-id="engine"]');
-    await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
-    await page.locator('[data-copy-link]').click();
-    assert.equal(await page.evaluate(() => navigator.clipboard.readText()), new URL('audi.html', base).href);
+    assert.equal(await page.locator('[data-copy-link]').count(), 0, 'Copy link removed');
     await page.route('**/engine_forward.mp4', route => route.abort());
     await page.locator('[data-feature-id="engine"]').click();
     await page.waitForFunction(() => document.querySelector('[data-media-status]').textContent.includes('Video unavailable'));
@@ -113,7 +111,7 @@ async function run() {
     await page.goto(base, {waitUntil: 'domcontentloaded'});
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
     assert.deepEqual(errors, [], 'No browser runtime errors');
-    console.log('PASS: photo-only homepage, direct tour links, customer share link, light theme,  search, filters, reset, compare, cancellation, zoom, video fallback/retry, forward/reverse playback, sub-hotspots, gallery keys, modal Escape, and three mobile widths.');
+    console.log('PASS: photo-only homepage, direct tour links, direct customer URL, light theme,  search, filters, reset, compare, cancellation, zoom, video fallback/retry, forward/reverse playback, sub-hotspots, gallery keys, modal Escape, and three mobile widths.');
   } finally { await browser.close(); server?.kill(); }
 }
 run().catch(error => { console.error(error); process.exit(1); });

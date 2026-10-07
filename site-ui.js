@@ -28,24 +28,6 @@
       dialog.addEventListener('close', syncDialogScroll);
     });
 
-    const copyLink = document.querySelector('[data-copy-link]');
-    copyLink?.addEventListener('click', async () => {
-      const url = new URL(location.pathname, location.origin).href;
-      const status = document.querySelector('[data-share-status]');
-      const fallback = document.querySelector('[data-share-url]');
-      try {
-        await navigator.clipboard.writeText(url);
-        status.textContent = 'Link copied. Ready to share.';
-        fallback.hidden = true;
-      } catch {
-        fallback.hidden = false;
-        fallback.value = url;
-        fallback.focus();
-        fallback.select();
-        status.textContent = 'Select and copy this link to share the tour.';
-      }
-    });
-
     const dedicated = !!document.getElementById('mediaPlane');
     const video = document.getElementById(dedicated ? 'viewerVideo' : 'showroomVideo');
     const media = document.getElementById(dedicated ? 'mediaPlane' : 'showroomMedia');
@@ -71,7 +53,13 @@
         retry.hidden = !failed || !current().activeItem?.forwardVideo;
         media.setAttribute('aria-busy', String(!!text && !failed));
       };
+      const panel = dedicated ? document.getElementById('tourPanel') : null;
+      const keepPhotoVisible = () => {
+        const rect = media.getBoundingClientRect();
+        if (rect.top < 0 || rect.bottom > innerHeight) media.scrollIntoView({block: 'start', behavior: 'instant'});
+      };
       const sync = () => {
+        if (panel) panel.hidden = current().mode === 'normal';
         const active = current().activeItem;
         featureTray.hidden = !dedicated && vehicles[showroomIndex].id !== 'audi-s5';
         featureTray.querySelectorAll('button').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.featureId === active?.id)));
@@ -80,21 +68,24 @@
         tools.querySelector('[data-zoom="out"]').disabled = zoom().scale <= 1;
         tools.querySelector('[data-zoom="in"]').disabled = zoom().scale >= 4;
       };
-      const choose = item => {
+      const choose = (item, trigger) => {
         restore();
+        trigger?.focus({preventScroll: true});
         showFeedback();
-        select(item);
+        if (dedicated) selectHotspot(item, trigger); else select(item);
         sync();
+        keepPhotoVisible();
       };
       const renderFeatures = () => {
         featureTray.replaceChildren();
         features().forEach(item => {
           const button = document.createElement('button');
           button.type = 'button';
-          button.textContent = item.label;
+          const labels = {interior: 'Cabin', boot: 'Boot', wheel: 'Wheel & brakes', audio: 'Audio', climate: 'Rear climate'};
+          button.textContent = labels[item.id] || item.label;
           button.dataset.featureId = item.id;
           button.setAttribute('aria-pressed', 'false');
-          button.addEventListener('click', () => choose(item));
+          button.addEventListener('click', () => choose(item, button));
           featureTray.appendChild(button);
         });
         sync();
@@ -106,6 +97,7 @@
         dedicated ? handleBack() : handleShowroomBack();
         if (current().mode === 'normal') showFeedback();
         sync();
+        keepPhotoVisible();
       });
       tools.querySelectorAll('[data-zoom]').forEach(button => button.addEventListener('click', () => {
         if (button.dataset.zoom === 'reset') {
@@ -120,7 +112,7 @@
       }));
       retry.addEventListener('click', () => {
         const item = features().find(item => item.id === current().activeItem?.id);
-        if (item) choose(item);
+        if (item) choose(item, retry);
       });
       ['loadstart', 'waiting', 'stalled'].forEach(event => video.addEventListener(event, () => {
         if (video.getAttribute('src') && ['video', 'reverse'].includes(current().mode)) showFeedback('Loading video… You can return to the car at any time.');
