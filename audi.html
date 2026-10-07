@@ -2,13 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <script>document.documentElement.classList.add('js-enabled');</script>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Interactive Audi S5 Avant example for Japan Recon Car Gallery">
   <title>Audi S5 Avant | Japan Recon Car Gallery</title>
-  <link rel="stylesheet" href="audi-experience.css?v=20261007">
-  <link rel="stylesheet" href="enhancements.css?v=20261007">
+  <link rel="stylesheet" href="audi-experience.css?v=20261007-2">
+  <link rel="stylesheet" href="enhancements.css?v=20261007-2">
+  <link rel="preload" href="assets/fonts/nimbus-sans-regular.woff" as="font" type="font/woff" crossorigin>
+  <link rel="stylesheet" href="taste.css?v=20261007-2">
 </head>
-<body>
+<body class="vehicle-tour">
   <a class="skip-link" href="#mainContent">Skip to content</a>
   <div class="demo"><b>DEMO SHOWROOM</b> · Audi S5 Avant · Sample images and specifications · No real booking or payment</div>
 
@@ -27,8 +30,9 @@
     <section class="wrap hero" id="experience">
       <div class="hero-copy">
         <p class="kicker">AUDI · PERFORMANCE AVANT</p>
-        <h1>S5<br><span>Avant</span></h1>
+        <h1>S5 <span>Avant</span></h1>
         <p class="lede">Get to know the S5 Avant. Tap a feature on the car or choose a button below.</p>
+        <div class="share-actions"><button class="primary-button" type="button" data-copy-link>Copy link ↗</button><span data-share-status role="status"></span><input class="share-url" data-share-url type="url" aria-label="Customer tour link" readonly hidden></div>
         <div class="chips">
           <span class="chip">Right-hand drive</span>
           <span class="chip">S sport interior</span>
@@ -55,7 +59,7 @@
             </button>
 
             <button class="showroom-zoom-pill" id="mediaZoomPill" type="button" aria-label="Reset zoom level">
-              <span class="zoom-icon">🔍</span>
+              <span class="zoom-icon" aria-hidden="true">＋</span>
               <span id="mediaZoomValue">1.0x</span>
               <span class="zoom-reset-hint">Reset</span>
             </button>
@@ -103,7 +107,7 @@
 
     <section class="wrap section" id="gallery">
       <div class="heading">
-        <div><p class="kicker">PHOTO GALLERY</p><h2>Exterior. Interior. Details.</h2></div>
+        <div><h2>Exterior. Interior. Details.</h2></div>
         <p>The interactive scene gives a guided experience. The gallery keeps the complete photographic evidence available to inspect.</p>
       </div>
 
@@ -144,7 +148,7 @@
 
     <section class="wrap section" id="features">
       <div class="heading">
-        <div><p class="kicker">DEMO VEHICLE HIGHLIGHTS</p><h2>Explore the equipment.</h2></div>
+        <div><h2>Explore the equipment.</h2></div>
         <p>The equipment below illustrates how a listing can be presented. Confirm the actual specification against vehicle documents.</p>
       </div>
 
@@ -177,7 +181,7 @@
     <section class="wrap cta">
       <div>
         <h3>Want to know more about this S5 Avant?</h3>
-        <p>Demo interaction only — no real enquiry is submitted yet.</p>
+        <p>Demo interaction only - no real enquiry is submitted yet.</p>
       </div>
       <button id="demoEnquiry" type="button">Preview enquiry flow</button>
     </section>
@@ -200,7 +204,7 @@
     </div>
   </dialog>
 
-  <script src="audi-experience.js?v=20261007"></script>
-  <script src="site-ui.js?v=20261007"></script>
+  <script src="audi-experience.js?v=20261007-2"></script>
+  <script src="site-ui.js?v=20261007-2"></script>
 </body>
 </html>

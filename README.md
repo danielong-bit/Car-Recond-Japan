@@ -4,7 +4,7 @@ An interactive demo showroom based on the latest Gemini build. All inventory, pr
 
 ## GitHub Pages
 
-Open `index.html` for the gallery and `audi.html` for the Audi tour. Pages are static; the demo editor saves changes in the current browser only. Shared uploads and settings require the Node server. The editor is linked as **Manage demo** in the footer.
+Open `index.html` for a compact photo-only inventory gallery and `audi.html` for the interactive Audi tour. The homepage has no car hotspots, video playback, or zoom. Share the dedicated `audi.html` URL directly with customers, or use its **Copy link** button. Pages are static; the demo editor saves changes in the current browser only. Shared uploads and settings require the Node server. The editor is linked as **Manage demo** in the footer.
 
 ## Run locally
 
@@ -18,7 +18,7 @@ Open http://localhost:3000/. The server provides `/audi`, `/admin`, config persi
 ## Improvements
 
 - Search by make/model and filter by body, year, mileage and power; clear empty-result filters in one click.
-- Mobile navigation, feature shortcuts, explicit zoom buttons, and cancellable viewer transitions.
+- Mobile navigation, Taste-inspired showroom styling, self-hosted fonts, and system light/dark themes. Dedicated tours retain feature shortcuts, zoom buttons, and cancellable viewer transitions.
 - Loading feedback and photo fallback for video failures; gallery arrows and keyboard navigation.
 - Original image dimensions retained in high-quality JPEGs; videos use browser-compatible H.264 with fast-start playback. Clips load on demand.
 

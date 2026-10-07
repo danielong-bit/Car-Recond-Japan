@@ -2,135 +2,59 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <script>document.documentElement.classList.add('js-enabled');</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#07090b" />
-  <title>Japan Recon Car Gallery — Interactive Demo</title>
+  <title>Japan Recon Car Gallery - Interactive Demo</title>
   <meta name="description" content="Interactive Japanese Recon Car Gallery & Showroom prototype featuring demo vehicle details, spec explorer, and digital showroom experience." />
-  <meta property="og:title" content="Japan Recon Car Gallery — Interactive Demo" />
+  <meta property="og:title" content="Japan Recon Car Gallery - Interactive Demo" />
   <meta property="og:description" content="Interactive Japanese Recon Car Gallery & Showroom prototype featuring demo vehicle details, spec explorer, and digital showroom experience." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20261007" />
-  <link rel="stylesheet" href="enhancements.css?v=20261007">
+
+  <link rel="stylesheet" href="style.css?v=20261007-2" />
+  <link rel="stylesheet" href="enhancements.css?v=20261007-2">
+  <link rel="preload" href="assets/fonts/nimbus-sans-regular.woff" as="font" type="font/woff" crossorigin>
+  <link rel="stylesheet" href="taste.css?v=20261007-2">
 </head>
-<body>
+<body class="home">
   <a class="skip-link" href="#top">Skip to content</a>
   <div class="demo-banner" role="note">
-    <span class="demo-dot"></span>
     DEMO SHOWROOM · SAMPLE INVENTORY · NO REAL BOOKINGS OR PAYMENTS
   </div>
 
   <header class="site-header">
-    <a class="brand" href="#top" aria-label="Japan Recon Car Gallery home">
-      <span class="brand-mark">JRCG</span>
+    <a class="brand" href="#top">
+      <span class="brand-mark" aria-hidden="true">JRCG</span>
       <span class="brand-copy"><strong>Japan Recon</strong><small>Car Gallery</small></span>
     </a>
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primaryNav">Menu</button>
     <nav id="primaryNav" aria-label="Primary navigation">
       <a href="#inventory">Inventory</a>
       <a href="#experience">Experience</a>
-      <button class="ghost-button nav-compare-btn" id="navCompareBtn" type="button" aria-label="Open side-by-side vehicle comparison">Compare <span class="nav-compare-count" id="navCompareBadge">0/2</span></button>
+      <button class="ghost-button nav-compare-btn" id="navCompareBtn" type="button">Compare <span aria-hidden="true" class="nav-compare-count" id="navCompareBadge">0/2</span></button>
       <button class="ghost-button" type="button" data-demo-action>Demo enquiry</button>
     </nav>
   </header>
 
   <main id="top" tabindex="-1">
-    <section class="showroom-hero" id="experience" aria-labelledby="showroomTitle">
-      <div class="showroom-topline">
-        <div>
-          <p class="eyebrow">JAPANESE RECON · DIGITAL SHOWROOM</p>
-          <h1 id="showroomTitle">Find your next<br><span>recon car.</span></h1>
-        </div>
-        <p class="showroom-intro">Choose a vehicle below. The selected car becomes the main showroom view, with price and key details immediately visible.</p>
+    <section class="catalog-intro" id="experience" aria-labelledby="showroomTitle">
+      <div class="catalog-copy">
+        <p class="eyebrow">JAPAN RECON CAR GALLERY</p>
+        <h1 id="showroomTitle">Find your next recon car.</h1>
+        <p>Browse the photos and specifications. Open a dedicated vehicle tour when you want a closer look.</p>
+        <a class="text-button browse-link" href="#inventory">Browse the gallery <span aria-hidden="true">↓</span></a>
       </div>
-
-      <div class="showroom-stage" id="showroomStage">
-        <div class="showroom-media" id="showroomMedia">
-          <div class="showroom-media-label">
-            <span id="showroomMediaBadge">SELECTED VEHICLE · 16:9 INTERACTIVE VIEWER</span>
-            <span id="showroomCounter">01 / 07</span>
-          </div>
-
-          <div class="showroom-zoom-canvas" id="showroomZoomCanvas">
-            <div class="showroom-image-wrap" id="showroomImageWrap">
-              <img id="showroomImage" class="showroom-image" src="assets/audi-s5/main-car-16x9.jpg" alt="Audi S5 Avant" width="1280" height="720" decoding="async" fetchpriority="high">
-            </div>
-            <video class="viewer-video showroom-video" id="showroomVideo" playsinline muted preload="none" aria-hidden="true"></video>
-            <img class="viewer-detail-image showroom-detail-image" id="showroomDetailImage" alt="" aria-hidden="true">
-            <div class="viewer-hotspots showroom-hotspots" id="showroomHotspots" aria-label="Vehicle feature hotspots"></div>
-            <!-- Sub-Hotspots Layer (Active inside feature view) -->
-            <div class="viewer-sub-hotspots showroom-sub-hotspots" id="showroomSubHotspots" aria-label="Detailed feature sub-hotspots" style="display: none;"></div>
-            <!-- Floating Feature Card for Sub-Hotspot Details -->
-            <div class="showroom-sub-feature-card" id="showroomSubFeatureCard" style="display: none;">
-              <div class="sub-feature-card-header">
-                <span class="sub-feature-eyebrow" id="subFeatureEyebrow">FEATURE DETAIL</span>
-                <button type="button" class="sub-feature-close-btn" id="subFeatureCloseBtn">✕</button>
-              </div>
-              <h4 class="sub-feature-title" id="subFeatureTitle">Part Title</h4>
-              <p class="sub-feature-description" id="subFeatureDesc">Description</p>
-              <div class="sub-feature-specs" id="subFeatureSpecs"></div>
-            </div>
-          </div>
-
-          <button class="viewer-back-btn showroom-back-btn" id="showroomBackBtn" type="button" aria-label="Back to vehicle overview">
-            <span class="viewer-back-icon">←</span>
-            <span class="viewer-back-label">Back to Vehicle</span>
-          </button>
-
-          <button class="showroom-zoom-pill" id="showroomZoomPill" type="button" aria-label="Reset zoom level">
-            <span class="zoom-icon">🔍</span>
-            <span id="showroomZoomValue">1.0x</span>
-            <span class="zoom-reset-hint">Reset</span>
-          </button>
-
-          <div class="showroom-shade"></div>
-        </div>
-
-        <div class="viewer-tools" aria-label="Car viewer controls">
-  <div class="feature-shortcuts" data-feature-shortcuts role="group" aria-label="Explore vehicle features"></div>
-  <div class="viewer-controls" role="group" aria-label="Zoom and return controls">
-    <button type="button" data-viewer-back disabled>← Back to car</button>
-    <button type="button" data-zoom="out" aria-label="Zoom out">−</button>
-    <output data-zoom-value aria-label="Zoom level">1.0×</output>
-    <button type="button" data-zoom="in" aria-label="Zoom in">+</button>
-    <button type="button" data-zoom="reset">Reset view</button>
-  </div>
-  <p class="viewer-help" data-viewer-help>Tap a feature to explore. Use + / − to zoom, then drag to look around.</p>
-  <div class="media-feedback" data-media-status role="status" hidden><span></span><button type="button" data-media-retry hidden>Retry video</button></div>
-</div>
-        <div class="showroom-thumbs" id="showroomThumbs" aria-label="Choose a demo vehicle"></div>
-
-        <div class="showroom-info">
-          <div class="showroom-name">
-            <small id="showroomMeta">AUDI · PERFORMANCE AVANT</small>
-            <h2 id="showroomName">Audi S5 Avant</h2>
-            <p id="showroomSub">Interactive photo and video demo</p>
-          </div>
-          <div class="showroom-price">
-            <small>DEMO PRICE</small>
-            <strong id="showroomPrice">RM 438,000</strong>
-            <button class="primary-button showroom-cta" id="showroomCta" type="button">View vehicle <span>→</span></button>
-          </div>
-        </div>
-
-        <div class="showroom-specs">
-          <div class="showroom-spec-title">
-            <span>KEY SPECIFICATIONS</span>
-            <small id="showroomSpecNote">Demo specifications · confirm before purchase</small>
-          </div>
-          <div class="showroom-spec-grid" id="showroomSpecs"></div>
-        </div>
-      </div>
+      <article class="featured-vehicle">
+        <img id="featuredPhoto" src="assets/audi-s5/main-car-preview.jpg" alt="Audi S5 Avant in Daytona Grey" width="1280" height="720" fetchpriority="high" decoding="async">
+        <div class="featured-caption"><div><span>Featured tour</span><h2>Audi S5 Avant</h2></div><a class="primary-button" href="audi.html" data-interaction-link>View interaction <span aria-hidden="true">↗</span></a></div>
+      </article>
     </section>
 
     <section class="inventory-section" id="inventory" aria-labelledby="inventory-title">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">DEMO INVENTORY</p>
           <h2 id="inventory-title">Browse the gallery</h2>
         </div>
-        <p>Every vehicle, mileage figure and specification below is fictional demo content for interface preview only.</p>
+        <p>Sample vehicles and prices for demonstration. Confirm actual stock and specifications before purchase.</p>
       </div>
 
       <div class="filters" aria-label="Inventory filters">
@@ -157,7 +81,16 @@
             <option value="Wagon">Wagon / estate</option>
           </select>
         </label>
-        <label>Year
+        <label>Sort
+          <select id="sortFilter">
+            <option value="default">Featured</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="year-desc">Year: Newest First</option>
+            <option value="year-asc">Year: Oldest First</option>
+          </select>
+        </label>
+        <details class="advanced-filters"><summary>More filters</summary><div class="advanced-filter-fields">        <label>Year
           <select id="yearFilter">
             <option value="all">Any year</option>
             <option value="2024">2024+</option>
@@ -171,45 +104,30 @@
         <label>Power
           <select id="powerFilter"><option value="all">Any power</option><option value="300">300 hp or more</option><option value="400">400 hp or more</option></select>
         </label>
-        <label>Sort
-          <select id="sortFilter">
-            <option value="default">Featured</option>
-            <option value="price-asc">Price: Low to High</option>
-            <option value="price-desc">Price: High to Low</option>
-            <option value="year-desc">Year: Newest First</option>
-            <option value="year-asc">Year: Oldest First</option>
-          </select>
-        </label>
+</div></details>
+        <div class="filter-actions">
         <button class="filter-reset" id="resetFilters" type="button">Reset</button>
-        <button class="filter-compare-btn" id="filterCompareBtn" type="button" aria-label="Open side-by-side vehicle comparison">
-          <span class="compare-icon">⇄</span>
+        <button class="filter-compare-btn" id="filterCompareBtn" type="button">
+          <span aria-hidden="true" class="compare-icon">⇄</span>
           <span>Compare</span>
-          <span class="compare-count-badge" id="filterCompareBadge">0/2</span>
+          <span aria-hidden="true" class="compare-count-badge" id="filterCompareBadge">0/2</span>
         </button>
         <span id="resultCount" class="result-count" aria-live="polite"></span>
+        </div>
       </div>
 
       <div class="inventory-grid" id="inventoryGrid"></div>
     </section>
 
-    <section class="how-section" aria-labelledby="how-title">
-      <div class="section-heading compact">
-        <div>
-          <p class="eyebrow">CUSTOMER EXPERIENCE</p>
-          <h2 id="how-title">Learn by interacting</h2>
-        </div>
-      </div>
-      <div class="how-grid">
-        <article><span>01</span><h3>Browse</h3><p>Filter demo stock by brand, body style and year without information overload.</p></article>
-        <article><span>02</span><h3>Open</h3><p>Enter a focused vehicle view with large visuals instead of a dense specification page.</p></article>
-        <article><span>03</span><h3>Interact</h3><p>Tap hotspots on the vehicle to understand engine, braking, aero, cabin and HUD equipment.</p></article>
-        <article><span>04</span><h3>Understand</h3><p>Switch between highlights and full specs, then preview what an enquiry flow could look like.</p></article>
-      </div>
+    <section class="catalog-note" aria-label="About the showroom">
+      <h2>Explore at your own pace.</h2>
+      <p>Browse photos here. The Audi S5 Avant has a separate interactive tour you can open or share directly.</p>
+      <p class="muted">All vehicles and prices shown are demonstration content.</p>
     </section>
   </main>
 
   <footer>
-    <div><strong>JAPAN RECON CAR GALLERY</strong><span>Interactive showroom prototype</span></div>
+    <div><strong>JAPAN RECON CAR GALLERY</strong><span>Photo gallery and dedicated vehicle tours</span></div>
     <div><span>Demo only · Not real inventory</span><a class="manage-link" href="admin.html">Manage demo</a></div>
   </footer>
 
@@ -219,43 +137,14 @@
       <div class="dialog-topline"><span>DEMO VEHICLE DETAIL</span><span>FICTIONAL DATA</span></div>
 
       <div class="vehicle-layout">
-        <div class="vehicle-media">
-          <div class="gallery-main" id="galleryMain">
-            <div class="detail-car-wrap" id="detailCarWrap">
-              <div class="car-visual detail-car" id="detailCar" aria-hidden="true">
-                <div class="shadow"></div>
-                <div class="car-shell">
-                  <div class="window window-a"></div><div class="window window-b"></div>
-                  <div class="front-light"></div><div class="rear-light"></div>
-                  <div class="wheel wheel-front"><i></i></div><div class="wheel wheel-rear"><i></i></div>
-                  <div class="body-line"></div>
-                </div>
-              </div>
-              <button class="hotspot detail-hotspot d-engine" data-feature="engine" type="button"><span>+</span><b>Engine</b></button>
-              <button class="hotspot detail-hotspot d-brake" data-feature="brakes" type="button"><span>+</span><b>Brakes</b></button>
-              <button class="hotspot detail-hotspot d-aero" data-feature="aero" type="button"><span>+</span><b>Aero</b></button>
-              <button class="hotspot detail-hotspot d-seat" data-feature="interior" type="button"><span>+</span><b>Interior</b></button>
-              <button class="hotspot detail-hotspot d-hud" data-feature="hud" type="button"><span>+</span><b>HUD</b></button>
-            </div>
-            <div class="gallery-overlay" id="galleryOverlay"></div>
-          </div>
-          <div class="gallery-tabs" role="tablist" aria-label="Vehicle gallery">
-            <button type="button" class="active" data-gallery="exterior">Exterior</button>
-            <button type="button" data-gallery="interior">Interior</button>
-            <button type="button" data-gallery="details">Details</button>
-          </div>
-        </div>
+        <div class="vehicle-media"><img id="vehiclePhoto" class="vehicle-photo" alt="" width="1280" height="720"><p class="photo-note">Sample photography. Vehicle details are unverified.</p></div>
 
         <div class="vehicle-copy">
           <p class="eyebrow" id="vehicleMeta">2024 · DEMO SPEC</p>
           <h2 id="vehicleTitle">Vehicle</h2>
           <p class="vehicle-sub" id="vehicleSub"></p>
 
-          <div class="feature-panel" id="featurePanel" aria-live="polite">
-            <small>INTERACTIVE FEATURE</small>
-            <h3 id="featureTitle">Select a hotspot</h3>
-            <p id="featureText">Tap a point on the vehicle to reveal a customer-friendly explanation.</p>
-          </div>
+          <a id="vehicleInteraction" class="primary-button" href="audi.html" hidden>View interaction ↗</a>
 
           <div class="quick-specs" id="quickSpecs"></div>
 
@@ -336,7 +225,7 @@
     <span id="compareToastMsg">Maximum 2 vehicles can be compared simultaneously.</span>
   </div>
 
-  <script src="app.js?v=20261007"></script>
-  <script src="site-ui.js?v=20261007"></script>
+  <script src="app.js?v=20261007-2"></script>
+  <script src="site-ui.js?v=20261007-2"></script>
 </body>
 </html>

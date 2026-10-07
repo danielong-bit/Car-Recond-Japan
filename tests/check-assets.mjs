@@ -3,12 +3,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const files = ['index.html', 'audi.html', 'admin.html', 'app.js', 'audi-experience.js', 'admin.js', 'site-ui.js', 'server.js'];
+const files = ['index.html', 'audi.html', 'admin.html', 'app.js', 'audi-experience.js', 'admin.js', 'site-ui.js', 'server.js', 'taste.css'];
 const references = new Set();
 for (const file of files) {
   const text = fs.readFileSync(path.join(root, file), 'utf8');
   if (file.endsWith('.js')) execFileSync(process.execPath, ['--check', path.join(root, file)]);
-  for (const match of text.matchAll(/assets\/[\w./-]+\.(?:jpg|png|webp|mp4)/g)) references.add(match[0]);
+  for (const match of text.matchAll(/assets\/[\w./-]+\.(?:jpg|png|webp|mp4|woff)/g)) references.add(match[0]);
   for (const match of text.matchAll(/ROOT\s*\+\s*["']([\w-]+\.jpg)/g)) references.add('assets/audi-s5/' + match[1]);
   if (file.endsWith('.html')) {
     for (const match of text.matchAll(/(?:src|href)=["']([^"'#?]+)(?:\?[^"']*)?["']/g)) {

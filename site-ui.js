@@ -28,6 +28,24 @@
       dialog.addEventListener('close', syncDialogScroll);
     });
 
+    const copyLink = document.querySelector('[data-copy-link]');
+    copyLink?.addEventListener('click', async () => {
+      const url = new URL(location.pathname, location.origin).href;
+      const status = document.querySelector('[data-share-status]');
+      const fallback = document.querySelector('[data-share-url]');
+      try {
+        await navigator.clipboard.writeText(url);
+        status.textContent = 'Link copied. Ready to share.';
+        fallback.hidden = true;
+      } catch {
+        fallback.hidden = false;
+        fallback.value = url;
+        fallback.focus();
+        fallback.select();
+        status.textContent = 'Select and copy this link to share the tour.';
+      }
+    });
+
     const dedicated = !!document.getElementById('mediaPlane');
     const video = document.getElementById(dedicated ? 'viewerVideo' : 'showroomVideo');
     const media = document.getElementById(dedicated ? 'mediaPlane' : 'showroomMedia');
