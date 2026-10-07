@@ -5,18 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#07090b" />
   <title>Japan Recon Car Gallery — Interactive Demo</title>
-  <meta name="description" content="Interactive Japanese Recon Car Gallery & Showroom prototype featuring real vehicle details, spec explorer, and digital showroom experience." />
+  <meta name="description" content="Interactive Japanese Recon Car Gallery & Showroom prototype featuring demo vehicle details, spec explorer, and digital showroom experience." />
   <meta property="og:title" content="Japan Recon Car Gallery — Interactive Demo" />
-  <meta property="og:description" content="Interactive Japanese Recon Car Gallery & Showroom prototype featuring real vehicle details, spec explorer, and digital showroom experience." />
+  <meta property="og:description" content="Interactive Japanese Recon Car Gallery & Showroom prototype featuring demo vehicle details, spec explorer, and digital showroom experience." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=20261007" />
+  <link rel="stylesheet" href="enhancements.css?v=20261007">
 </head>
 <body>
+  <a class="skip-link" href="#top">Skip to content</a>
   <div class="demo-banner" role="note">
     <span class="demo-dot"></span>
-    DEMO WEBSITE · FICTIONAL INVENTORY & SPECIFICATIONS · NO REAL ENQUIRY, BOOKING OR PAYMENT
+    DEMO SHOWROOM · SAMPLE INVENTORY · NO REAL BOOKINGS OR PAYMENTS
   </div>
 
   <header class="site-header">
@@ -24,14 +26,16 @@
       <span class="brand-mark">JRCG</span>
       <span class="brand-copy"><strong>Japan Recon</strong><small>Car Gallery</small></span>
     </a>
-    <nav aria-label="Primary navigation">
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primaryNav">Menu</button>
+    <nav id="primaryNav" aria-label="Primary navigation">
       <a href="#inventory">Inventory</a>
       <a href="#experience">Experience</a>
+      <button class="ghost-button nav-compare-btn" id="navCompareBtn" type="button" aria-label="Open side-by-side vehicle comparison">Compare <span class="nav-compare-count" id="navCompareBadge">0/2</span></button>
       <button class="ghost-button" type="button" data-demo-action>Demo enquiry</button>
     </nav>
   </header>
 
-  <main id="top">
+  <main id="top" tabindex="-1">
     <section class="showroom-hero" id="experience" aria-labelledby="showroomTitle">
       <div class="showroom-topline">
         <div>
@@ -42,21 +46,66 @@
       </div>
 
       <div class="showroom-stage" id="showroomStage">
-        <div class="showroom-media">
-          <div class="showroom-media-label"><span>SELECTED VEHICLE</span><span id="showroomCounter">01 / 07</span></div>
-          <div class="showroom-image-wrap" id="showroomImageWrap">
-            <img id="showroomImage" class="showroom-image" src="assets/audi-s5-v2/hero.jpg" alt="Audi S5 Avant">
+        <div class="showroom-media" id="showroomMedia">
+          <div class="showroom-media-label">
+            <span id="showroomMediaBadge">SELECTED VEHICLE · 16:9 INTERACTIVE VIEWER</span>
+            <span id="showroomCounter">01 / 07</span>
           </div>
+
+          <div class="showroom-zoom-canvas" id="showroomZoomCanvas">
+            <div class="showroom-image-wrap" id="showroomImageWrap">
+              <img id="showroomImage" class="showroom-image" src="assets/audi-s5/main-car-16x9.jpg" alt="Audi S5 Avant" width="1280" height="720" decoding="async" fetchpriority="high">
+            </div>
+            <video class="viewer-video showroom-video" id="showroomVideo" playsinline muted preload="none" aria-hidden="true"></video>
+            <img class="viewer-detail-image showroom-detail-image" id="showroomDetailImage" alt="" aria-hidden="true">
+            <div class="viewer-hotspots showroom-hotspots" id="showroomHotspots" aria-label="Vehicle feature hotspots"></div>
+            <!-- Sub-Hotspots Layer (Active inside feature view) -->
+            <div class="viewer-sub-hotspots showroom-sub-hotspots" id="showroomSubHotspots" aria-label="Detailed feature sub-hotspots" style="display: none;"></div>
+            <!-- Floating Feature Card for Sub-Hotspot Details -->
+            <div class="showroom-sub-feature-card" id="showroomSubFeatureCard" style="display: none;">
+              <div class="sub-feature-card-header">
+                <span class="sub-feature-eyebrow" id="subFeatureEyebrow">FEATURE DETAIL</span>
+                <button type="button" class="sub-feature-close-btn" id="subFeatureCloseBtn">✕</button>
+              </div>
+              <h4 class="sub-feature-title" id="subFeatureTitle">Part Title</h4>
+              <p class="sub-feature-description" id="subFeatureDesc">Description</p>
+              <div class="sub-feature-specs" id="subFeatureSpecs"></div>
+            </div>
+          </div>
+
+          <button class="viewer-back-btn showroom-back-btn" id="showroomBackBtn" type="button" aria-label="Back to vehicle overview">
+            <span class="viewer-back-icon">←</span>
+            <span class="viewer-back-label">Back to Vehicle</span>
+          </button>
+
+          <button class="showroom-zoom-pill" id="showroomZoomPill" type="button" aria-label="Reset zoom level">
+            <span class="zoom-icon">🔍</span>
+            <span id="showroomZoomValue">1.0x</span>
+            <span class="zoom-reset-hint">Reset</span>
+          </button>
+
           <div class="showroom-shade"></div>
         </div>
 
+        <div class="viewer-tools" aria-label="Car viewer controls">
+  <div class="feature-shortcuts" data-feature-shortcuts role="group" aria-label="Explore vehicle features"></div>
+  <div class="viewer-controls" role="group" aria-label="Zoom and return controls">
+    <button type="button" data-viewer-back disabled>← Back to car</button>
+    <button type="button" data-zoom="out" aria-label="Zoom out">−</button>
+    <output data-zoom-value aria-label="Zoom level">1.0×</output>
+    <button type="button" data-zoom="in" aria-label="Zoom in">+</button>
+    <button type="button" data-zoom="reset">Reset view</button>
+  </div>
+  <p class="viewer-help" data-viewer-help>Tap a feature to explore. Use + / − to zoom, then drag to look around.</p>
+  <div class="media-feedback" data-media-status role="status" hidden><span></span><button type="button" data-media-retry hidden>Retry video</button></div>
+</div>
         <div class="showroom-thumbs" id="showroomThumbs" aria-label="Choose a demo vehicle"></div>
 
         <div class="showroom-info">
           <div class="showroom-name">
             <small id="showroomMeta">AUDI · PERFORMANCE AVANT</small>
             <h2 id="showroomName">Audi S5 Avant</h2>
-            <p id="showroomSub">Actual photographed example · interactive detail page</p>
+            <p id="showroomSub">Interactive photo and video demo</p>
           </div>
           <div class="showroom-price">
             <small>DEMO PRICE</small>
@@ -68,7 +117,7 @@
         <div class="showroom-specs">
           <div class="showroom-spec-title">
             <span>KEY SPECIFICATIONS</span>
-            <small id="showroomSpecNote">Actual vehicle · unverified fields stay marked</small>
+            <small id="showroomSpecNote">Demo specifications · confirm before purchase</small>
           </div>
           <div class="showroom-spec-grid" id="showroomSpecs"></div>
         </div>
@@ -85,6 +134,9 @@
       </div>
 
       <div class="filters" aria-label="Inventory filters">
+        <label class="search-label">Search make or model
+          <input id="searchFilter" type="search" placeholder="Try Audi S5 or Toyota" autocomplete="off">
+        </label>
         <label>Brand
           <select id="brandFilter">
             <option value="all">All brands</option>
@@ -102,6 +154,7 @@
             <option value="SUV">SUV</option>
             <option value="Coupe">Coupe</option>
             <option value="Sedan">Sedan</option>
+            <option value="Wagon">Wagon / estate</option>
           </select>
         </label>
         <label>Year
@@ -112,7 +165,27 @@
             <option value="2022">2022+</option>
           </select>
         </label>
+        <label>Mileage
+          <select id="mileageFilter"><option value="all">Any mileage</option><option value="10000">Up to 10,000 km</option><option value="20000">Up to 20,000 km</option><option value="30000">Up to 30,000 km</option></select>
+        </label>
+        <label>Power
+          <select id="powerFilter"><option value="all">Any power</option><option value="300">300 hp or more</option><option value="400">400 hp or more</option></select>
+        </label>
+        <label>Sort
+          <select id="sortFilter">
+            <option value="default">Featured</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="year-desc">Year: Newest First</option>
+            <option value="year-asc">Year: Oldest First</option>
+          </select>
+        </label>
         <button class="filter-reset" id="resetFilters" type="button">Reset</button>
+        <button class="filter-compare-btn" id="filterCompareBtn" type="button" aria-label="Open side-by-side vehicle comparison">
+          <span class="compare-icon">⇄</span>
+          <span>Compare</span>
+          <span class="compare-count-badge" id="filterCompareBadge">0/2</span>
+        </button>
         <span id="resultCount" class="result-count" aria-live="polite"></span>
       </div>
 
@@ -137,7 +210,7 @@
 
   <footer>
     <div><strong>JAPAN RECON CAR GALLERY</strong><span>Interactive showroom prototype</span></div>
-    <div><span>Demo only</span><span>Not real inventory</span></div>
+    <div><span>Demo only · Not real inventory</span><a class="manage-link" href="admin.html">Manage demo</a></div>
   </footer>
 
   <dialog id="vehicleDialog" class="vehicle-dialog" aria-labelledby="vehicleTitle">
@@ -210,6 +283,60 @@
     </div>
   </dialog>
 
-  <script src="app.js?v=9"></script>
+  <dialog id="compareDialog" class="compare-dialog" aria-labelledby="compareTitle">
+    <div class="compare-dialog-shell">
+      <div class="compare-topline">
+        <div class="compare-heading-block">
+          <p class="eyebrow">SPECIFICATION BENCHMARK · SIDE-BY-SIDE</p>
+          <h2 id="compareTitle">Vehicle Comparison</h2>
+        </div>
+        <div class="compare-actions-bar">
+          <div class="compare-view-toggle" role="tablist" aria-label="Comparison filter">
+            <button type="button" class="compare-tab-btn active" id="cmpViewAll" role="tab" aria-selected="true">All Specs</button>
+            <button type="button" class="compare-tab-btn" id="cmpViewDiff" role="tab" aria-selected="false">Highlight Differences</button>
+          </div>
+          <button class="dialog-close compare-close-btn" id="closeCompareDialog" type="button" aria-label="Close vehicle comparison">×</button>
+        </div>
+      </div>
+
+      <div class="compare-scroll-body" id="compareBody">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Floating bottom compare dock -->
+  <aside class="compare-dock" id="compareDock" aria-label="Selected vehicles to compare" role="region">
+    <div class="compare-dock-shell">
+      <div class="compare-dock-status">
+        <span class="compare-dock-dot"></span>
+        <div class="compare-dock-label-group">
+          <strong>Compare Vehicles</strong>
+          <small id="compareDockStatus">Select 2 vehicles from gallery</small>
+        </div>
+      </div>
+
+      <div class="compare-dock-slots" id="compareDockSlots">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div class="compare-dock-controls">
+        <button class="compare-dock-clear-btn" id="compareDockClear" type="button" aria-label="Clear all compared vehicles">Clear</button>
+        <button class="primary-button compare-dock-launch-btn" id="compareDockLaunch" type="button" disabled>
+          <span>Compare (0/2)</span>
+          <span class="dock-arrow">→</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Non-intrusive notification toast -->
+  <div class="compare-toast" id="compareToast" role="status" aria-live="polite">
+    <span class="compare-toast-icon">ℹ</span>
+    <span id="compareToastMsg">Maximum 2 vehicles can be compared simultaneously.</span>
+  </div>
+
+  <script src="app.js?v=20261007"></script>
+  <script src="site-ui.js?v=20261007"></script>
 </body>
 </html>

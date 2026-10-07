@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "node server.js",
     "start": "node server.js",
-    "build": "node -e \"console.log('Build succeeded')\""
+    "build": "npm test",
+    "lint": "node --check app.js && node --check audi-experience.js && node --check admin.js && node --check site-ui.js && node --check server.js",
+    "test": "node tests/check-assets.mjs"
   },
   "dependencies": {
     "express": "^4.21.2"

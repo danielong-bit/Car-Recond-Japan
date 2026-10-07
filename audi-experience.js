@@ -1,344 +1,877 @@
-const ROOT="assets/audi-s5/";
+// ==========================================================================
+// Japan Recon Car Gallery — Audi S5 Avant 16:9 Interactive Viewer
+// ==========================================================================
 
-const tour={
-  engine:{
-    label:"ENGINE",
-    title:"Engine bay",
-    description:"Move toward the bonnet and reveal the actual engine compartment. Exact engine output, torque and drivetrain remain unverified until the stock documents are supplied.",
-    src:ROOT+"engine.webp",
-    alt:"Audi S5 Avant engine bay",
-    x:"73%",y:"34%",
-    specs:[
-      ["Engine type","To verify"],
-      ["Power","To verify"],
-      ["Torque","To verify"],
-      ["Transmission","To verify"]
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+}
+const ROOT = "assets/audi-s5/";
+
+// Viewer Hotspots Configuration (Videos & Images)
+let viewerConfig = [
+  // --- VIDEO HOTSPOTS ---
+  {
+    id: "engine",
+    label: "Engine",
+    type: "video",
+    x: "72%",
+    y: "46%",
+    forwardVideo: "assets/videos/engine_forward.mp4",
+    reverseVideo: "assets/videos/engine_reverse_web.mp4",
+    title: "V6 TFSI Engine Bay",
+    eyebrow: "POWERTRAIN",
+    description: "Move beneath the bonnet to reveal the 3.0-litre turbocharged V6 powerplant, carbon-accented engine cover, and precision cooling architecture.",
+    specs: [
+      ["Engine", "3.0L TFSI V6 Turbo"],
+      ["Power", "349 hp (demo)"],
+      ["Torque", "500 Nm (demo)"],
+      ["Transmission", "8-speed Tiptronic (demo)"]
     ]
   },
-  interior:{
-    label:"INTERIOR",
-    title:"Inside the S5 Avant",
-    description:"Push into the cabin, then choose a specific interior area to inspect.",
-    src:ROOT+"cockpit.webp",
-    alt:"Audi S5 Avant right-hand-drive cockpit",
-    x:"58%",y:"23%",
-    children:{
-      cockpit:{
-        label:"COCKPIT",
-        title:"Driver-focused cockpit",
-        description:"Actual right-hand-drive cockpit with steering controls, digital instrument cluster and centre display visible.",
-        src:ROOT+"cockpit.webp",
-        alt:"Audi S5 Avant right-hand-drive cockpit",
-        specs:[["Steering","Right-hand drive"],["Driver display","Digital instrument cluster"],["Centre display","Visible in photo"],["Other equipment","To verify"]]
-      },
-      climate:{
-        label:"REAR CLIMATE",
-        title:"Rear climate controls",
-        description:"Move deeper into the cabin to inspect the rear climate-control area photographed in this vehicle.",
-        src:ROOT+"rear-climate.webp",
-        alt:"Audi S5 Avant rear climate controls",
-        specs:[["Rear climate","Controls visible"],["Zones","To verify"],["Seat functions","To verify"],["Rear comfort spec","To verify"]]
-      },
-      audio:{
-        label:"BANG & OLUFSEN",
-        title:"Premium cabin audio detail",
-        description:"Inspect the Bang & Olufsen branded speaker treatment visible on the photographed vehicle.",
-        src:ROOT+"bang-olufsen.webp",
-        alt:"Audi S5 Avant Bang and Olufsen speaker",
-        specs:[["Brand","Bang & Olufsen"],["Speaker count","To verify"],["Output","To verify"],["Package level","To verify"]]
-      }
-    }
+  {
+    id: "interior",
+    label: "Interior",
+    type: "video",
+    x: "54%",
+    y: "38%",
+    forwardVideo: "assets/videos/interior_forward.mp4",
+    reverseVideo: "assets/videos/interior_reverse.mp4",
+    title: "Inside the S5 Avant",
+    eyebrow: "CABIN & COCKPIT",
+    description: "Step into the driver-focused cabin featuring digital instrumentation, S sport steering wheel, ambient lighting, and refined tactile controls.",
+    specs: [
+      ["Steering layout", "Right-hand drive"],
+      ["Driver display", "Audi Virtual Cockpit"],
+      ["Trim", "Matte Brushed Aluminum"],
+      ["Pedals", "Stainless steel S sport pedals"]
+    ]
   },
-  wheel:{
-    label:"WHEEL & BRAKES",
-    title:"Wheel, brake and tyre",
-    description:"Zoom into the front wheel area, then inspect the rim, brake caliper or tyre detail.",
-    src:ROOT+"wheel-brake.webp",
-    alt:"Audi S5 Avant wheel and red S brake caliper",
-    x:"77%",y:"67%",
-    children:{
-      rim:{
-        label:"RIM",
-        title:"Wheel design",
-        description:"Focus on the alloy-wheel design and centre-cap area. Exact wheel dimensions remain to verify.",
-        src:ROOT+"wheel-brake.webp",
-        alt:"Audi S5 Avant alloy wheel",
-        focus:"rim",
-        specs:[["Rim design","Multi-spoke alloy"],["Wheel size","To verify"],["Finish","Visible in photo"],["Centre cap","Audi"]]
-      },
-      brake:{
-        label:"BRAKE",
-        title:"S-branded brake caliper",
-        description:"Zoom closer to the visible red S-branded front brake caliper and brake hardware.",
-        src:ROOT+"wheel-brake.webp",
-        alt:"Audi S5 Avant red S brake caliper",
-        focus:"brake",
-        specs:[["Caliper","Red S-branded front caliper"],["Brake disc","Visible in photo"],["Caliper piston count","To verify"],["Brake package","To verify"]]
-      },
-      tyre:{
-        label:"TYRE",
-        title:"Tyre detail",
-        description:"Inspect the tyre sidewall area. Brand, size and specification should only be filled when they can be read or confirmed from stock information.",
-        src:ROOT+"wheel-brake.webp",
-        alt:"Audi S5 Avant tyre and wheel",
-        focus:"tyre",
-        specs:[["Tyre brand","To verify"],["Tyre size","To verify"],["Profile","To verify"],["Condition","Inspect photo / verify"]]
-      }
-    }
+  {
+    id: "boot",
+    label: "Boot / Trunk",
+    type: "video",
+    x: "24%",
+    y: "44%",
+    forwardVideo: "assets/videos/boot_forward.mp4",
+    reverseVideo: "assets/videos/boot_reverse_web.mp4",
+    title: "Cargo Area & Powered Tailgate",
+    eyebrow: "STORAGE & UTILITY",
+    description: "Open the powered rear tailgate revealing the estate cargo hold with illuminated side liners, luggage tie-downs, and 40:20:40 split-folding rear seats.",
+    specs: [
+      ["Tailgate", "Power opening / closing"],
+      ["Cargo capacity", "465L - 1,495L"],
+      ["Seat folding", "40:20:40 split"],
+      ["Load threshold", "Stainless steel guard"]
+    ]
   },
-  audio:{
-    label:"AUDIO",
-    title:"Bang & Olufsen",
-    description:"Move into the cabin audio detail and inspect the Bang & Olufsen branded speaker treatment.",
-    src:ROOT+"bang-olufsen.webp",
-    alt:"Audi S5 Avant Bang and Olufsen speaker",
-    x:"51%",y:"47%",
-    specs:[["Brand","Bang & Olufsen"],["Speaker count","To verify"],["System output","To verify"],["Package","To verify"]]
+
+  // --- STATIC IMAGE HOTSPOTS ---
+  {
+    id: "wheel",
+    label: "Wheel",
+    type: "image",
+    x: "78%",
+    y: "74%",
+    imageSrc: ROOT + "wheel_16x9.jpg",
+    title: "Wheel, Brake & Tyre Setup",
+    eyebrow: "CHASSIS & BRAKES",
+    description: "Multi-spoke S-design alloy wheels equipped with high-performance ventilated brake discs and red S-branded front multi-piston calipers.",
+    specs: [
+      ["Wheel size", "20-inch S-design"],
+      ["Brake caliper", "Red S-branded caliper"],
+      ["Brake disc", "Ventilated performance disc"],
+      ["Tyre profile", "255/35 R20"]
+    ]
   },
-  cargo:{
-    label:"CARGO",
-    title:"Cargo and powered tailgate",
-    description:"Push toward the rear of the car and reveal the photographed cargo compartment. The vehicle also shows powered tailgate controls.",
-    src:ROOT+"cargo.webp",
-    alt:"Audi S5 Avant cargo area with tailgate open",
-    x:"24%",y:"38%",
-    specs:[["Body style","Avant / wagon"],["Tailgate","Powered controls visible"],["Cargo capacity","To verify"],["Rear seat split","To verify"]]
+  {
+    id: "dashboard",
+    label: "Dashboard",
+    type: "image",
+    x: "62%",
+    y: "36%",
+    imageSrc: ROOT + "dashboard_16x9.jpg",
+    title: "Driver Dashboard & Virtual Cockpit",
+    eyebrow: "DIGITAL COCKPIT",
+    description: "Driver-oriented curved MMI touch display paired with full digital instrument cluster and configurable navigation views.",
+    specs: [
+      ["Cluster", "12.3-inch Virtual Cockpit"],
+      ["Central MMI", "10.1-inch High-res Touch"],
+      ["Connectivity", "Apple CarPlay & Android Auto"],
+      ["Interface", "Audi MMI Touch Response"]
+    ]
+  },
+  {
+    id: "seats",
+    label: "Seats",
+    type: "image",
+    x: "48%",
+    y: "42%",
+    imageSrc: ROOT + "seats_16x9.jpg",
+    title: "S Sport Contoured Seats",
+    eyebrow: "INTERIOR SEATING",
+    description: "Contoured sport seats upholstered in fine Nappa leather with diamond quilting, embossed S logos and integrated pneumatic side bolstering.",
+    specs: [
+      ["Upholstery", "Fine Nappa Leather"],
+      ["Stitching", "Diamond pattern with S logo"],
+      ["Adjustment", "14-way electric with memory"],
+      ["Heating", "Multi-stage front seat heating"]
+    ]
+  },
+  {
+    id: "audio",
+    label: "Bang & Olufsen",
+    type: "image",
+    x: "65%",
+    y: "46%",
+    imageSrc: ROOT + "audio_16x9.jpg",
+    title: "Bang & Olufsen 3D Sound",
+    eyebrow: "PREMIUM AUDIO",
+    description: "Bang & Olufsen 3D Sound System with precision-etched acoustic grilles, 19 speakers, 16-channel amplifier and 755 watts output.",
+    specs: [
+      ["Brand", "Bang & Olufsen"],
+      ["Speakers", "19 high-performance speakers"],
+      ["Amplifier", "16-channel 755W DSP"],
+      ["Sound dimension", "3D Sound spatial algorithm"]
+    ]
+  },
+  {
+    id: "climate",
+    label: "Rear climate controls",
+    type: "image",
+    x: "38%",
+    y: "46%",
+    imageSrc: ROOT + "climate_16x9.jpg",
+    title: "Deluxe 3-Zone Climate Control",
+    eyebrow: "REAR CABIN COMFORT",
+    description: "Independent rear-seat climate adjustment console with dedicated digital temperature display, air direction dials and dual USB-C charging ports.",
+    specs: [
+      ["Zones", "3-zone automatic climate"],
+      ["Controls", "Digital rear display & touch dials"],
+      ["Air filtration", "Fine particulate pollen filter"],
+      ["Ports", "Dual fast-charge USB-C"]
+    ]
   }
+];
+
+// Default Overview State Copy
+const overviewCopy = {
+  eyebrow: "VEHICLE OVERVIEW",
+  title: "Choose what you want to inspect.",
+  description: "Click any hotspot on the car to inspect the engine bay, cabin interior, powered tailgate boot, wheel hardware, audio system, or rear climate controls.",
+  specs: [
+    ["Model", "Audi S5 Avant"],
+    ["Body style", "Performance Estate"],
+    ["Exterior colour", "Daytona Grey Metallic"],
+    ["Viewer ratio", "16:9 Responsive"]
+  ]
 };
 
-const state={
-  scene:"overview",
-  category:null,
-  child:null,
-  transitioning:false,
-  lastTrigger:null
+// Application State
+const state = {
+  mode: "normal", // "normal" | "video" | "reverse" | "image"
+  activeItem: null,
+  isAnimating: false,
+  lastTrigger: null
 };
 
-const shell=document.getElementById("experienceShell");
-const mediaPlane=document.getElementById("mediaPlane");
-const overviewImage=document.getElementById("overviewImage");
-const detailImage=document.getElementById("detailImage");
-const sceneLabel=document.getElementById("sceneLabel");
-const detailEyebrow=document.getElementById("detailEyebrow");
-const detailTitle=document.getElementById("detailTitle");
-const detailDescription=document.getElementById("detailDescription");
-const tourSubnav=document.getElementById("tourSubnav");
-const tourSpecs=document.getElementById("tourSpecs");
-const detailBack=document.getElementById("detailBack");
-const hotspotButtons=[...document.querySelectorAll("[data-tour]")];
-const prefersReduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const transitionMs=prefersReduced?120:560;
+// DOM References
+const mediaPlane = document.getElementById("mediaPlane");
+const overviewImage = document.getElementById("overviewImage");
+const viewerVideo = document.getElementById("viewerVideo");
+const detailImage = document.getElementById("detailImage");
+const viewerBackBtn = document.getElementById("viewerBackBtn");
+const viewerHotspots = document.getElementById("hotspots");
+const viewerSubHotspots = document.getElementById("subHotspots");
+const sceneLabel = document.getElementById("sceneLabel");
+const detailStatus = document.getElementById("detailStatus");
+const detailEyebrow = document.getElementById("detailEyebrow");
+const detailTitle = document.getElementById("detailTitle");
+const detailDescription = document.getElementById("detailDescription");
+const tourSubnav = document.getElementById("tourSubnav");
+const tourSpecs = document.getElementById("tourSpecs");
+const detailBack = document.getElementById("detailBack");
+const shell = document.getElementById("experienceShell");
 
-const HERO_CHUNKS = Array.from({length:10},(_,i)=>
-  `assets/audi-s5-hq/chunks/front-${String(i).padStart(2,"0")}.txt?v=10`
-);
+// Helper: Normalize Percentage Coordinate
+function toPercent(val) {
+  if (typeof val === "number") return `${val}%`;
+  if (typeof val === "string") return val.trim().endsWith("%") ? val.trim() : `${val}%`;
+  return "50%";
+}
 
-async function loadHighQualityHero(){
-  try{
-    const parts=await Promise.all(
-      HERO_CHUNKS.map(async url=>{
-        const response=await fetch(url,{cache:"no-store"});
-        if(!response.ok) throw new Error(`Hero chunk failed: ${url}`);
-        return response.text();
-      })
-    );
-    const base64=parts.join("").replace(/\s+/g,"");
-    const src=`data:image/jpeg;base64,${base64}`;
+// Preload Video and Image Assets
+function preloadAssets() {
+  // Media is loaded only when a customer selects a feature.
+}
 
-    const image=new Image();
-    image.src=src;
-    if(image.decode) await image.decode();
-    else await new Promise((resolve,reject)=>{
-      image.onload=resolve;
-      image.onerror=reject;
+// Render Spec Rows in Side Panel
+function renderSpecs(rows = []) {
+  if (!tourSpecs) return;
+  tourSpecs.innerHTML = rows.map(([key, value]) => `
+    <div class="tour-spec-row">
+      <span>${key}</span>
+      <strong>${value}</strong>
+    </div>
+  `).join("");
+}
+
+// Apply Text Copy to Panel
+function applyCopy(item) {
+  if (detailEyebrow) detailEyebrow.textContent = item.eyebrow || "SPECIFICATION";
+  if (detailTitle) detailTitle.textContent = item.title || item.label || "";
+  if (detailDescription) detailDescription.textContent = item.description || "";
+  renderSpecs(item.specs || []);
+}
+
+// Reset Copy to Default Overview
+function resetOverviewCopy() {
+  applyCopy(overviewCopy);
+  renderSubnav();
+}
+
+// Render Filter / Subnav Shortcuts
+function renderSubnav(activeId = null) {
+  if (!tourSubnav) return;
+  tourSubnav.innerHTML = viewerConfig.map(item => `
+    <button type="button" 
+      data-id="${item.id}" 
+      class="${activeId === item.id ? 'active' : ''}"
+      title="${item.label} (${item.type})">
+      ${item.label}${item.type === 'video' ? ' ▶' : ''}
+    </button>
+  `).join("");
+
+  tourSubnav.querySelectorAll("button[data-id]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.id;
+      const target = findConfigItem(id);
+      if (target) selectHotspot(target, btn);
     });
-
-    overviewImage.src=src;
-    const galleryHero=document.querySelector("[data-hq-hero]");
-    if(galleryHero) galleryHero.src=src;
-  }catch(error){
-    console.error("HQ Audi hero failed to load",error);
-  }
-}
-
-loadHighQualityHero();
-
-
-function delay(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
-
-function preload(src){
-  if(!src)return;
-  const img=new Image();
-  img.src=src;
-}
-
-function renderSpecs(rows=[]){
-  tourSpecs.innerHTML=rows.map(([key,value])=>`
-    <div class="tour-spec-row"><span>${key}</span><strong>${value}</strong></div>
-  `).join("");
-}
-
-function renderChildren(category){
-  const children=tour[category]?.children;
-  if(!children){
-    tourSubnav.innerHTML="";
-    return;
-  }
-  tourSubnav.innerHTML=Object.entries(children).map(([key,item])=>`
-    <button type="button" data-child="${key}" class="${state.child===key?"active":""}">${item.label}</button>
-  `).join("");
-  tourSubnav.querySelectorAll("[data-child]").forEach(button=>{
-    button.addEventListener("click",()=>selectChild(category,button.dataset.child));
   });
 }
 
-function applyCopy(item){
-  detailEyebrow.textContent=item.label;
-  detailTitle.textContent=item.title;
-  detailDescription.textContent=item.description;
-  renderSpecs(item.specs||[]);
-  sceneLabel.textContent=item.label;
+function findConfigItem(id) {
+  if (!id) return null;
+  const cleanId = String(id).toLowerCase().trim();
+  return viewerConfig.find(c => 
+    c.id.toLowerCase() === cleanId ||
+    (cleanId === "trunk" && c.id === "boot") ||
+    (cleanId === "boot" && c.id === "boot") ||
+    (cleanId === "bang-olufsen" && c.id === "audio") ||
+    (cleanId === "rear-climate" && c.id === "climate")
+  );
 }
 
-async function setDetailImage(item,category){
-  const src=item.src;
-  if(!src)return;
-  preload(src);
-  detailImage.className="experience-detail-image";
-  if(item.focus) detailImage.classList.add("focus-"+item.focus);
-  detailImage.alt=item.alt||"Audi S5 Avant detail";
-  detailImage.src=src;
+// Render All Hotspots on 16:9 Viewer
+function renderHotspots() {
+  if (!viewerHotspots) return;
+  viewerHotspots.innerHTML = viewerConfig.map(item => {
+    const left = toPercent(item.x);
+    const top = toPercent(item.y);
+    const isVideo = item.type === "video";
+    return `
+      <button class="vehicle-hotspot" 
+        type="button" 
+        data-id="${item.id}" 
+        data-type="${item.type}"
+        style="left: ${left}; top: ${top};" 
+        aria-label="Inspect ${item.label} (${isVideo ? 'video animation' : 'detail image'})">
+        <span class="hotspot-dot">
+          ${isVideo ? '<span class="hotspot-video-badge">▶</span>' : '<span class="hotspot-plus">+</span>'}
+        </span>
+        <span class="hotspot-label">
+          ${item.label}
+          <span class="hotspot-label-type">${isVideo ? 'Video' : 'Detail'}</span>
+        </span>
+      </button>
+    `;
+  }).join("");
+
+  viewerHotspots.querySelectorAll(".vehicle-hotspot").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.id;
+      const item = findConfigItem(id);
+      if (item) selectHotspot(item, btn);
+    });
+  });
+}
+
+// Core Selector Dispatcher
+function selectHotspot(item, trigger = null) {
+  if (state.isAnimating) return;
+  state.lastTrigger = trigger;
+  if (item.type === "video") {
+    playForwardVideo(item);
+  } else {
+    showStaticImage(item);
+  }
+}
+
+// --------------------------------------------------------------------------
+// 2. VIDEO HOTSPOT WORKFLOW
+// --------------------------------------------------------------------------
+async function playForwardVideo(item) {
+  if (state.isAnimating) return;
+  state.isAnimating = true;
+  state.activeItem = item;
+  state.mode = "video";
+
+  // 1. Hide all hotspots immediately
+  viewerHotspots.classList.add("hotspots-hidden");
+  viewerBackBtn.classList.add("is-visible");
+  if (detailBack) detailBack.classList.add("is-visible");
+
+  // 2. Update descriptive metadata and titles
+  applyCopy(item);
+  renderSubnav(item.id);
+  if (sceneLabel) sceneLabel.textContent = item.label.toUpperCase() + " · PLAYING";
+  if (detailStatus) detailStatus.innerHTML = `<span>ACTIVE ANIMATION</span><strong>Inspecting ${item.label}</strong>`;
+
+  // 3. Prepare video in the exact same 16:9 container
+  viewerVideo.pause();
+  viewerVideo.removeAttribute("src");
+  viewerVideo.load();
+  viewerVideo.src = item.forwardVideo;
+  viewerVideo.currentTime = 0;
+
+  // 4. Reveal video over main image
+  mediaPlane.classList.add("is-video-active");
+  mediaPlane.classList.remove("is-image-active");
+
+  try {
+    await viewerVideo.play();
+  } catch (err) {
+    if (state.activeItem === item && state.mode === "video") recoverViewerVideo();
+  }
+}
+
+// --------------------------------------------------------------------------
+// 6. STATIC IMAGE HOTSPOT WORKFLOW
+// --------------------------------------------------------------------------
+function showStaticImage(item) {
+  if (state.isAnimating) return;
+  state.isAnimating = true;
+  state.activeItem = item;
+  state.mode = "image";
+
+  // Hide hotspots immediately
+  viewerHotspots.classList.add("hotspots-hidden");
+  viewerBackBtn.classList.remove("is-visible");
+  if (detailBack) detailBack.classList.remove("is-visible");
+
+  // Update descriptive metadata
+  applyCopy(item);
+  renderSubnav(item.id);
+  if (sceneLabel) sceneLabel.textContent = item.label.toUpperCase();
+  if (detailStatus) detailStatus.innerHTML = `<span>VIEWING DETAIL</span><strong>${item.title || item.label}</strong>`;
+
+  // Display detail image in exact 16:9 bounds
+  detailImage.src = item.imageSrc;
+  detailImage.alt = item.title || item.label;
   detailImage.removeAttribute("aria-hidden");
-  shell.dataset.category=category;
+
+  mediaPlane.classList.add("is-image-active");
+  mediaPlane.classList.remove("is-video-active");
+
+  // Reveal Back button over viewer
+  setTimeout(() => {
+    if (state.activeItem !== item) return;
+    viewerBackBtn.classList.add("is-visible");
+    viewerBackBtn.focus({ preventScroll: true });
+    if (detailBack) detailBack.classList.add("is-visible");
+    state.isAnimating = false;
+    renderExperienceSubHotspots(item);
+  }, 220);
 }
 
-async function enterCategory(category,trigger){
-  if(state.transitioning||state.scene!=="overview"||!tour[category])return;
-  const item=tour[category];
-  state.transitioning=true;
-  state.scene="entering";
-  state.category=category;
-  state.child=null;
-  state.lastTrigger=trigger;
-
-  shell.dataset.scene="entering";
-  shell.dataset.category=category;
-  mediaPlane.style.setProperty("--focus-x",item.x||"50%");
-  mediaPlane.style.setProperty("--focus-y",item.y||"50%");
-  sceneLabel.textContent="MOVING IN";
-
-  await setDetailImage(item,category);
-  applyCopy(item);
-
-  if(item.children){
-    state.child=Object.keys(item.children)[0];
-    const first=item.children[state.child];
-    await setDetailImage(first,category);
-    applyCopy(first);
+// --------------------------------------------------------------------------
+// Sub-Hotspots Renderer for Detailed Views
+// --------------------------------------------------------------------------
+function renderExperienceSubHotspots(item) {
+  if (!viewerSubHotspots) return;
+  viewerSubHotspots.innerHTML = "";
+  if (!item || !Array.isArray(item.subHotspots) || item.subHotspots.length === 0) {
+    viewerSubHotspots.style.display = "none";
+    viewerSubHotspots.classList.add("sub-hidden");
+    return;
   }
-  renderChildren(category);
+  viewerSubHotspots.style.display = "block";
+  viewerSubHotspots.classList.remove("sub-hidden");
 
-  await delay(prefersReduced?20:120);
-  shell.dataset.scene="detail";
-  state.scene="detail";
-  await delay(transitionMs);
-  state.transitioning=false;
-  detailBack.focus({preventScroll:true});
+  item.subHotspots.forEach(sub => {
+    const left = toPercent(sub.x);
+    const top = toPercent(sub.y);
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "sub-hotspot-pin";
+    btn.style.left = left;
+    btn.style.top = top;
+    btn.setAttribute("aria-label", `Inspect ${sub.label}`);
+
+    btn.innerHTML = `
+      <span class="sub-pin-dot">✦</span>
+      <span class="sub-pin-label">${escapeHtml(sub.label || sub.id)}</span>
+    `;
+
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      selectExperienceSubHotspot(sub, btn);
+    });
+
+    viewerSubHotspots.appendChild(btn);
+  });
 }
 
-async function selectChild(category,key){
-  if(state.transitioning||state.scene!=="detail")return;
-  const item=tour[category]?.children?.[key];
-  if(!item)return;
-  state.transitioning=true;
-  state.child=key;
-  shell.classList.add("child-switching");
-  renderChildren(category);
-  await delay(prefersReduced?30:170);
-  await setDetailImage(item,category);
-  applyCopy(item);
-  shell.classList.remove("child-switching");
-  renderChildren(category);
-  await delay(prefersReduced?20:180);
-  state.transitioning=false;
+function selectExperienceSubHotspot(sub, btn) {
+  if (viewerSubHotspots) {
+    viewerSubHotspots.querySelectorAll(".sub-hotspot-pin").forEach(b => b.classList.remove("is-active"));
+  }
+  if (btn) btn.classList.add("is-active");
+
+  applyCopy({
+    eyebrow: sub.eyebrow || (state.activeItem ? state.activeItem.label : "FEATURE DETAIL"),
+    title: sub.title || sub.label || sub.id,
+    description: sub.description || "Detailed specification inspection.",
+    specs: sub.specs || []
+  });
+
+  if (sceneLabel) sceneLabel.textContent = (sub.label || sub.id).toUpperCase() + " · SUB-DETAIL";
+  if (detailStatus) detailStatus.innerHTML = `<span>INSPECTING</span><strong>${sub.title || sub.label}</strong>`;
 }
 
-async function returnOverview(){
-  if(state.transitioning||state.scene!=="detail")return;
-  state.transitioning=true;
-  state.scene="returning";
-  shell.dataset.scene="returning";
-  sceneLabel.textContent="PUSHING BACK";
-  await delay(transitionMs);
-
-  detailImage.src="";
-  detailImage.alt="";
-  detailImage.setAttribute("aria-hidden","true");
-  detailImage.className="experience-detail-image";
-
-  detailEyebrow.textContent="VEHICLE OVERVIEW";
-  detailTitle.textContent="Choose what you want to inspect.";
-  detailDescription.textContent="Open the engine bay, move into the cabin, inspect the wheel and brake hardware, view the audio detail or check the cargo area.";
-  tourSubnav.innerHTML="";
-  tourSpecs.innerHTML="";
-  shell.dataset.category="overview";
-  shell.dataset.scene="overview";
-  sceneLabel.textContent="OVERVIEW";
-
-  state.scene="overview";
-  state.category=null;
-  state.child=null;
-  state.transitioning=false;
-
-  if(state.lastTrigger)state.lastTrigger.focus({preventScroll:true});
+function clearExperienceSubHotspots() {
+  if (viewerSubHotspots) {
+    viewerSubHotspots.innerHTML = "";
+    viewerSubHotspots.style.display = "none";
+    viewerSubHotspots.classList.add("sub-hidden");
+  }
 }
 
-hotspotButtons.forEach(button=>{
-  const category=button.dataset.tour;
-  const item=tour[category];
-  button.addEventListener("mouseenter",()=>preload(item?.src));
-  button.addEventListener("focus",()=>preload(item?.src));
-  button.addEventListener("click",()=>enterCategory(category,button));
-});
-
-detailBack.addEventListener("click",returnOverview);
-document.addEventListener("keydown",event=>{
-  if(event.key==="Escape"&&state.scene==="detail"){
-    event.preventDefault();
-    returnOverview();
+// --------------------------------------------------------------------------
+// 3 & 4. VIDEO END & BACK REVERSE WORKFLOW
+// --------------------------------------------------------------------------
+viewerVideo.addEventListener("ended", () => {
+  if (state.mode === "video" && state.activeItem) {
+    state.isAnimating = false;
+    viewerBackBtn.classList.add("is-visible");
+    viewerBackBtn.focus({ preventScroll: true });
+    if (detailBack) detailBack.classList.add("is-visible");
+    if (sceneLabel) sceneLabel.textContent = state.activeItem.label.toUpperCase() + " · COMPLETED";
+    if (detailStatus) detailStatus.innerHTML = `<span>COMPLETED</span><strong>Use Back to car to return</strong>`;
+    renderExperienceSubHotspots(state.activeItem);
+  } else if (state.mode === "reverse") {
+    finishReturnToOverview();
   }
 });
 
-// Gallery + lightbox
-const lightbox=document.getElementById("lightbox");
-const lightboxImg=document.getElementById("lightboxImg");
-function openLightbox(src,alt){
-  lightboxImg.src=src;
-  lightboxImg.alt=alt||"Audi S5 Avant detail";
+viewerVideo.addEventListener("error", (e) => {
+  if (state.mode === "reverse") finishReturnToOverview();
+  else if (state.mode === "video") recoverViewerVideo();
+});
+
+// Back Handler: Plays Reverse Animation or Smoothly Fades Back
+function recoverViewerVideo() {
+  const item = state.activeItem;
+  if (!item) return;
+  viewerVideo.pause();
+  state.isAnimating = false;
+  const photos = {engine: 'engine', interior: 'dashboard', boot: 'boot'};
+  showStaticImage({...item, type: 'image', imageSrc: ROOT + (photos[item.id] || 'main-car-16x9') + (photos[item.id] ? '_16x9.jpg' : '.jpg')});
+  document.dispatchEvent(new CustomEvent('viewermediaerror', {detail: 'Video unavailable. Showing a photo instead.'}));
+}
+
+async function handleBack() {
+  if (state.isAnimating || state.mode === "reverse") { finishReturnToOverview(); return; }
+  state.isAnimating = true;
+
+  clearExperienceSubHotspots();
+  viewerBackBtn.classList.add("is-visible");
+  if (detailBack) detailBack.classList.add("is-visible");
+
+  const item = state.activeItem;
+
+  if (state.mode === "video" && item) {
+    if (item.reverseVideo) {
+      state.mode = "reverse";
+      if (sceneLabel) sceneLabel.textContent = "CLOSING · REVERSE";
+      if (detailStatus) detailStatus.innerHTML = `<span>RETURNING</span><strong>Restoring overview</strong>`;
+
+      viewerVideo.pause();
+      viewerVideo.src = item.reverseVideo;
+      viewerVideo.currentTime = 0;
+
+      try {
+        await viewerVideo.play();
+      } catch (err) {
+        console.warn("Reverse playback notice:", err);
+        finishReturnToOverview();
+      }
+    } else {
+      finishReturnToOverview();
+    }
+  } else if (state.mode === "image") {
+    finishReturnToOverview();
+  } else {
+    state.isAnimating = false;
+  }
+}
+
+// Restore Original Main 16:9 Image & Hotspots
+function finishReturnToOverview() {
+  viewerBackBtn.classList.remove("is-visible");
+  if (detailBack) detailBack.classList.remove("is-visible");
+  if (typeof resetExperienceZoom === "function") resetExperienceZoom(true);
+  clearExperienceSubHotspots();
+  mediaPlane.classList.remove("is-video-active", "is-image-active");
+  viewerVideo.pause();
+  viewerVideo.removeAttribute("src");
+  viewerVideo.load();
+
+  if (detailImage) {
+    detailImage.removeAttribute("src");
+    detailImage.setAttribute("aria-hidden", "true");
+  }
+
+  // Restore copy to overview
+  resetOverviewCopy();
+
+  // Restore all hotspots
+  viewerHotspots.classList.remove("hotspots-hidden");
+
+  state.activeItem = null;
+  state.mode = "normal";
+  state.isAnimating = false;
+
+  if (sceneLabel) sceneLabel.textContent = "OVERVIEW";
+  if (detailStatus) detailStatus.innerHTML = `<span>SELECT A PART</span><strong>Click a hotspot to start inspection</strong>`;
+
+  if (state.lastTrigger && typeof state.lastTrigger.focus === "function") {
+    state.lastTrigger.focus({ preventScroll: true });
+  }
+}
+
+// --------------------------------------------------------------------------
+// Event Listeners & Keyboard Navigation
+// --------------------------------------------------------------------------
+if (viewerBackBtn) viewerBackBtn.addEventListener("click", handleBack);
+if (detailBack) detailBack.addEventListener("click", handleBack);
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !document.querySelector("dialog[open]") && (state.mode === "video" || state.mode === "image" || viewerBackBtn.classList.contains("is-visible"))) {
+    e.preventDefault();
+    handleBack();
+  }
+});
+
+// --------------------------------------------------------------------------
+// Photo Gallery Tabs, Lightbox & Demo Enquiry Modal
+// --------------------------------------------------------------------------
+const lightbox = document.getElementById("lightbox");
+const lightboxImg = document.getElementById("lightboxImg");
+
+function openLightbox(src, alt) {
+  if (!lightbox || !lightboxImg) return;
+  lightboxImg.src = src;
+  lightboxImg.alt = alt || "Audi S5 Avant detail";
   lightbox.showModal();
 }
 
-document.querySelectorAll("[data-filter]").forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    document.querySelectorAll("[data-filter]").forEach(x=>x.classList.toggle("active",x===btn));
-    document.querySelectorAll(".tile").forEach(tile=>{
-      tile.style.display=(btn.dataset.filter==="all"||tile.dataset.kind===btn.dataset.filter)?"block":"none";
+document.querySelectorAll("[data-filter]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("[data-filter]").forEach(x => x.classList.toggle("active", x === btn));
+    document.querySelectorAll(".tile").forEach(tile => {
+      tile.style.display = (btn.dataset.filter === "all" || tile.dataset.kind === btn.dataset.filter) ? "block" : "none";
     });
   });
 });
 
-document.querySelectorAll(".tile").forEach(tile=>{
-  tile.addEventListener("click",()=>{
-    if(tile.classList.contains("missing"))return;
-    const image=tile.querySelector("img");
-    if(image)openLightbox(image.src,image.alt);
+document.querySelectorAll(".tile").forEach(tile => {
+  tile.addEventListener("click", () => {
+    if (tile.classList.contains("missing")) return;
+    const image = tile.querySelector("img");
+    if (image) openLightbox(image.src, image.alt);
   });
 });
 
-document.getElementById("closeLightbox").addEventListener("click",()=>lightbox.close());
-lightbox.addEventListener("click",event=>{if(event.target===lightbox)lightbox.close()});
+const closeLightboxBtn = document.getElementById("closeLightbox");
+if (closeLightboxBtn) closeLightboxBtn.addEventListener("click", () => lightbox.close());
+if (lightbox) {
+  lightbox.addEventListener("click", (e) => {
+    if (e.target === lightbox) lightbox.close();
+  });
+}
 
-const enquiry=document.getElementById("enquiry");
-document.getElementById("demoEnquiry").addEventListener("click",()=>enquiry.showModal());
-document.getElementById("closeEnquiry").addEventListener("click",()=>enquiry.close());
-enquiry.addEventListener("click",event=>{if(event.target===enquiry)enquiry.close()});
+const enquiry = document.getElementById("enquiry");
+const demoEnquiryBtn = document.getElementById("demoEnquiry");
+const closeEnquiryBtn = document.getElementById("closeEnquiry");
+
+if (demoEnquiryBtn && enquiry) {
+  demoEnquiryBtn.addEventListener("click", () => enquiry.showModal());
+}
+if (closeEnquiryBtn && enquiry) {
+  closeEnquiryBtn.addEventListener("click", () => enquiry.close());
+}
+if (enquiry) {
+  enquiry.addEventListener("click", (e) => {
+    if (e.target === enquiry) enquiry.close();
+  });
+}
+
+// ==========================================================================
+// Pinch-to-Zoom & Pan Gesture Controller for Dedicated Audi Experience
+// ==========================================================================
+const mediaZoomCanvas = document.getElementById("mediaZoomCanvas");
+const mediaZoomPill = document.getElementById("mediaZoomPill");
+const mediaZoomValue = document.getElementById("mediaZoomValue");
+
+const expZoomState = {
+  scale: 1,
+  panX: 0,
+  panY: 0,
+  isPinching: false,
+  isPanning: false,
+  startDistance: 0,
+  startScale: 1,
+  startPan: { x: 0, y: 0 },
+  startTouch: { x: 0, y: 0 },
+  lastTapTime: 0
+};
+
+function getExpDistance(t1, t2) {
+  return Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+}
+
+function updateExpZoomTransform(animate = false) {
+  if (!mediaZoomCanvas) return;
+  if (animate) {
+    mediaZoomCanvas.classList.add("is-animating-zoom");
+    setTimeout(() => mediaZoomCanvas.classList.remove("is-animating-zoom"), 300);
+  } else {
+    mediaZoomCanvas.classList.remove("is-animating-zoom");
+  }
+
+  mediaZoomCanvas.style.transform = `translate3d(${expZoomState.panX}px, ${expZoomState.panY}px, 0) scale(${expZoomState.scale})`;
+
+  if (mediaPlane) {
+    mediaPlane.classList.toggle("is-zoomed", expZoomState.scale > 1.05);
+  }
+
+  if (mediaZoomPill) {
+    if (expZoomState.scale > 1.05) {
+      mediaZoomPill.classList.add("is-visible");
+      if (mediaZoomValue) mediaZoomValue.textContent = `${expZoomState.scale.toFixed(1)}x`;
+    } else {
+      mediaZoomPill.classList.remove("is-visible");
+    }
+  }
+}
+
+function clampExpPan() {
+  if (!mediaPlane) return;
+  const rect = mediaPlane.getBoundingClientRect();
+  const maxPanX = Math.max(0, ((expZoomState.scale - 1) * rect.width) / 2);
+  const maxPanY = Math.max(0, ((expZoomState.scale - 1) * rect.height) / 2);
+  expZoomState.panX = Math.max(-maxPanX, Math.min(maxPanX, expZoomState.panX));
+  expZoomState.panY = Math.max(-maxPanY, Math.min(maxPanY, expZoomState.panY));
+}
+
+function resetExperienceZoom(animate = true) {
+  expZoomState.scale = 1;
+  expZoomState.panX = 0;
+  expZoomState.panY = 0;
+  expZoomState.isPinching = false;
+  expZoomState.isPanning = false;
+  updateExpZoomTransform(animate);
+}
+
+function initExperienceZoom() {
+  if (!mediaPlane || !mediaZoomCanvas) return;
+
+  mediaPlane.addEventListener("touchstart", (e) => {
+    if (e.touches.length === 2) {
+      expZoomState.isPinching = true;
+      expZoomState.isPanning = false;
+      expZoomState.startDistance = getExpDistance(e.touches[0], e.touches[1]);
+      expZoomState.startScale = expZoomState.scale;
+      e.preventDefault();
+    } else if (e.touches.length === 1) {
+      const now = Date.now();
+      if (now - expZoomState.lastTapTime < 320) {
+        e.preventDefault();
+        if (expZoomState.scale > 1.1) {
+          resetExperienceZoom(true);
+        } else {
+          const rect = mediaPlane.getBoundingClientRect();
+          const touchX = e.touches[0].clientX - rect.left - rect.width / 2;
+          const touchY = e.touches[0].clientY - rect.top - rect.height / 2;
+          expZoomState.scale = 2.2;
+          expZoomState.panX = -touchX * 0.8;
+          expZoomState.panY = -touchY * 0.8;
+          clampExpPan();
+          updateExpZoomTransform(true);
+        }
+        expZoomState.lastTapTime = 0;
+        return;
+      }
+      expZoomState.lastTapTime = now;
+
+      if (expZoomState.scale > 1.05) {
+        expZoomState.isPanning = true;
+        expZoomState.startTouch = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        expZoomState.startPan = { x: expZoomState.panX, y: expZoomState.panY };
+      }
+    }
+  }, { passive: false });
+
+  mediaPlane.addEventListener("touchmove", (e) => {
+    if (expZoomState.isPinching && e.touches.length === 2) {
+      e.preventDefault();
+      const currentDistance = getExpDistance(e.touches[0], e.touches[1]);
+      if (expZoomState.startDistance > 0) {
+        const factor = currentDistance / expZoomState.startDistance;
+        expZoomState.scale = Math.min(3.8, Math.max(1, expZoomState.startScale * factor));
+        clampExpPan();
+        updateExpZoomTransform(false);
+      }
+    } else if (expZoomState.isPanning && e.touches.length === 1 && expZoomState.scale > 1.05) {
+      e.preventDefault();
+      const dx = e.touches[0].clientX - expZoomState.startTouch.x;
+      const dy = e.touches[0].clientY - expZoomState.startTouch.y;
+      expZoomState.panX = expZoomState.startPan.x + dx;
+      expZoomState.panY = expZoomState.startPan.y + dy;
+      clampExpPan();
+      updateExpZoomTransform(false);
+    }
+  }, { passive: false });
+
+  const handleTouchEnd = (e) => {
+    if (e.touches.length < 2) {
+      expZoomState.isPinching = false;
+    }
+    if (e.touches.length === 0) {
+      expZoomState.isPanning = false;
+      if (expZoomState.scale < 1.05) {
+        resetExperienceZoom(true);
+      } else {
+        clampExpPan();
+        updateExpZoomTransform(true);
+      }
+    }
+  };
+
+  mediaPlane.addEventListener("touchend", handleTouchEnd);
+  mediaPlane.addEventListener("touchcancel", handleTouchEnd);
+
+  // Desktop Mouse Drag to pan when zoomed
+  let isMouseDragging = false;
+  let mouseStart = { x: 0, y: 0 };
+  let mouseStartPan = { x: 0, y: 0 };
+
+  mediaPlane.addEventListener("mousedown", (e) => {
+    if (expZoomState.scale > 1.05 && e.button === 0 && !e.target.closest("button")) {
+      isMouseDragging = true;
+      mouseStart = { x: e.clientX, y: e.clientY };
+      mouseStartPan = { x: expZoomState.panX, y: expZoomState.panY };
+      mediaPlane.style.cursor = "grabbing";
+      e.preventDefault();
+    }
+  });
+
+  window.addEventListener("mousemove", (e) => {
+    if (isMouseDragging && expZoomState.scale > 1.05) {
+      const dx = e.clientX - mouseStart.x;
+      const dy = e.clientY - mouseStart.y;
+      expZoomState.panX = mouseStartPan.x + dx;
+      expZoomState.panY = mouseStartPan.y + dy;
+      clampExpPan();
+      updateExpZoomTransform(false);
+    }
+  });
+
+  window.addEventListener("mouseup", () => {
+    if (isMouseDragging) {
+      isMouseDragging = false;
+      if (mediaPlane) mediaPlane.style.cursor = "";
+    }
+  });
+
+  mediaPlane.addEventListener("wheel", (e) => {
+    if (e.ctrlKey) {
+      e.preventDefault();
+      const zoomDelta = -e.deltaY * 0.01;
+      expZoomState.scale = Math.min(3.8, Math.max(1, expZoomState.scale + zoomDelta));
+      if (expZoomState.scale <= 1.05) {
+        resetExperienceZoom(true);
+      } else {
+        clampExpPan();
+        updateExpZoomTransform(false);
+      }
+    }
+  }, { passive: false });
+
+  if (mediaZoomPill) {
+    mediaZoomPill.addEventListener("click", (e) => {
+      e.stopPropagation();
+      resetExperienceZoom(true);
+    });
+  }
+}
+
+// Dynamic Admin Configuration Loader
+async function loadDynamicConfig() {
+  try {
+    const res = await fetch("/api/config");
+    if (res.ok) {
+      const data = await res.json();
+      if (data && Array.isArray(data.hotspots)) {
+        applyLoadedConfig(data);
+        return;
+      }
+    }
+  } catch (e) {
+    console.debug("Config fetch from server skipped, trying localStorage:", e);
+  }
+
+  const local = localStorage.getItem("japan_recon_viewer_config");
+  if (local) {
+    try {
+      const data = JSON.parse(local);
+      if (data && Array.isArray(data.hotspots)) {
+        applyLoadedConfig(data);
+      }
+    } catch (e) {}
+  }
+}
+
+function applyLoadedConfig(data) {
+  if (data.mainImage && overviewImage) {
+    overviewImage.src = data.mainImage;
+  }
+  if (Array.isArray(data.hotspots) && data.hotspots.length > 0) {
+    viewerConfig = data.hotspots;
+    renderSubnav();
+    renderHotspots();
+    preloadAssets();
+    document.dispatchEvent(new Event("viewerconfigchange"));
+  }
+}
+
+// Initialize Viewer on Load
+document.addEventListener("DOMContentLoaded", () => {
+  renderHotspots();
+  resetOverviewCopy();
+  preloadAssets();
+  initExperienceZoom();
+  loadDynamicConfig();
+});
+
+// Initial invocation if DOM already ready
+if (document.readyState === "interactive" || document.readyState === "complete") {
+  renderHotspots();
+  resetOverviewCopy();
+  preloadAssets();
+  initExperienceZoom();
+  loadDynamicConfig();
+}
+

@@ -1,0 +1,7 @@
+node_modules/
+.env
+assets/uploads/
+assets/audi-s5/config.json
+*.log
+assets/videos/engine_reverse.mp4
+assets/videos/boot_reverse.mp4

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>车辆展示后台管理 | Car Showroom Admin Studio</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-body">
+  <!-- Top Navigation Bar -->
+  <header class="admin-header">
+    <div class="admin-brand">
+      <a href="/" class="admin-brand-link">
+        <span class="brand-badge">ADMIN</span>
+        <span class="brand-title">Japan Recon · Showroom Studio</span>
+      </a>
+      <span class="brand-sub">车辆热点与媒体管理后台</span>
+    </div>
+
+    <div class="admin-nav-actions">
+      <div class="status-indicator" id="saveStatusIndicator">
+        <span class="status-dot"></span>
+        <span class="status-text" id="statusText">已同步最新配置</span>
+      </div>
+
+      <div class="action-btn-group">
+        <button type="button" class="admin-btn admin-btn-secondary" id="resetConfigBtn" title="恢复预设的奥迪S5配置">
+          <span>🔄 恢复默认</span>
+        </button>
+        <button type="button" class="admin-btn admin-btn-secondary" id="exportConfigBtn" title="导出当前配置为 JSON 文件">
+          <span>📥 导出配置</span>
+        </button>
+        <button type="button" class="admin-btn admin-btn-secondary" id="importConfigBtn" title="导入已有配置 JSON">
+          <span>📤 导入配置</span>
+        </button>
+        <button type="button" class="admin-btn admin-btn-primary" id="saveConfigBtn" title="保存发布至网站">
+          <span>💾 保存发布</span>
+        </button>
+      </div>
+
+      <div class="preview-links">
+        <a href="/" target="_blank" class="preview-link-btn" title="在新标签页预览首页展厅">
+          <span>首页展厅 ↗</span>
+        </a>
+        <a href="audi.html" target="_blank" class="preview-link-btn" title="在新标签页预览奥迪S5交互页">
+          <span>奥迪详情页 ↗</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Studio Workspace -->
+  <main class="admin-workspace">
+    <!-- Left Column: Visual 16:9 Canvas & Stage -->
+    <section class="admin-canvas-section">
+      <div class="canvas-toolbar">
+        <div class="toolbar-modes">
+          <button type="button" class="mode-btn active" id="modeEditBtn" data-mode="edit">
+            <span class="mode-icon">🎯</span>
+            <span>定位编辑模式 (Edit Hotspots)</span>
+          </button>
+          <button type="button" class="mode-btn" id="modeTestBtn" data-mode="test">
+            <span class="mode-icon">👁️</span>
+            <span>交互测试模式 (Test Viewer)</span>
+          </button>
+        </div>
+
+        <div class="canvas-quick-actions">
+          <label class="quick-upload-label" title="上传新的主车身图片">
+            <span>📷 更换主车图</span>
+            <input type="file" id="quickMainImageUpload" accept="image/*" class="sr-only">
+          </label>
+          <span class="canvas-coords-badge" id="canvasCoordsBadge">X: 50% · Y: 50%</span>
+        </div>
+      </div>
+
+      <!-- 16:9 Interactive Stage Container -->
+      <div class="admin-stage-container">
+        <div class="admin-stage-wrapper" id="adminStage">
+          <!-- Main Car Overview Image -->
+          <img id="adminMainImage" class="admin-main-img" src="assets/audi-s5/main-car-16x9.jpg" alt="Vehicle Overview" width="1280" height="720">
+
+          <!-- Test Video Player (active during test mode) -->
+          <video id="adminTestVideo" class="admin-test-video" playsinline muted preload="auto"></video>
+
+          <!-- Test Detail Image (active during test mode) -->
+          <img id="adminTestDetailImage" class="admin-test-detail-img" alt="Detail Preview">
+
+          <!-- Hotspots Layer -->
+          <div class="admin-hotspots-layer" id="adminHotspotsLayer"></div>
+          <div class="admin-hotspots-layer" id="adminTestSubHotspotsLayer" style="display: none; z-index: 12;"></div>
+
+          <!-- Crosshair Guide (Edit Mode only) -->
+          <div class="canvas-crosshair" id="canvasCrosshair">
+            <div class="crosshair-x"></div>
+            <div class="crosshair-y"></div>
+            <span class="crosshair-tip" id="crosshairTip">点击添加热点</span>
+          </div>
+
+          <!-- Back button for Test Mode -->
+          <button type="button" class="admin-test-back-btn" id="adminTestBackBtn">
+            <span>← 返回整车总览 (Back to Vehicle)</span>
+          </button>
+
+          <!-- Floating Feature Card for Sub-Hotspots in Test Mode -->
+          <div class="admin-test-subcard" id="testSubhotspotCard" style="display: none;">
+            <div class="test-subcard-head">
+              <span class="test-subcard-eyebrow" id="testCardEyebrow">SUB-HOTSPOT DETAIL</span>
+              <button type="button" class="test-subcard-close" id="testCardCloseBtn">✕</button>
+            </div>
+            <h4 class="test-subcard-title" id="testCardTitle">Part Name</h4>
+            <p class="test-subcard-desc" id="testCardDesc">Description of this sub-part...</p>
+            <div class="test-subcard-specs" id="testCardSpecs"></div>
+          </div>
+
+          <!-- Watermark / Aspect Badge -->
+          <div class="stage-aspect-badge">16:9 ASPECT RATIO</div>
+        </div>
+      </div>
+
+      <!-- Hint bar beneath canvas -->
+      <div class="canvas-hint-bar">
+        <div class="hint-item">
+          <strong>💡 快速定位：</strong> 在「定位编辑模式」下，直接点击车身任何位置即可添加或选中热点，也可鼠标按住拖拽微调位置。
+        </div>
+        <div class="hint-item">
+          <strong>🎬 实时预览：</strong> 切换至「交互测试模式」可模拟买家点击，实时查看正向/倒放视频播放与图文详情返回效果。
+        </div>
+      </div>
+
+      <!-- Stage Breadcrumb & Context Banner for Sub-Hotspot Editing -->
+      <div class="stage-context-bar" id="stageContextBar" style="display: none;">
+        <div class="context-info">
+          <span class="context-badge">子热点编辑模式 SUB-HOTSPOTS</span>
+          <span class="context-text" id="contextParentLabel">正在编辑部件内部的子热点</span>
+        </div>
+        <button type="button" class="admin-btn admin-btn-secondary" id="exitSubHotspotViewBtn">
+          <span>← 返回整车总览 (Back to Main Car)</span>
+        </button>
+      </div>
+
+      <!-- Hotspot Thumbnails Strip -->
+      <div class="hotspots-strip-container">
+        <div class="strip-header">
+          <span>当前热点列表 HOTSPOTS (<span id="hotspotCountBadge">0</span>)</span>
+          <div class="strip-header-actions">
+            <button type="button" class="btn-text-action text-danger" id="cleanTestHotspotsBtn" title="清理所有未命名或多余的测试热点">🧹 清理测试点</button>
+            <button type="button" class="btn-text-action" id="stripAddBtn">+ 新建热点</button>
+          </div>
+        </div>
+        <div class="hotspots-strip" id="hotspotsStrip"></div>
+      </div>
+    </section>
+
+    <!-- Right Column: Inspector & Media Settings Panel -->
+    <aside class="admin-inspector-panel">
+      <!-- Inspector Tabs -->
+      <div class="inspector-tabs">
+        <button type="button" class="inspector-tab active" data-tab="hotspot" id="tabHotspotBtn">
+          <span>🎯 当前热点属性</span>
+        </button>
+        <button type="button" class="inspector-tab" data-tab="vehicle" id="tabVehicleBtn">
+          <span>🚗 整车与主图设置</span>
+        </button>
+        <button type="button" class="inspector-tab" data-tab="json" id="tabJsonBtn">
+          <span>📋 JSON 配置</span>
+        </button>
+      </div>
+
+      <!-- Tab 1: Hotspot Properties -->
+      <div class="inspector-content" id="panelHotspot">
+        <div class="panel-section-title">
+          <div>
+            <h3 id="inspectorHotspotTitle">编辑热点</h3>
+            <p id="inspectorHotspotSubtitle">调整坐标、视频/图片媒体、文案与规格</p>
+          </div>
+          <div class="inspector-actions">
+            <button type="button" class="btn-icon-danger" id="deleteHotspotBtn" title="删除此热点">🗑️ 删除</button>
+          </div>
+        </div>
+
+        <form id="hotspotForm" class="inspector-form" onsubmit="return false;">
+          <!-- Hotspot Label & ID -->
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label for="hotspotLabelInput">热点名称 (Label / 按钮文字)</label>
+              <input type="text" id="hotspotLabelInput" class="admin-input" placeholder="例如: Engine / 发动机舱" required>
+            </div>
+            <div class="form-group">
+              <label for="hotspotIdInput">唯一标识 (ID)</label>
+              <input type="text" id="hotspotIdInput" class="admin-input" placeholder="例如: engine, interior, wheel" required>
+            </div>
+          </div>
+
+          <!-- Interaction Type -->
+          <div class="form-group">
+            <label>交互类型 (Interaction Type)</label>
+            <div class="radio-segmented">
+              <label class="segmented-option">
+                <input type="radio" name="hotspotType" value="video" id="typeVideoRadio" checked>
+                <span class="segmented-card">
+                  <strong>🎬 动态视频 (Video)</strong>
+                  <small>播放 16:9 MP4 镜头推进与倒放退出</small>
+                </span>
+              </label>
+              <label class="segmented-option">
+                <input type="radio" name="hotspotType" value="image" id="typeImageRadio">
+                <span class="segmented-card">
+                  <strong>🖼️ 高清静态特写 (Image)</strong>
+                  <small>切换 16:9 细节大图并附带返回按钮</small>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Coordinates X and Y -->
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label for="coordXInput">水平坐标 X (%)</label>
+              <div class="input-with-unit">
+                <input type="number" id="coordXInput" class="admin-input" min="0" max="100" step="0.5" value="50">
+                <span class="unit-text">%</span>
+              </div>
+              <input type="range" id="coordXRange" min="0" max="100" step="0.5" value="50" class="admin-range">
+            </div>
+            <div class="form-group">
+              <label for="coordYInput">垂直坐标 Y (%)</label>
+              <div class="input-with-unit">
+                <input type="number" id="coordYInput" class="admin-input" min="0" max="100" step="0.5" value="50">
+                <span class="unit-text">%</span>
+              </div>
+              <input type="range" id="coordYRange" min="0" max="100" step="0.5" value="50" class="admin-range">
+            </div>
+          </div>
+
+          <!-- Video Fields (shown when type === 'video') -->
+          <div class="media-fields-group" id="videoFieldsGroup">
+            <div class="form-group">
+              <div class="label-with-action">
+                <label for="forwardVideoInput">正向进入视频 (Forward Video MP4)</label>
+                <label class="btn-file-upload">
+                  <span>📁 本地上传 MP4</span>
+                  <input type="file" id="forwardVideoUpload" accept="video/mp4,video/*" class="sr-only">
+                </label>
+              </div>
+              <input type="text" id="forwardVideoInput" class="admin-input" placeholder="例如: assets/videos/engine_forward.mp4">
+              <div class="media-preview-box" id="forwardVideoPreviewBox">
+                <video id="forwardVideoPreview" controls muted preload="none"></video>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="label-with-action">
+                <label for="reverseVideoInput">倒放退出视频 (Reverse Video MP4)</label>
+                <label class="btn-file-upload">
+                  <span>📁 本地上传 MP4</span>
+                  <input type="file" id="reverseVideoUpload" accept="video/mp4,video/*" class="sr-only">
+                </label>
+              </div>
+              <input type="text" id="reverseVideoInput" class="admin-input" placeholder="例如: assets/videos/engine_reverse.mp4">
+              <div class="media-preview-box" id="reverseVideoPreviewBox">
+                <video id="reverseVideoPreview" controls muted preload="none"></video>
+              </div>
+            </div>
+          </div>
+
+          <!-- Image Fields (shown when type === 'image') -->
+          <div class="media-fields-group" id="imageFieldsGroup" style="display: none;">
+            <div class="form-group">
+              <div class="label-with-action">
+                <label for="detailImageInput">细节特写大图 (16:9 Detail Image)</label>
+                <label class="btn-file-upload">
+                  <span>📁 本地上传图片</span>
+                  <input type="file" id="detailImageUpload" accept="image/*" class="sr-only">
+                </label>
+              </div>
+              <input type="text" id="detailImageInput" class="admin-input" placeholder="例如: assets/audi-s5/wheel_16x9.jpg">
+              <div class="media-preview-box" id="detailImagePreviewBox">
+                <img id="detailImagePreview" alt="Detail preview">
+              </div>
+            </div>
+          </div>
+
+          <!-- Text and Copywriting -->
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label for="hotspotEyebrowInput">分类眉标 (Eyebrow)</label>
+              <input type="text" id="hotspotEyebrowInput" class="admin-input" placeholder="例如: POWERTRAIN, CABIN">
+            </div>
+            <div class="form-group">
+              <label for="hotspotTitleInput">详情大标题 (Title)</label>
+              <input type="text" id="hotspotTitleInput" class="admin-input" placeholder="例如: V6 TFSI Engine Bay">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="hotspotDescInput">介绍文案 (Description)</label>
+            <textarea id="hotspotDescInput" class="admin-textarea" rows="3" placeholder="介绍此部件的设计、工艺或特色说明..."></textarea>
+          </div>
+
+          <!-- Specifications Table Key-Value Editor -->
+          <div class="form-group">
+            <div class="label-with-action">
+              <label>核心规格参数 (Specifications Key-Value)</label>
+              <button type="button" class="btn-text-action" id="addSpecRowBtn">+ 添加规格项</button>
+            </div>
+            <div class="specs-editor-list" id="specsEditorList"></div>
+          </div>
+
+          <!-- Sub-Hotspots Section (Hotspot inside Hotspot) -->
+          <div class="form-group sub-hotspot-group">
+            <div class="label-with-action">
+              <label>🌟 热点内的子热点 (Sub-Hotspots inside this view)</label>
+              <button type="button" class="btn-text-action" id="openSubHotspotModeBtn">
+                🎯 切换到该画面可视化标记
+              </button>
+            </div>
+            <p class="form-hint">进入此部件详情画面后，可在画面内部展示更细微的部件标记（如方向盘、液晶屏、座椅缝线、排气阀门等）：</p>
+            <div class="sub-hotspots-manager-list" id="subHotspotsManagerList"></div>
+            <button type="button" class="admin-btn admin-btn-secondary" id="addSubHotspotBtn" style="margin-top: 6px;">
+              + 为当前热点添加一个子热点
+            </button>
+          </div>
+
+          <div class="form-submit-row">
+            <button type="button" class="admin-btn admin-btn-primary" id="updateHotspotBtn">
+              <span>✓ 应用热点更新</span>
+            </button>
+            <button type="button" class="admin-btn admin-btn-secondary" id="duplicateHotspotBtn">
+              <span>📋 复制为新热点</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tab 2: Vehicle & Main Image Settings -->
+      <div class="inspector-content" id="panelVehicle" style="display: none;">
+        <div class="panel-section-title">
+          <div>
+            <h3>整车与主图设置</h3>
+            <p>更换整车主视角 16:9 图片及基础展示信息</p>
+          </div>
+        </div>
+
+        <div class="inspector-form">
+          <div class="form-group">
+            <div class="label-with-action">
+              <label for="mainImageUrlInput">主车身图片地址 (Main 16:9 Car Image)</label>
+              <label class="btn-file-upload">
+                <span>📁 从本地上传新主图</span>
+                <input type="file" id="mainImageFileUpload" accept="image/*" class="sr-only">
+              </label>
+            </div>
+            <input type="text" id="mainImageUrlInput" class="admin-input" value="assets/audi-s5/main-car-16x9.jpg">
+            <div class="media-preview-box large">
+              <img id="mainImagePreview" src="assets/audi-s5/main-car-16x9.jpg" alt="Main car preview">
+            </div>
+          </div>
+
+          <div class="form-row form-row-2">
+            <div class="form-group">
+              <label for="vehicleNameInput">车型名称 (Vehicle Name)</label>
+              <input type="text" id="vehicleNameInput" class="admin-input" value="Audi S5 Avant">
+            </div>
+            <div class="form-group">
+              <label for="vehiclePriceInput">展示价格 (Price)</label>
+              <input type="text" id="vehiclePriceInput" class="admin-input" value="RM 438,000">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="vehicleSubInput">副标题介绍 (Subtitle / Tagline)</label>
+            <input type="text" id="vehicleSubInput" class="admin-input" value="Actual photographed example · interactive detail page">
+          </div>
+
+          <!-- Quick Presets -->
+          <div class="form-group">
+            <label>快速预设热点模板 (Quick Hotspot Presets)</label>
+            <p class="form-hint">一键在当前车辆中添加常用视角热点：</p>
+            <div class="preset-buttons-grid">
+              <button type="button" class="preset-btn" data-preset="engine">🚀 发动机舱 (Engine)</button>
+              <button type="button" class="preset-btn" data-preset="interior">💺 驾驶座舱 (Interior)</button>
+              <button type="button" class="preset-btn" data-preset="boot">📦 后备箱 (Tailgate)</button>
+              <button type="button" class="preset-btn" data-preset="wheel">🛞 轮毂刹车 (Wheel)</button>
+              <button type="button" class="preset-btn" data-preset="dashboard">📟 液晶仪表 (Dashboard)</button>
+              <button type="button" class="preset-btn" data-preset="audio">🎵 B&O音响 (Audio)</button>
+            </div>
+          </div>
+
+          <div class="form-submit-row">
+            <button type="button" class="admin-btn admin-btn-primary" id="saveVehicleSettingsBtn">
+              <span>✓ 应用整车设置</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: JSON Config & Export -->
+      <div class="inspector-content" id="panelJson" style="display: none;">
+        <div class="panel-section-title">
+          <div>
+            <h3>JSON 配置代码</h3>
+            <p>直接查看、编辑或复制整套 16:9 展示配置</p>
+          </div>
+          <div class="inspector-actions">
+            <button type="button" class="admin-btn admin-btn-secondary" id="copyJsonBtn">📋 复制 JSON</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <textarea id="jsonConfigTextarea" class="admin-code-area" spellcheck="false" rows="18"></textarea>
+        </div>
+
+        <div class="form-submit-row">
+          <button type="button" class="admin-btn admin-btn-primary" id="applyJsonBtn">
+            <span>✓ 从 JSON 应用配置</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Toast Notification Container -->
+  <div class="admin-toast-container" id="toastContainer"></div>
+
+  <!-- Import Modal -->
+  <dialog class="admin-dialog" id="importDialog">
+    <div class="dialog-card">
+      <div class="dialog-header">
+        <h3>导入配置 JSON</h3>
+        <button type="button" class="dialog-close-btn" id="closeImportDialogBtn">✕</button>
+      </div>
+      <div class="dialog-body">
+        <p>将导出的配置 JSON 文本粘贴在下方，或者选择本地 <code>.json</code> 文件：</p>
+        <input type="file" id="importJsonFileInput" accept=".json,application/json" class="admin-input-file">
+        <textarea id="importJsonTextarea" class="admin-code-area" rows="8" placeholder="粘贴 JSON 内容..."></textarea>
+      </div>
+      <div class="dialog-footer">
+        <button type="button" class="admin-btn admin-btn-secondary" id="cancelImportBtn">取消</button>
+        <button type="button" class="admin-btn admin-btn-primary" id="confirmImportBtn">确认导入</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Confirm Modal (In-page modal to safely replace window.confirm in iframes) -->
+  <dialog class="admin-dialog" id="confirmDialog">
+    <div class="dialog-card">
+      <div class="dialog-header">
+        <h3 id="confirmDialogTitle">确认操作</h3>
+        <button type="button" class="dialog-close-btn" id="closeConfirmDialogBtn">✕</button>
+      </div>
+      <div class="dialog-body">
+        <p id="confirmDialogMessage">您确定要执行此操作吗？</p>
+      </div>
+      <div class="dialog-footer">
+        <button type="button" class="admin-btn admin-btn-secondary" id="cancelConfirmDialogBtn">取消</button>
+        <button type="button" class="admin-btn admin-btn-danger" id="okConfirmDialogBtn">确认删除</button>
+      </div>
+    </div>
+  </dialog>
+
+  <script src="admin.js"></script>
+</body>
+</html>

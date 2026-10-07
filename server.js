@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -8,6 +9,325 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 const HOST = '0.0.0.0';
+
+// Enable large JSON payloads for base64 file uploads (up to 100MB)
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ extended: true, limit: '100mb' }));
+
+// Ensure uploads directory exists
+const uploadsDir = path.join(__dirname, 'assets', 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+// Config file path
+const configFilePath = path.join(__dirname, 'assets', 'audi-s5', 'config.json');
+
+// Default configuration fallback
+const defaultConfig = {
+  mainImage: "assets/audi-s5/main-car-16x9.jpg",
+  vehicleName: "Audi S5 Avant",
+  vehicleSub: "Actual photographed example · interactive detail page",
+  price: "RM 438,000",
+  hotspots: [
+    {
+      id: "engine",
+      label: "Engine",
+      type: "video",
+      x: "72%",
+      y: "46%",
+      forwardVideo: "assets/videos/engine_forward.mp4",
+      reverseVideo: "assets/videos/engine_reverse_web.mp4",
+      title: "V6 TFSI Engine Bay",
+      eyebrow: "POWERTRAIN",
+      description: "Move beneath the bonnet to reveal the 3.0-litre turbocharged V6 powerplant, carbon-accented engine cover, and precision cooling architecture.",
+      specs: [
+        ["Engine", "3.0L TFSI V6 Turbo"],
+        ["Power", "349 hp (demo)"],
+        ["Torque", "500 Nm (demo)"],
+        ["Transmission", "8-speed Tiptronic (demo)"]
+      ],
+      subHotspots: [
+        {
+          id: "engine_turbo",
+          label: "Twin-Scroll Turbo",
+          x: "52%",
+          y: "52%",
+          title: "Hot-V Twin-Scroll Turbocharger",
+          eyebrow: "FORCED INDUCTION",
+          description: "Mounted inside the 90-degree V of the engine banks for instant spool and immediate torque delivery.",
+          specs: [["Boost", "1.4 bar"], ["Configuration", "Hot-V Twin-Scroll"]]
+        },
+        {
+          id: "engine_cover",
+          label: "Carbon Shroud",
+          x: "50%",
+          y: "36%",
+          title: "Carbon Fibre Engine Cover",
+          eyebrow: "ENGINE DRESSING",
+          description: "Gloss carbon composite engine dress cover with thermal dampening and Audi V6 TFSI red emblems.",
+          specs: [["Material", "Gloss Carbon Fibre"], ["Acoustics", "Thermal composite"]]
+        }
+      ]
+    },
+    {
+      id: "interior",
+      label: "Interior",
+      type: "video",
+      x: "54%",
+      y: "38%",
+      forwardVideo: "assets/videos/interior_forward.mp4",
+      reverseVideo: "assets/videos/interior_reverse.mp4",
+      title: "Inside the S5 Avant",
+      eyebrow: "CABIN & COCKPIT",
+      description: "Step into the driver-focused cabin featuring digital instrumentation, S sport steering wheel, ambient lighting, and refined tactile controls.",
+      specs: [
+        ["Steering layout", "Right-hand drive"],
+        ["Driver display", "Audi Virtual Cockpit"],
+        ["Trim", "Matte Brushed Aluminum"],
+        ["Pedals", "Stainless steel S sport pedals"]
+      ],
+      subHotspots: [
+        {
+          id: "interior_wheel",
+          label: "Sport Steering",
+          x: "38%",
+          y: "60%",
+          title: "Flat-Bottom Sport Steering Wheel",
+          eyebrow: "DRIVER INTERFACE",
+          description: "Perforated sport leather wheel with aluminum shift paddles and multifunction drive mode selectors.",
+          specs: [["Material", "Perforated Nappa Leather"], ["Paddles", "Die-cast Aluminum"]]
+        },
+        {
+          id: "interior_cockpit",
+          label: "Virtual Cockpit",
+          x: "49%",
+          y: "40%",
+          title: "12.3-inch Virtual Cockpit HD",
+          eyebrow: "DIGITAL INSTRUMENTATION",
+          description: "Configurable instrument screen featuring 3D Google Earth maps and S-specific telemetry views.",
+          specs: [["Resolution", "1920x720 HD"], ["Modes", "Classic / Sport / Dynamic"]]
+        },
+        {
+          id: "interior_mmi",
+          label: "MMI Display",
+          x: "66%",
+          y: "44%",
+          title: "10.1-inch MMI Touch Display",
+          eyebrow: "INFOTAINMENT & CONTROL",
+          description: "Acoustic and haptic feedback screen running navigation, vehicle dynamics, and wireless Apple CarPlay.",
+          specs: [["Display", "10.1-inch Glass"], ["Connectivity", "Wireless CarPlay & Android Auto"]]
+        }
+      ]
+    },
+    {
+      id: "boot",
+      label: "Boot / Trunk",
+      type: "video",
+      x: "24%",
+      y: "44%",
+      forwardVideo: "assets/videos/boot_forward.mp4",
+      reverseVideo: "assets/videos/boot_reverse_web.mp4",
+      title: "Cargo Area & Powered Tailgate",
+      eyebrow: "STORAGE & UTILITY",
+      description: "Open the powered rear tailgate revealing the estate cargo hold with illuminated side liners, luggage tie-downs, and 40:20:40 split-folding rear seats.",
+      specs: [
+        ["Tailgate", "Power opening / closing"],
+        ["Cargo capacity", "465L - 1,495L"],
+        ["Seat folding", "40:20:40 split"],
+        ["Load threshold", "Stainless steel guard"]
+      ],
+      subHotspots: [
+        {
+          id: "boot_seats",
+          label: "40:20:40 Seats",
+          x: "48%",
+          y: "48%",
+          title: "40:20:40 Split-Folding Rear Seats",
+          eyebrow: "CARGO CAPACITY",
+          description: "Quick-release levers expand luggage space from 465 litres to 1,495 litres with a flat loading floor.",
+          specs: [["Volume", "Up to 1,495L"], ["Mechanism", "Side-wall quick release"]]
+        },
+        {
+          id: "boot_switch",
+          label: "Tailgate Switch",
+          x: "20%",
+          y: "34%",
+          title: "Electric Tailgate Close Switch",
+          eyebrow: "POWER UTILITY",
+          description: "Illuminated tailgate button with programmable opening height memory and lock function.",
+          specs: [["Function", "One-touch close & lock"], ["Memory", "Height programmable"]]
+        }
+      ]
+    },
+    {
+      id: "wheel",
+      label: "Wheel",
+      type: "image",
+      x: "78%",
+      y: "74%",
+      imageSrc: "assets/audi-s5/wheel_16x9.jpg",
+      title: "Wheel, Brake & Tyre Setup",
+      eyebrow: "CHASSIS & BRAKES",
+      description: "Multi-spoke S-design alloy wheels equipped with high-performance ventilated brake discs and red S-branded front multi-piston calipers.",
+      specs: [
+        ["Wheel size", "20-inch S-design"],
+        ["Brake caliper", "Red S-branded caliper"],
+        ["Brake disc", "Ventilated performance disc"],
+        ["Tyre profile", "255/35 R20"]
+      ]
+    },
+    {
+      id: "dashboard",
+      label: "Dashboard",
+      type: "image",
+      x: "62%",
+      y: "36%",
+      imageSrc: "assets/audi-s5/dashboard_16x9.jpg",
+      title: "Driver Dashboard & Virtual Cockpit",
+      eyebrow: "DIGITAL COCKPIT",
+      description: "Driver-oriented curved MMI touch display paired with full digital instrument cluster and configurable navigation views.",
+      specs: [
+        ["Cluster", "12.3-inch Virtual Cockpit"],
+        ["Central MMI", "10.1-inch High-res Touch"],
+        ["Connectivity", "Apple CarPlay & Android Auto"],
+        ["Interface", "Audi MMI Touch Response"]
+      ]
+    },
+    {
+      id: "seats",
+      label: "Seats",
+      type: "image",
+      x: "48%",
+      y: "42%",
+      imageSrc: "assets/audi-s5/seats_16x9.jpg",
+      title: "S Sport Contoured Seats",
+      eyebrow: "INTERIOR SEATING",
+      description: "Contoured sport seats upholstered in fine Nappa leather with diamond quilting, embossed S logos and integrated pneumatic side bolstering.",
+      specs: [
+        ["Upholstery", "Fine Nappa Leather"],
+        ["Stitching", "Diamond pattern with S logo"],
+        ["Adjustment", "14-way electric with memory"],
+        ["Heating", "Multi-stage front seat heating"]
+      ]
+    },
+    {
+      id: "audio",
+      label: "Bang & Olufsen",
+      type: "image",
+      x: "65%",
+      y: "46%",
+      imageSrc: "assets/audi-s5/audio_16x9.jpg",
+      title: "Bang & Olufsen 3D Sound",
+      eyebrow: "PREMIUM AUDIO",
+      description: "Bang & Olufsen 3D Sound System with precision-etched acoustic grilles, 19 speakers, 16-channel amplifier and 755 watts output.",
+      specs: [
+        ["Brand", "Bang & Olufsen"],
+        ["Speakers", "19 high-performance speakers"],
+        ["Amplifier", "16-channel 755W DSP"],
+        ["Sound dimension", "3D Sound spatial algorithm"]
+      ]
+    },
+    {
+      id: "climate",
+      label: "Rear climate controls",
+      type: "image",
+      x: "38%",
+      y: "46%",
+      imageSrc: "assets/audi-s5/climate_16x9.jpg",
+      title: "Rear Cabin Climate Controls",
+      eyebrow: "COMFORT & CLIMATE",
+      description: "Dedicated digital temperature panel for rear passengers, regulating dual-zone rear airflow and rear heated seat levels.",
+      specs: [
+        ["Zones", "Tri-zone automatic climate"],
+        ["Display", "Dedicated rear digital readout"],
+        ["Vents", "Centre console & B-pillar vents"],
+        ["Controls", "Physical rocker switchgear"]
+      ]
+    }
+  ]
+};
+
+// API: Get current config
+app.get('/api/config', (req, res) => {
+  try {
+    if (fs.existsSync(configFilePath)) {
+      const data = fs.readFileSync(configFilePath, 'utf8');
+      return res.json(JSON.parse(data));
+    }
+    return res.json(defaultConfig);
+  } catch (err) {
+    console.error('Error reading config:', err);
+    return res.json(defaultConfig);
+  }
+});
+
+// API: Save config
+app.post('/api/config', (req, res) => {
+  try {
+    const newConfig = req.body;
+    if (!newConfig || !Array.isArray(newConfig.hotspots)) {
+      return res.status(400).json({ error: 'Invalid config structure' });
+    }
+    const dir = path.dirname(configFilePath);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(configFilePath, JSON.stringify(newConfig, null, 2), 'utf8');
+    return res.json({ success: true, message: 'Configuration saved successfully' });
+  } catch (err) {
+    console.error('Error saving config:', err);
+    return res.status(500).json({ error: 'Failed to save configuration' });
+  }
+});
+
+// API: Reset config to default
+app.post('/api/reset-config', (req, res) => {
+  try {
+    if (fs.existsSync(configFilePath)) {
+      fs.unlinkSync(configFilePath);
+    }
+    return res.json({ success: true, config: defaultConfig, message: 'Reset to factory defaults' });
+  } catch (err) {
+    console.error('Error resetting config:', err);
+    return res.status(500).json({ error: 'Failed to reset config' });
+  }
+});
+
+// API: Direct file upload (base64 payload)
+app.post('/api/upload', (req, res) => {
+  try {
+    const { fileName, fileData } = req.body;
+    if (!fileName || !fileData) {
+      return res.status(400).json({ error: 'Missing fileName or fileData' });
+    }
+
+    // Split base64 header if present (e.g. data:image/jpeg;base64,....)
+    const matches = fileData.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
+    let buffer;
+    if (matches && matches.length === 3) {
+      buffer = Buffer.from(matches[2], 'base64');
+    } else {
+      buffer = Buffer.from(fileData, 'base64');
+    }
+
+    // Sanitize file name
+    const sanitizedName = fileName.replace(/[^a-zA-Z0-9._-]/g, '_');
+    const uniqueName = `${Date.now()}_${sanitizedName}`;
+    const targetPath = path.join(uploadsDir, uniqueName);
+
+    fs.writeFileSync(targetPath, buffer);
+    const publicUrl = `assets/uploads/${uniqueName}`;
+
+    return res.json({
+      success: true,
+      url: publicUrl,
+      fileName: uniqueName,
+      size: buffer.length
+    });
+  } catch (err) {
+    console.error('Error uploading file:', err);
+    return res.status(500).json({ error: 'File upload failed' });
+  }
+});
 
 // Serve static files from root directory
 app.use(express.static(__dirname));
@@ -19,6 +339,14 @@ app.get('/', (req, res) => {
 
 app.get('/audi', (req, res) => {
   res.sendFile(path.join(__dirname, 'audi.html'));
+});
+
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
+app.get('/admin.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
 // Fallback for SPA/direct navigation

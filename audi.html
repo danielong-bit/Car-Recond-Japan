@@ -5,14 +5,17 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Interactive Audi S5 Avant example for Japan Recon Car Gallery">
   <title>Audi S5 Avant | Japan Recon Car Gallery</title>
-  <link rel="stylesheet" href="audi-experience.css?v=9">
+  <link rel="stylesheet" href="audi-experience.css?v=20261007">
+  <link rel="stylesheet" href="enhancements.css?v=20261007">
 </head>
 <body>
-  <div class="demo"><b>EXAMPLE LISTING</b> · Audi S5 Avant · Interactive real-vehicle experience · Unverified fields are marked</div>
+  <a class="skip-link" href="#mainContent">Skip to content</a>
+  <div class="demo"><b>DEMO SHOWROOM</b> · Audi S5 Avant · Sample images and specifications · No real booking or payment</div>
 
   <header class="wrap top">
     <a class="brand" href="./">JAPAN RECON CAR GALLERY<span>INTERACTIVE VEHICLE EXPERIENCE</span></a>
-    <nav>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primaryNav">Menu</button>
+    <nav id="primaryNav" aria-label="Primary navigation">
       <a href="#experience">Experience</a>
       <a href="#gallery">Gallery</a>
       <a href="#features">Features</a>
@@ -20,53 +23,51 @@
     </nav>
   </header>
 
-  <main>
+  <main id="mainContent" tabindex="-1">
     <section class="wrap hero" id="experience">
       <div class="hero-copy">
         <p class="kicker">AUDI · PERFORMANCE AVANT</p>
         <h1>S5<br><span>Avant</span></h1>
-        <p class="lede">Explore the actual vehicle through key details. Select a point to begin.</p>
+        <p class="lede">Get to know the S5 Avant. Tap a feature on the car or choose a button below.</p>
         <div class="chips">
           <span class="chip">Right-hand drive</span>
           <span class="chip">S sport interior</span>
           <span class="chip">Bang & Olufsen</span>
           <span class="chip">Powered tailgate</span>
         </div>
-        <p class="experience-note">Interactive presentation built from photographs of this vehicle.</p>
+        <p class="experience-note">Photo and video demonstration · vehicle details are unverified.</p>
       </div>
 
       <div class="experience-shell" id="experienceShell" data-scene="overview" data-category="overview">
         <div class="experience-frame tour-frame" id="experienceFrame" aria-live="polite">
-          <div class="media-plane" id="mediaPlane">
-            <img class="experience-overview" id="overviewImage" src="assets/audi-s5-v2/open-doors-tailgate.jpg" alt="Audi S5 Avant with camera-side front and rear doors and tailgate open" width="520" height="693" decoding="async" fetchpriority="high" onerror="this.onerror=null;this.src='assets/audi-s5/front-view.webp'">
-            <img class="experience-detail-image" id="detailImage" alt="" aria-hidden="true">
-
-            <div class="hotspots" id="hotspots">
-              <button class="vehicle-hotspot engine-hotspot" type="button" data-tour="engine" aria-label="Explore engine">
-                <span class="hotspot-dot">+</span><span class="hotspot-label">Engine</span>
-              </button>
-              <button class="vehicle-hotspot interior-hotspot" type="button" data-tour="interior" aria-label="Explore interior">
-                <span class="hotspot-dot">+</span><span class="hotspot-label">Interior</span>
-              </button>
-              <button class="vehicle-hotspot wheel-hotspot" type="button" data-tour="wheel" aria-label="Explore wheel and brakes">
-                <span class="hotspot-dot">+</span><span class="hotspot-label">Wheel & Brakes</span>
-              </button>
-              <button class="vehicle-hotspot audio-hotspot" type="button" data-tour="audio" aria-label="Explore Bang and Olufsen audio">
-                <span class="hotspot-dot">+</span><span class="hotspot-label">Audio</span>
-              </button>
-              <button class="vehicle-hotspot cargo-hotspot" type="button" data-tour="cargo" aria-label="Explore cargo area">
-                <span class="hotspot-dot">+</span><span class="hotspot-label">Cargo</span>
-              </button>
+          <div class="media-plane" id="mediaPlane" role="region" aria-label="16:9 Interactive Car Viewer">
+            <div class="media-zoom-canvas" id="mediaZoomCanvas">
+              <img class="experience-overview viewer-main-image" id="overviewImage" src="assets/audi-s5/main-car-16x9.jpg" alt="Audi S5 Avant in Daytona Grey metallic - 16:9 interactive viewer" width="1280" height="720" decoding="async" fetchpriority="high">
+              <video class="viewer-video" id="viewerVideo" playsinline muted preload="none" aria-hidden="true"></video>
+              <img class="experience-detail-image viewer-detail-image" id="detailImage" alt="" aria-hidden="true">
+              <div class="hotspots viewer-hotspots" id="hotspots" aria-label="Vehicle feature hotspots"></div>
+              <div class="sub-hotspots viewer-sub-hotspots" id="subHotspots" aria-label="Feature sub-hotspots" style="display:none;"></div>
             </div>
 
+            <button class="viewer-back-btn" id="viewerBackBtn" type="button" aria-label="Back to vehicle overview">
+              <span class="viewer-back-icon">←</span>
+              <span class="viewer-back-label">Back to Vehicle</span>
+            </button>
+
+            <button class="showroom-zoom-pill" id="mediaZoomPill" type="button" aria-label="Reset zoom level">
+              <span class="zoom-icon">🔍</span>
+              <span id="mediaZoomValue">1.0x</span>
+              <span class="zoom-reset-hint">Reset</span>
+            </button>
+
             <div class="experience-topline">
-              <span>INTERACTIVE VEHICLE TOUR</span>
+              <span>INTERACTIVE VEHICLE VIEWER · 16:9</span>
               <span id="sceneLabel">OVERVIEW</span>
             </div>
 
             <div class="detail-status" id="detailStatus">
               <span>SELECT A PART</span>
-              <strong>Click the car to inspect it.</strong>
+              <strong>Click a hotspot to start inspection</strong>
             </div>
           </div>
 
@@ -81,11 +82,23 @@
             <div class="tour-specs" id="tourSpecs"></div>
 
             <button class="detail-back" id="detailBack" type="button" aria-label="Back to vehicle overview">
-              <span>←</span> Push back to vehicle
+              <span>←</span> Back to car
             </button>
           </aside>
         </div>
       </div>
+      <div class="viewer-tools" aria-label="Car viewer controls">
+  <div class="feature-shortcuts" data-feature-shortcuts role="group" aria-label="Explore vehicle features"></div>
+  <div class="viewer-controls" role="group" aria-label="Zoom and return controls">
+    <button type="button" data-viewer-back disabled>← Back to car</button>
+    <button type="button" data-zoom="out" aria-label="Zoom out">−</button>
+    <output data-zoom-value aria-label="Zoom level">1.0×</output>
+    <button type="button" data-zoom="in" aria-label="Zoom in">+</button>
+    <button type="button" data-zoom="reset">Reset view</button>
+  </div>
+  <p class="viewer-help" data-viewer-help>Tap a feature to explore. Use + / − to zoom, then drag to look around.</p>
+  <div class="media-feedback" data-media-status role="status" hidden><span></span><button type="button" data-media-retry hidden>Retry video</button></div>
+</div>
     </section>
 
     <section class="wrap section" id="gallery">
@@ -103,41 +116,41 @@
 
       <div class="gallery">
         <button class="tile" type="button" data-kind="exterior">
-          <img data-hq-hero src="assets/audi-s5-v2/open-doors-tailgate.jpg" alt="Audi S5 Avant with camera-side doors and tailgate open" onerror="this.onerror=null;this.src='assets/audi-s5/front-view.webp'"><span>Front 3/4</span>
+          <img loading="lazy" decoding="async" src="assets/audi-s5/main-car-16x9.jpg" alt="Audi S5 Avant in Daytona Grey metallic" width="1280" height="720"><span>Front 3/4</span>
         </button>
         <button class="tile" type="button" data-kind="exterior">
-          <img src="assets/audi-s5/rear-three-quarter.webp" alt="Audi S5 Avant rear three-quarter" onerror="this.parentElement.classList.add('missing');this.style.display='none'"><span>Rear 3/4</span>
+          <img loading="lazy" decoding="async" src="assets/audi-s5/boot_16x9.jpg" alt="Audi S5 Avant open cargo area with powered tailgate" width="1280" height="720"><span>Powered Tailgate</span>
         </button>
         <button class="tile" type="button" data-kind="interior">
-          <img src="assets/audi-s5/cockpit.webp" alt="Audi S5 Avant right-hand-drive cockpit" onerror="this.parentElement.classList.add('missing');this.style.display='none'"><span>Cockpit</span>
+          <img loading="lazy" decoding="async" src="assets/audi-s5/dashboard_16x9.jpg" alt="Audi S5 Avant digital dashboard and cockpit" width="1280" height="720"><span>Cockpit & MMI</span>
         </button>
         <button class="tile" type="button" data-kind="detail">
-          <img src="assets/audi-s5/engine.webp" alt="Audi S5 Avant engine bay" onerror="this.parentElement.classList.add('missing');this.style.display='none'"><span>Engine bay</span>
+          <img loading="lazy" decoding="async" src="assets/audi-s5/engine_16x9.jpg" alt="Audi S5 Avant 3.0L TFSI V6 turbo engine bay" width="1280" height="720"><span>V6 Engine bay</span>
         </button>
         <button class="tile" type="button" data-kind="detail">
-          <img src="assets/audi-s5/wheel-brake.webp" alt="Audi S5 Avant wheel and S-branded red brake caliper" onerror="this.parentElement.classList.add('missing');this.style.display='none'"><span>Wheel + brake</span>
+          <img loading="lazy" decoding="async" src="assets/audi-s5/wheel_16x9.jpg" alt="Audi S5 Avant 20-inch S-design wheel and red brake caliper" width="1280" height="720"><span>Wheel + brake</span>
         </button>
         <button class="tile" type="button" data-kind="interior">
-          <img src="assets/audi-s5/bang-olufsen.webp" alt="Bang and Olufsen speaker in Audi S5 Avant" onerror="this.parentElement.classList.add('missing');this.style.display='none'"><span>Bang & Olufsen</span>
+          <img loading="lazy" decoding="async" src="assets/audi-s5/audio_16x9.jpg" alt="Bang and Olufsen 3D sound speaker in Audi S5 Avant" width="1280" height="720"><span>Bang & Olufsen</span>
         </button>
         <button class="tile" type="button" data-kind="interior">
-          <img src="assets/audi-s5/rear-climate.webp" alt="Audi S5 Avant rear climate controls" onerror="this.parentElement.classList.add('missing');this.style.display='none'"><span>Rear climate</span>
+          <img loading="lazy" decoding="async" src="assets/audi-s5/climate_16x9.jpg" alt="Audi S5 Avant deluxe rear climate controls" width="1280" height="720"><span>Rear climate</span>
         </button>
         <button class="tile" type="button" data-kind="interior">
-          <img src="assets/audi-s5/cargo.webp" alt="Audi S5 Avant open cargo area" onerror="this.parentElement.classList.add('missing');this.style.display='none'"><span>Cargo area</span>
+          <img loading="lazy" decoding="async" src="assets/audi-s5/seats_16x9.jpg" alt="Audi S5 Avant contoured fine Nappa leather S sport seats" width="1280" height="720"><span>S Sport Seats</span>
         </button>
       </div>
     </section>
 
     <section class="wrap section" id="features">
       <div class="heading">
-        <div><p class="kicker">OBSERVED FROM YOUR PHOTOS</p><h2>What the customer can see.</h2></div>
-        <p>These are photo-supported observations. They are kept separate from vehicle data that still needs documentation.</p>
+        <div><p class="kicker">DEMO VEHICLE HIGHLIGHTS</p><h2>Explore the equipment.</h2></div>
+        <p>The equipment below illustrates how a listing can be presented. Confirm the actual specification against vehicle documents.</p>
       </div>
 
       <div class="info-grid">
         <article class="box">
-          <h3>Visible equipment</h3>
+          <h3>Demo equipment</h3>
           <div class="row"><span>Body style</span><b>Avant / wagon</b></div>
           <div class="row"><span>Steering layout</span><b>Right-hand drive</b></div>
           <div class="row"><span>Interior</span><b>Black S sport seats</b></div>
@@ -150,7 +163,7 @@
 
         <article class="box" id="verify">
           <h3>Stock data to verify</h3>
-          <p class="lede">I have not filled these from guesses. When you give me the auction sheet, registration information or exact vehicle spec, these can become the real listing data.</p>
+          <p class="lede">Confirm these details with the auction sheet, registration documents and exact vehicle specification before considering a purchase.</p>
           <div class="row"><span>Model year</span><b class="pending">To verify</b></div>
           <div class="row"><span>Mileage</span><b class="pending">To verify</b></div>
           <div class="row"><span>Engine / output</span><b class="pending">To verify</b></div>
@@ -170,7 +183,7 @@
     </section>
   </main>
 
-  <footer class="wrap"><span>JAPAN RECON CAR GALLERY</span><span>AUDI S5 AVANT · EXAMPLE VEHICLE PAGE</span></footer>
+  <footer class="wrap"><span>JAPAN RECON CAR GALLERY</span><a href="./#inventory">← Browse all cars</a><a class="manage-link" href="admin.html">Manage demo</a></footer>
 
   <dialog id="lightbox">
     <div class="light">
@@ -187,6 +200,7 @@
     </div>
   </dialog>
 
-  <script src="audi-experience.js?v=9"></script>
+  <script src="audi-experience.js?v=20261007"></script>
+  <script src="site-ui.js?v=20261007"></script>
 </body>
 </html>
