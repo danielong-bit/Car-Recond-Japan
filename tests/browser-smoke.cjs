@@ -38,10 +38,12 @@ async function run() {
     await page.locator('#bodyFilter').selectOption('Wagon');
     await page.locator('.advanced-filters summary').click();
     await page.locator('#powerFilter').selectOption('300');
+    assert.equal(await page.locator('#advancedFilterCount').textContent(), '1', 'Active advanced filter is visible in its summary');
     assert.equal(await page.locator('.car-card').count(), 1);
     await page.locator('#mileageFilter').selectOption('10000');
     assert.equal(await page.locator('.car-card').count(), 0);
     await page.locator('#emptyReset').click();
+    assert.equal(await page.locator('#advancedFilterCount').isVisible(), false, 'Reset clears the advanced filter indicator');
     assert.equal(await page.locator('.car-card').count(), 7);
     await page.locator('.card-compare-btn').nth(0).click();
     await page.locator('.card-compare-btn').nth(1).click();

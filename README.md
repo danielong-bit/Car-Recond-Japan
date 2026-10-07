@@ -18,7 +18,7 @@ Open http://localhost:3000/. The server provides `/audi`, `/admin`, config persi
 ## Improvements
 
 - Search by make/model and filter by body, year, mileage and power; clear empty-result filters in one click.
-- Mobile navigation, Taste-inspired showroom styling, self-hosted fonts, and system light/dark themes. Dedicated tours retain feature shortcuts, zoom buttons, and cancellable viewer transitions.
+- Mobile navigation, UI UX Pro Max showroom styling, self-hosted fonts, and system light/dark themes. Dedicated tours retain feature shortcuts, zoom buttons, and cancellable viewer transitions.
 - Loading feedback and photo fallback for video failures; gallery arrows and keyboard navigation.
 - Original image dimensions retained in high-quality JPEGs; videos use browser-compatible H.264 with fast-start playback. Clips load on demand.
 

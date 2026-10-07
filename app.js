@@ -311,6 +311,13 @@ function renderInventory() {
     filtered.sort((a, b) => Number(a.year || 0) - Number(b.year || 0));
   }
 
+  const advancedCount = [yearFilter, mileageFilter, powerFilter].filter(field => field.value !== 'all').length;
+  const advancedCountLabel = document.getElementById('advancedFilterCount');
+  if (advancedCountLabel) {
+    advancedCountLabel.hidden = advancedCount === 0;
+    advancedCountLabel.textContent = String(advancedCount);
+    advancedCountLabel.setAttribute('aria-label', `${advancedCount} active advanced filters`);
+  }
   resultCount.textContent = `${filtered.length} demo vehicle${filtered.length === 1 ? '' : 's'}`;
   if (!filtered.length) {
     inventoryGrid.innerHTML = '<div class="inventory-empty"><h3>No cars match these filters</h3><p>Try a different model, or clear the filters to see all demo vehicles.</p><button type="button" class="primary-button" id="emptyReset">Clear all filters</button></div>';
@@ -320,7 +327,7 @@ function renderInventory() {
   inventoryGrid.innerHTML = filtered.map((v, index) => {
     const isCompared = compareList.includes(v.id);
     return `
-    <article class="car-card ${isCompared ? 'is-compared' : ''}" data-id="${v.id}" aria-label="Open ${v.brand} ${v.model} demo details">
+    <article class="car-card ${isCompared ? 'is-compared' : ''}" data-id="${v.id}" aria-label="${v.brand} ${v.model} demo vehicle">
       <div class="card-visual" style="--card-a:${v.cardA || '#61727c'};--card-b:${v.cardB || '#202a30'}">
         ${v.image ? `<img class="card-photo" src="${v.preview || v.image}" alt="${v.brand} ${v.model} demo vehicle image" width="960" height="540" decoding="async" loading="${index < 3 ? 'eager' : 'lazy'}" fetchpriority="${index === 0 ? 'high' : 'auto'}" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="card-photo-fallback" style="display:none">${carMarkup()}</div>` : carMarkup()}
         <button type="button" class="thumb-compare-btn ${isCompared ? 'active' : ''}" data-compare-id="${v.id}" aria-pressed="${isCompared}" aria-label="${isCompared ? 'Remove ' + v.brand + ' ' + v.model + ' from compare queue' : 'Add ' + v.brand + ' ' + v.model + ' to compare queue'}" title="${isCompared ? 'Remove from compare queue' : 'Add to compare queue'}">

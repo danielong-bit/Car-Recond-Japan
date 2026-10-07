@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const files = ['index.html', 'audi.html', 'admin.html', 'app.js', 'audi-experience.js', 'admin.js', 'site-ui.js', 'server.js', 'taste.css'];
+const files = ['index.html', 'audi.html', 'admin.html', 'app.js', 'audi-experience.js', 'admin.js', 'site-ui.js', 'server.js', 'showroom.css'];
 const references = new Set();
 for (const file of files) {
   const text = fs.readFileSync(path.join(root, file), 'utf8');

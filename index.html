@@ -5,15 +5,15 @@
   <script>document.documentElement.classList.add('js-enabled');</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#07090b" />
-  <title>Japan Recon Car Gallery - Interactive Demo</title>
-  <meta name="description" content="Interactive Japanese Recon Car Gallery & Showroom prototype featuring demo vehicle details, spec explorer, and digital showroom experience." />
-  <meta property="og:title" content="Japan Recon Car Gallery - Interactive Demo" />
-  <meta property="og:description" content="Interactive Japanese Recon Car Gallery & Showroom prototype featuring demo vehicle details, spec explorer, and digital showroom experience." />
+  <title>Japan Recon Car Gallery - Photo Gallery</title>
+  <meta name="description" content="Browse sample recon car photos and specifications. Open or share the separate Audi S5 Avant interactive tour." />
+  <meta property="og:title" content="Japan Recon Car Gallery - Photo Gallery" />
+  <meta property="og:description" content="Browse sample recon car photos and specifications. Open or share the separate Audi S5 Avant interactive tour." />
 
-  <link rel="stylesheet" href="style.css?v=20261007-2" />
-  <link rel="stylesheet" href="enhancements.css?v=20261007-2">
+  <link rel="stylesheet" href="style.css?v=20261007-3" />
+  <link rel="stylesheet" href="enhancements.css?v=20261007-3">
   <link rel="preload" href="assets/fonts/nimbus-sans-regular.woff" as="font" type="font/woff" crossorigin>
-  <link rel="stylesheet" href="taste.css?v=20261007-2">
+  <link rel="stylesheet" href="showroom.css?v=20261007-3">
 </head>
 <body class="home">
   <a class="skip-link" href="#top">Skip to content</a>
@@ -29,7 +29,7 @@
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primaryNav">Menu</button>
     <nav id="primaryNav" aria-label="Primary navigation">
       <a href="#inventory">Inventory</a>
-      <a href="#experience">Experience</a>
+      <a href="audi.html">Audi tour</a>
       <button class="ghost-button nav-compare-btn" id="navCompareBtn" type="button">Compare <span aria-hidden="true" class="nav-compare-count" id="navCompareBadge">0/2</span></button>
       <button class="ghost-button" type="button" data-demo-action>Demo enquiry</button>
     </nav>
@@ -59,7 +59,7 @@
 
       <div class="filters" aria-label="Inventory filters">
         <label class="search-label">Search make or model
-          <input id="searchFilter" type="search" placeholder="Try Audi S5 or Toyota" autocomplete="off">
+          <input id="searchFilter" enterkeyhint="search" type="search" placeholder="Try Audi S5 or Toyota" autocomplete="off">
         </label>
         <label>Brand
           <select id="brandFilter">
@@ -90,7 +90,7 @@
             <option value="year-asc">Year: Oldest First</option>
           </select>
         </label>
-        <details class="advanced-filters"><summary>More filters</summary><div class="advanced-filter-fields">        <label>Year
+        <details class="advanced-filters"><summary>More filters<span id="advancedFilterCount" hidden></span></summary><div class="advanced-filter-fields">        <label>Year
           <select id="yearFilter">
             <option value="all">Any year</option>
             <option value="2024">2024+</option>
@@ -225,7 +225,7 @@
     <span id="compareToastMsg">Maximum 2 vehicles can be compared simultaneously.</span>
   </div>
 
-  <script src="app.js?v=20261007-2"></script>
-  <script src="site-ui.js?v=20261007-2"></script>
+  <script src="app.js?v=20261007-3"></script>
+  <script src="site-ui.js?v=20261007-3"></script>
 </body>
 </html>

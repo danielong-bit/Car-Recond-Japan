@@ -1,10 +1,9 @@
-/* Taste design: automotive showroom, variance 6, motion 4, density 4.
-   Native CSS preserves the existing buildless site and customer routes.
-   One accent; controls 8px, media/cards 14px; semantic layers remain in base CSS. */
+/* Showroom UI: UI UX Pro Max automotive palette, compact static catalog,
+   readable type, semantic themes and native controls. */
 @font-face{font-family:Showroom Sans;src:url('assets/fonts/nimbus-sans-regular.woff') format('woff');font-weight:400 500;font-display:optional}
 @font-face{font-family:Showroom Sans;src:url('assets/fonts/nimbus-sans-bold.woff') format('woff');font-weight:600 800;font-display:optional}
-:root{color-scheme:dark;--bg:#111417;--panel:#191e22;--panel-2:#22292e;--text:#edf0f2;--muted:#aab4bb;--line:#3b444b;--accent:#d5ee75;--accent-soft:#d5ee751a;--ui-accent:var(--accent);--radius:14px;--ink:#17220a;--shadow:0 12px 36px #080b0e24}
-@media(prefers-color-scheme:light){:root{color-scheme:light;--bg:#f1f3f4;--panel:#fafbfc;--panel-2:#e7ebee;--text:#192128;--muted:#525f69;--line:#c8d0d5;--accent:#d5ee75;--accent-soft:#738e0914;--ui-accent:#596b16;--ink:#17220a;--shadow:0 12px 36px #26333e12}}
+:root{color-scheme:dark;--bg:#101720;--panel:#18222f;--panel-2:#233143;--text:#f1f5f9;--muted:#b1bdcc;--line:#465466;--accent:#c92d3a;--accent-soft:#c92d3a18;--ui-accent:#ff8993;--radius:14px;--ink:#ffffff;--shadow:0 12px 36px #080b0e24}
+@media(prefers-color-scheme:light){:root{color-scheme:light;--bg:#f4f6f8;--panel:#ffffff;--panel-2:#e9eef3;--text:#142033;--muted:#526170;--line:#bdc8d3;--accent:#c92d3a;--accent-soft:#c92d3a0c;--ui-accent:#b52230;--ink:#ffffff;--shadow:0 12px 36px #26333e12}}
 body.home,body.vehicle-tour{font-family:Showroom Sans,Arial,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
 h1,h2,h3,h4,.brand-copy strong,.brand-mark,.card-price,.card-meta,.compare-card-price{font-family:Showroom Sans,Arial,sans-serif}
 [hidden]{display:none!important}
@@ -141,7 +140,6 @@ footer{border-color:var(--line);color:var(--muted)}
 @media(max-width:1100px){.catalog-intro{gap:30px;grid-template-columns:1.1fr 1fr}.vehicle-tour .hero{grid-template-columns:1fr}.hero>.viewer-tools{grid-column:1}.vehicle-tour .hero-copy{display:grid;grid-template-columns:1.2fr 1fr;gap:12px 28px}.vehicle-tour .hero-copy h1,.vehicle-tour .hero-copy .kicker{grid-column:1}.vehicle-tour .hero-copy .lede{grid-column:1;margin:0}.vehicle-tour .hero-copy .share-actions{grid-column:2;grid-row:1/4;margin:0;align-self:center}.vehicle-tour .chips,.vehicle-tour .experience-note{display:none}.vehicle-tour .tour-frame{grid-template-columns:minmax(0,1fr) 270px}}
 @media(max-width:820px){.home .site-header,.home main,.home footer,.vehicle-tour .wrap{width:calc(100% - 32px)}.site-header,.top{height:auto;min-height:68px}.site-header nav a,.top nav a{border-color:var(--line)}.catalog-intro{gap:24px;padding:24px 0;grid-template-columns:1.15fr .85fr}.catalog-copy h1{font-size:36px}.catalog-copy p:not(.eyebrow){font-size:13px}.featured-caption{display:block}.featured-caption .primary-button{margin-top:10px}.filters{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.filters .search-label{grid-column:1/4}.result-count{grid-column:3}.inventory-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card-info{padding:14px}.card-info h3{font-size:20px}.card-price{font-size:17px}.catalog-note{gap:20px}.vehicle-tour .tour-frame{grid-template-columns:1fr}.vehicle-tour .gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.hero>.viewer-tools{margin-top:-18px}.tour-panel{min-height:0}.row{font-size:12px}.cta{padding:24px}}
 @media(max-width:639px){.catalog-intro{grid-template-columns:1fr;gap:18px;padding:24px 0}.catalog-copy h1{font-size:34px;max-width:360px}.catalog-copy .eyebrow{display:none}.catalog-copy p:not(.eyebrow){margin:12px 0 8px;max-width:42ch}.catalog-copy .browse-link{display:none}.featured-vehicle{display:grid;grid-template-columns:112px 1fr;gap:14px;align-items:center}.featured-vehicle>img{border-radius:8px}.featured-caption{padding:0;display:flex;align-items:center;flex-wrap:wrap;gap:8px}.featured-caption h2{font-size:17px}.featured-caption .primary-button{min-height:36px;margin:0;font-size:11px;padding-inline:10px}.featured-caption>div>span{font-size:10px}.inventory-section{padding:24px 0}.section-heading h2{font-size:26px}.section-heading>p{font-size:11px}.filters{grid-template-columns:repeat(2,minmax(0,1fr))}.filters .search-label{grid-column:1/3}.result-count{grid-column:1/3;text-align:left}.inventory-grid{grid-template-columns:1fr;gap:20px}.card-info h3{font-size:23px}.card-meta{margin-top:10px}.card-price{font-size:20px}.catalog-note{grid-template-columns:1fr;gap:16px;padding:30px 0}.catalog-note h2{grid-row:auto;font-size:27px}.home footer{padding-top:25px}.vehicle-tour .hero-copy{display:block}.vehicle-tour .hero-copy .lede{margin:12px 0}.vehicle-tour .hero-copy .share-actions{margin-top:16px}.vehicle-tour .hero h1{font-size:42px}.vehicle-tour .hero{padding-top:24px;gap:24px}.hero>.viewer-tools{margin-top:-10px}.info-grid{grid-template-columns:1fr}.heading h2{font-size:27px}.cta{display:block}.cta button{margin-top:16px}.vehicle-tour .gallery{gap:12px}.tile span{padding:10px;font-size:11px}}
-@media(prefers-reduced-motion:no-preference){.catalog-copy,.featured-vehicle,.vehicle-tour .hero-copy{animation:taste-arrive .5s cubic-bezier(.16,1,.3,1) both}.featured-vehicle{animation-delay:.06s}@keyframes taste-arrive{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
 /* Keep the browse controls compact and the vehicle media at its real aspect ratio. */
@@ -182,3 +180,101 @@ button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,su
 
 /* Reserve space while inventory is populated and avoid late font substitution on slow connections. */
 .inventory-grid:empty{min-height:460px}
+
+/* Keep browsing controls readable and the primary tour action easy to find. */
+:root{--ui-space:8px;--ui-duration:180ms}
+h1,h2,h3{text-wrap:balance}
+.home .brand-mark{background:var(--accent);border-color:var(--accent);color:var(--ink);border-radius:6px}
+.demo-banner,.demo{font-size:11px;line-height:1.5;padding-block:8px;letter-spacing:.04em}
+.site-header nav,.top nav{font-size:14px}
+.site-header nav>a,.top nav>a{display:inline-flex;align-items:center;min-height:44px}
+.catalog-copy h1{font-weight:700}
+.catalog-copy p:not(.eyebrow){font-size:16px;line-height:1.6}
+.catalog-copy .eyebrow{font-size:12px}
+.featured-caption>div>span{font-size:12px}
+.featured-caption .primary-button{min-height:44px;font-size:13px}
+.section-heading>p{font-size:13px}
+.filters{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:24px;gap:16px}
+.filters label{font-size:12px;color:var(--text);line-height:1.4}
+.filters input,.filters select{min-height:46px;font-size:14px;background:var(--bg)}
+.advanced-filters summary{min-height:46px;background:var(--bg);padding-inline:12px;gap:6px}
+.advanced-filters summary::after{margin-left:auto}
+#advancedFilterCount{display:inline-grid;place-items:center;min-width:20px;min-height:20px;background:var(--accent);color:var(--ink);border-radius:4px;font-size:12px}
+.filter-actions .filter-reset,.filter-actions .filter-compare-btn{min-height:44px;padding:8px 12px;font-size:13px}
+.filter-actions .result-count{font-size:12px;color:var(--muted)}
+.card-info{padding:20px}
+.card-info h3{font-size:24px;line-height:1.2;font-weight:600}
+.card-price{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums}
+.card-year,.card-sub,.card-specs small{font-size:12px}
+.card-sub{line-height:1.6}
+.card-specs strong{font-size:13px;line-height:1.6}
+.card-footer-row{align-items:center}
+.card-open-link,.interaction-link,.card-compare-btn{font-size:13px;min-height:44px}
+.card-open-link:hover,.interaction-link:hover{text-decoration:underline;text-underline-offset:4px;color:var(--ui-accent)}
+.car-card.is-compared{border-color:var(--ui-accent);box-shadow:0 0 0 1px var(--ui-accent)}
+.catalog-note p,.vehicle-tour .lede{font-size:16px;line-height:1.6}
+.catalog-note .muted{font-size:13px}
+.share-actions .primary-button{min-height:46px;font-size:14px}
+.share-url{font-size:16px}
+.share-actions [role=status]{font-size:13px}
+.tour-description{font-size:14px;line-height:1.6}
+.tour-spec-row span,.tour-spec-row strong{font-size:13px}
+.viewer-tools button{min-height:44px;min-width:44px;font-size:13px}
+.hotspot-dot{width:44px;height:44px;flex-shrink:0}
+.hotspot-dot:after{animation:none;border-color:#ff8993}
+.hotspot-video-badge,.hotspot-label-type,.experience-topline span:first-child{color:#ff8993}
+.vehicle-hotspot:hover .hotspot-dot,.vehicle-hotspot:focus-visible .hotspot-dot{border-color:#ff8993;box-shadow:0 0 0 4px #c92d3a30}
+.viewer-back-btn:hover,.viewer-back-btn:focus-visible,.showroom-zoom-pill:hover,.showroom-zoom-pill:focus-visible{color:var(--ink);box-shadow:none}
+.viewer-back-btn,.showroom-zoom-pill{min-height:44px}
+.dialog-close,.lightbox-close,.dock-slot-remove{min-height:44px;min-width:44px;cursor:pointer}
+button,.primary-button,summary{cursor:pointer;transition:background-color var(--ui-duration),border-color var(--ui-duration),color var(--ui-duration)}
+button:disabled{cursor:not-allowed}
+button:active,.primary-button:active{transform:none;filter:brightness(.92)}
+.primary-button:hover{transform:none;filter:brightness(1.08)}
+:where(.vehicle-dialog,.compare-dialog,.demo-dialog) :where(p,li){line-height:1.6}
+@media(max-width:820px){
+ .filters{gap:12px;padding:12px}
+ .filters input,.filters select{font-size:16px}
+ .card-info{padding:16px}
+ .card-specs{gap:8px}
+ .vehicle-tour .tour-panel{padding:20px}
+}
+@media(max-width:639px){
+ .demo-banner,.demo{font-size:10px;padding:6px 12px}
+ .catalog-copy h1{font-size:30px}
+ .catalog-copy p:not(.eyebrow){font-size:14px;line-height:1.55;margin:10px 0 0}
+ .featured-vehicle{grid-template-columns:80px 1fr;gap:12px}
+ .featured-caption{gap:8px}
+ .featured-caption>div>span{font-size:11px}
+ .featured-caption .primary-button{min-height:44px;font-size:12px;padding-inline:10px}
+ .section-heading>p{font-size:12px;line-height:1.5;margin-top:6px}
+ .filters{gap:10px;padding:12px;margin-bottom:20px}
+ .advanced-filters summary{font-size:12px;padding-inline:10px}
+ .advanced-filter-fields{position:static;width:100%;margin-top:10px;padding:0;border:0;box-shadow:none;background:transparent}
+ .advanced-filters[open]{grid-column:1/-1}
+ .advanced-filter-fields{grid-template-columns:1fr;gap:12px}
+ .filter-actions{flex-wrap:wrap}
+ .filter-actions .result-count{font-size:12px}
+ .card-info h3{font-size:24px}
+ .card-meta{margin-top:12px}
+ .card-price{font-size:23px}
+ .card-info{padding:20px}
+ .tile span{font-size:12px;line-height:1.5}
+ .tour-description{font-size:14px}
+ .viewer-controls{flex-wrap:wrap}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+/* Compact action labels keep the result count on the same row on phones. */
+.filter-compare-btn,.card-compare-btn{letter-spacing:0;text-transform:none}
+.filter-actions .filter-reset,.filter-actions .filter-compare-btn{font-size:12px}
+.filter-actions{gap:10px}
+.filter-actions .result-count{white-space:nowrap;font-size:11px}
+/* Feature names stay inside their buttons as the viewer narrows. */
+.feature-shortcuts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.feature-shortcuts button{min-width:0;width:100%;white-space:normal;overflow-wrap:break-word;line-height:1.35}
+@media(max-width:639px){.feature-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.filter-actions .result-count{width:auto;margin:0 0 0 auto}
+/* Theme checks include empty results and comparison actions. */
+.inventory-empty p{color:var(--muted)}
+.compare-card-btn-enquire{background:var(--accent);color:var(--ink);min-height:44px}
+.skip-link{background:var(--accent);color:var(--ink)}
