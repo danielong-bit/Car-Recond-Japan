@@ -248,31 +248,132 @@ const defaultConfig = {
   ]
 };
 
-// API: Get current config
+// Multi-vehicle configurations map
+const vehicleConfigsDir = path.join(__dirname, 'assets', 'configs');
+if (!fs.existsSync(vehicleConfigsDir)) {
+  fs.mkdirSync(vehicleConfigsDir, { recursive: true });
+}
+
+// Built-in vehicle catalog list
+const availableVehicles = [
+  { id: 'audi-s5', name: 'Audi S5 Avant', brand: 'Audi', price: 'RM 438,000', image: 'assets/audi-s5/main-car-16x9.jpg', page: 'audi.html' },
+  { id: 'alphard-z', name: 'Toyota Alphard Z', brand: 'Toyota', price: 'RM 329,000', image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=1200&q=80', page: '' },
+  { id: 'rx500h', name: 'Lexus RX 500h F Sport', brand: 'Lexus', price: 'RM 468,000', image: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1200&q=80', page: '' },
+  { id: 'gtr-premium', name: 'Nissan GT-R Premium', brand: 'Nissan', price: 'RM 598,000', image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80', page: '' },
+  { id: 'civic-type-r', name: 'Honda Civic Type R', brand: 'Honda', price: 'RM 328,000', image: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=80', page: '' },
+  { id: 'crown-crossover', name: 'Toyota Crown Crossover RS', brand: 'Toyota', price: 'RM 278,000', image: 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=1200&q=80', page: '' },
+  { id: 'lm500h', name: 'Lexus LM 500h Executive', brand: 'Lexus', price: 'RM 518,000', image: 'https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=1200&q=80', page: '' }
+];
+
+function getVehicleConfigPath(vehicleId = 'audi-s5') {
+  if (vehicleId === 'audi-s5') return configFilePath;
+  const safeId = vehicleId.replace(/[^a-zA-Z0-9_-]/g, '_');
+  return path.join(vehicleConfigsDir, `${safeId}.json`);
+}
+
+function getDefaultConfigForVehicle(vehicleId) {
+  const meta = availableVehicles.find(v => v.id === vehicleId);
+  if (!meta) return defaultConfig;
+  if (vehicleId === 'audi-s5') return defaultConfig;
+
+  // Template config for other inventory vehicles
+  return {
+    vehicleId: meta.id,
+    mainImage: meta.image,
+    vehicleName: meta.name,
+    vehicleSub: `${meta.brand} Japan recon luxury edition · Interactive detail model`,
+    price: meta.price,
+    hotspots: [
+      {
+        id: "engine",
+        label: "Powertrain",
+        type: "image",
+        x: "68%",
+        y: "48%",
+        imageSrc: meta.image,
+        title: `${meta.name} Powertrain`,
+        eyebrow: "ENGINE & HYBRID",
+        description: `Inspecting ${meta.name} powerplant and efficiency system.`,
+        specs: [["Model", meta.name], ["Power", "Japan Spec"], ["Condition", "Recon Verified"]]
+      },
+      {
+        id: "interior",
+        label: "Cabin",
+        type: "image",
+        x: "50%",
+        y: "42%",
+        imageSrc: meta.image,
+        title: `${meta.name} Executive Cockpit`,
+        eyebrow: "LUXURY CABIN",
+        description: `Premium materials and seating ergonomics.`,
+        specs: [["Steering", "Right-hand drive"], ["Cabin", "Japan Spec Grade"]]
+      },
+      {
+        id: "wheel",
+        label: "Wheels & Brakes",
+        type: "image",
+        x: "78%",
+        y: "74%",
+        imageSrc: meta.image,
+        title: "Alloy Wheel & Caliper Setup",
+        eyebrow: "CHASSIS & BRAKES",
+        description: "Alloy wheels and suspension package.",
+        specs: [["Wheels", "Factory Option Alloy"], ["Brakes", "Performance Calipers"]]
+      }
+    ]
+  };
+}
+
+// API: List all vehicles for admin selection
+app.get('/api/vehicles', (req, res) => {
+  return res.json(availableVehicles);
+});
+
+// API: Get current config (supports ?vehicleId= query param or default audi-s5)
 app.get('/api/config', (req, res) => {
   try {
-    if (fs.existsSync(configFilePath)) {
-      const data = fs.readFileSync(configFilePath, 'utf8');
+    const vId = req.query.vehicleId || 'audi-s5';
+    const filePath = getVehicleConfigPath(vId);
+    if (fs.existsSync(filePath)) {
+      const data = fs.readFileSync(filePath, 'utf8');
       return res.json(JSON.parse(data));
     }
-    return res.json(defaultConfig);
+    return res.json(getDefaultConfigForVehicle(vId));
   } catch (err) {
     console.error('Error reading config:', err);
     return res.json(defaultConfig);
   }
 });
 
-// API: Save config
+// API: Get config for specific vehicle
+app.get('/api/config/:vehicleId', (req, res) => {
+  try {
+    const vId = req.params.vehicleId || 'audi-s5';
+    const filePath = getVehicleConfigPath(vId);
+    if (fs.existsSync(filePath)) {
+      const data = fs.readFileSync(filePath, 'utf8');
+      return res.json(JSON.parse(data));
+    }
+    return res.json(getDefaultConfigForVehicle(vId));
+  } catch (err) {
+    console.error('Error reading vehicle config:', err);
+    return res.status(500).json({ error: 'Failed to read vehicle config' });
+  }
+});
+
+// API: Save config (supports body.vehicleId or ?vehicleId= query param)
 app.post('/api/config', (req, res) => {
   try {
     const newConfig = req.body;
     if (!newConfig || !Array.isArray(newConfig.hotspots)) {
       return res.status(400).json({ error: 'Invalid config structure' });
     }
-    const dir = path.dirname(configFilePath);
+    const vId = newConfig.vehicleId || req.query.vehicleId || 'audi-s5';
+    const targetFile = getVehicleConfigPath(vId);
+    const dir = path.dirname(targetFile);
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(configFilePath, JSON.stringify(newConfig, null, 2), 'utf8');
-    return res.json({ success: true, message: 'Configuration saved successfully' });
+    fs.writeFileSync(targetFile, JSON.stringify(newConfig, null, 2), 'utf8');
+    return res.json({ success: true, vehicleId: vId, message: `Configuration saved successfully for ${vId}` });
   } catch (err) {
     console.error('Error saving config:', err);
     return res.status(500).json({ error: 'Failed to save configuration' });
@@ -282,13 +383,273 @@ app.post('/api/config', (req, res) => {
 // API: Reset config to default
 app.post('/api/reset-config', (req, res) => {
   try {
-    if (fs.existsSync(configFilePath)) {
-      fs.unlinkSync(configFilePath);
+    const vId = req.query.vehicleId || req.body?.vehicleId || 'audi-s5';
+    const targetFile = getVehicleConfigPath(vId);
+    if (fs.existsSync(targetFile)) {
+      fs.unlinkSync(targetFile);
     }
-    return res.json({ success: true, config: defaultConfig, message: 'Reset to factory defaults' });
+    return res.json({ success: true, vehicleId: vId, config: getDefaultConfigForVehicle(vId), message: `Reset ${vId} to factory defaults` });
   } catch (err) {
     console.error('Error resetting config:', err);
     return res.status(500).json({ error: 'Failed to reset config' });
+  }
+});
+
+// Leads & Consultant Assignment Storage
+const leadsFilePath = path.join(vehicleConfigsDir, 'leads.json');
+const defaultConsultants = [
+  { id: 'kenji', name: 'Kenji Tanaka', role: 'Senior Recon Specialist', phone: '+6012-3889102', whatsapp: '60123889102', avatar: '👨‍💼', branch: 'Glenmarie 3S' },
+  { id: 'sarah', name: 'Sarah Lim', role: 'European Performance Consultant', phone: '+6016-5227183', whatsapp: '60165227183', avatar: '👩‍💼', branch: 'Petaling Jaya' },
+  { id: 'david', name: 'David Wong', role: 'JDM & Luxury MPV Lead', phone: '+6017-8912234', whatsapp: '60178912234', avatar: '👨‍💼', branch: 'Glenmarie 3S' },
+  { id: 'farhan', name: 'Farhan Razak', role: 'AP & Hire Purchase Specialist', phone: '+6019-3345519', whatsapp: '60193345519', avatar: '👨‍💼', branch: 'Damansara' }
+];
+
+function getStoredLeads() {
+  if (fs.existsSync(leadsFilePath)) {
+    try {
+      const data = fs.readFileSync(leadsFilePath, 'utf8');
+      return JSON.parse(data);
+    } catch (e) {
+      console.error('Error reading leads.json:', e);
+    }
+  }
+  const initialLeads = [
+    {
+      id: 'lead-101',
+      customerName: "Dato' Adrian Tan",
+      phone: "+6012-3988219",
+      vehicleId: "audi-s5",
+      vehicleName: "Audi S5 Avant (2021)",
+      price: "RM 438,000",
+      branch: "Glenmarie 3S Flagship",
+      preferredDate: "Tomorrow 2:30 PM",
+      inquiryType: "Showroom Viewing & Sound Test",
+      status: "confirmed",
+      assignedConsultantId: "kenji",
+      assignedConsultantName: "Kenji Tanaka",
+      notes: "Customer interested in B&O 3D audio demonstration and V6 TFSI exhaust note. High intent cash / fast loan buyer.",
+      createdAt: new Date(Date.now() - 3600000 * 2).toISOString()
+    },
+    {
+      id: 'lead-102',
+      customerName: "Kevin Chong",
+      phone: "+6017-8821940",
+      vehicleId: "alphard-z",
+      vehicleName: "Toyota Alphard Z (2023)",
+      price: "RM 329,000",
+      branch: "Petaling Jaya Showroom",
+      preferredDate: "This Saturday 11:00 AM",
+      inquiryType: "Family Test Drive & Trade-in",
+      status: "new",
+      assignedConsultantId: "sarah",
+      assignedConsultantName: "Sarah Lim",
+      notes: "Trade-in inquiry for 2018 Vellfire 2.5. Requests loan repayment calculation with 15% down payment.",
+      createdAt: new Date(Date.now() - 3600000 * 5).toISOString()
+    },
+    {
+      id: 'lead-103',
+      customerName: "Farid Kamaruddin",
+      phone: "+6019-2219483",
+      vehicleId: "gtr-premium",
+      vehicleName: "Nissan GT-R Premium (2022)",
+      price: "RM 598,000",
+      branch: "Glenmarie 3S Flagship",
+      preferredDate: "Friday 4:00 PM",
+      inquiryType: "Recon Inspection & AP Verification",
+      status: "contacted",
+      assignedConsultantId: "david",
+      assignedConsultantName: "David Wong",
+      notes: "Customer asked for auction inspection sheet grade 4.5+ verification and Brembo caliper condition check.",
+      createdAt: new Date(Date.now() - 3600000 * 18).toISOString()
+    }
+  ];
+  fs.writeFileSync(leadsFilePath, JSON.stringify(initialLeads, null, 2), 'utf8');
+  return initialLeads;
+}
+
+function saveStoredLeads(leads) {
+  fs.writeFileSync(leadsFilePath, JSON.stringify(leads, null, 2), 'utf8');
+}
+
+// API: Get leads and sales consultants
+app.get('/api/leads', (req, res) => {
+  try {
+    const leads = getStoredLeads();
+    return res.json({ success: true, leads, consultants: defaultConsultants });
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to fetch leads' });
+  }
+});
+
+// API: Add new lead / booking
+app.post('/api/leads', (req, res) => {
+  try {
+    const { customerName, phone, vehicleId, vehicleName, price, branch, preferredDate, inquiryType, notes } = req.body;
+    if (!customerName || !phone) {
+      return res.status(400).json({ error: 'Customer name and phone are required' });
+    }
+    const leads = getStoredLeads();
+    // Round-robin or default assign to Kenji
+    const defaultConsultant = defaultConsultants[leads.length % defaultConsultants.length];
+    const newLead = {
+      id: 'lead-' + Date.now().toString().slice(-6),
+      customerName,
+      phone,
+      vehicleId: vehicleId || 'audi-s5',
+      vehicleName: vehicleName || 'Audi S5 Avant',
+      price: price || 'RM 438,000',
+      branch: branch || 'Glenmarie 3S Flagship',
+      preferredDate: preferredDate || 'Pending confirmation',
+      inquiryType: inquiryType || 'Showroom Viewing',
+      status: 'new',
+      assignedConsultantId: defaultConsultant.id,
+      assignedConsultantName: defaultConsultant.name,
+      notes: notes || '',
+      createdAt: new Date().toISOString()
+    };
+    leads.unshift(newLead);
+    saveStoredLeads(leads);
+    return res.json({ success: true, lead: newLead, message: 'Lead recorded successfully' });
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to create lead' });
+  }
+});
+
+// API: Update lead assignment, status, or notes
+app.put('/api/leads/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    const { assignedConsultantId, status, notes } = req.body;
+    const leads = getStoredLeads();
+    const leadIndex = leads.findIndex(l => l.id === id);
+    if (leadIndex === -1) {
+      return res.status(404).json({ error: 'Lead not found' });
+    }
+    if (assignedConsultantId) {
+      const consultant = defaultConsultants.find(c => c.id === assignedConsultantId);
+      if (consultant) {
+        leads[leadIndex].assignedConsultantId = consultant.id;
+        leads[leadIndex].assignedConsultantName = consultant.name;
+      }
+    }
+    if (status) leads[leadIndex].status = status;
+    if (typeof notes === 'string') leads[leadIndex].notes = notes;
+    leads[leadIndex].updatedAt = new Date().toISOString();
+    saveStoredLeads(leads);
+    return res.json({ success: true, lead: leads[leadIndex], message: 'Lead updated successfully' });
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to update lead' });
+  }
+});
+
+// API: Duplicate Hotspot Template across vehicles
+app.post('/api/duplicate-template', (req, res) => {
+  try {
+    const { sourceVehicleId, targetVehicleId, mergeMode = 'replace' } = req.body;
+    if (!sourceVehicleId || !targetVehicleId) {
+      return res.status(400).json({ error: 'sourceVehicleId and targetVehicleId required' });
+    }
+    const sourcePath = getVehicleConfigPath(sourceVehicleId);
+    let sourceConfig;
+    if (fs.existsSync(sourcePath)) {
+      sourceConfig = JSON.parse(fs.readFileSync(sourcePath, 'utf8'));
+    } else {
+      sourceConfig = getDefaultConfigForVehicle(sourceVehicleId);
+    }
+
+    const targetPath = getVehicleConfigPath(targetVehicleId);
+    let targetConfig;
+    if (fs.existsSync(targetPath)) {
+      targetConfig = JSON.parse(fs.readFileSync(targetPath, 'utf8'));
+    } else {
+      targetConfig = getDefaultConfigForVehicle(targetVehicleId);
+    }
+
+    if (mergeMode === 'append') {
+      const existingIds = new Set(targetConfig.hotspots.map(h => h.id));
+      const newHotspots = sourceConfig.hotspots.filter(h => !existingIds.has(h.id));
+      targetConfig.hotspots = [...targetConfig.hotspots, ...newHotspots];
+    } else {
+      // Replace hotspots, keeping target vehicle mainImage, title, and metadata
+      targetConfig.hotspots = JSON.parse(JSON.stringify(sourceConfig.hotspots));
+    }
+
+    fs.writeFileSync(targetPath, JSON.stringify(targetConfig, null, 2), 'utf8');
+    return res.json({
+      success: true,
+      message: `Duplicated ${sourceConfig.hotspots.length} hotspots from ${sourceVehicleId} to ${targetVehicleId}`,
+      config: targetConfig
+    });
+  } catch (err) {
+    console.error('Error duplicating template:', err);
+    return res.status(500).json({ error: 'Failed to duplicate template' });
+  }
+});
+
+// API: Bulk import vehicles via parsed CSV
+app.post('/api/vehicles/import', (req, res) => {
+  try {
+    const { vehicles: importedList } = req.body;
+    if (!Array.isArray(importedList) || importedList.length === 0) {
+      return res.status(400).json({ error: 'No vehicles provided for import' });
+    }
+    importedList.forEach(item => {
+      const safeId = (item.id || item.model?.toLowerCase().replace(/[^a-z0-9]/g, '-') || 'recon-car-' + Date.now()).trim();
+      const existingIdx = availableVehicles.findIndex(v => v.id === safeId);
+      const vehicleObj = {
+        id: safeId,
+        name: item.name || `${item.brand || ''} ${item.model || ''}`.trim() || 'Japan Recon Special',
+        brand: item.brand || 'Import',
+        price: item.price ? (String(item.price).startsWith('RM') ? item.price : `RM ${parseInt(item.price, 10).toLocaleString()}`) : 'RM 298,000',
+        image: item.image || item.mainImage || 'assets/audi-s5/main-car-16x9.jpg',
+        page: item.page || '',
+        year: item.year || '2022',
+        mileage: item.mileage || '18,500 km',
+        engine: item.engine || '2.0L Turbo',
+        grade: item.grade || '4.5'
+      };
+      if (existingIdx >= 0) {
+        availableVehicles[existingIdx] = { ...availableVehicles[existingIdx], ...vehicleObj };
+      } else {
+        availableVehicles.push(vehicleObj);
+      }
+      // Ensure target config exists
+      const configPath = getVehicleConfigPath(safeId);
+      if (!fs.existsSync(configPath)) {
+        const defaultCfg = getDefaultConfigForVehicle(safeId);
+        fs.writeFileSync(configPath, JSON.stringify(defaultCfg, null, 2), 'utf8');
+      }
+    });
+
+    return res.json({
+      success: true,
+      importedCount: importedList.length,
+      totalVehicles: availableVehicles.length,
+      vehicles: availableVehicles
+    });
+  } catch (err) {
+    console.error('Error bulk importing vehicles:', err);
+    return res.status(500).json({ error: 'Failed to import vehicles' });
+  }
+});
+
+// API: Update single vehicle stock details (price, specs)
+app.post('/api/vehicles/update', (req, res) => {
+  try {
+    const { id, price, name, brand, mileage, engine, costData } = req.body;
+    if (!id) return res.status(400).json({ error: 'Vehicle ID required' });
+    const idx = availableVehicles.findIndex(v => v.id === id);
+    if (idx >= 0) {
+      if (price) availableVehicles[idx].price = price;
+      if (name) availableVehicles[idx].name = name;
+      if (brand) availableVehicles[idx].brand = brand;
+      if (mileage) availableVehicles[idx].mileage = mileage;
+      if (engine) availableVehicles[idx].engine = engine;
+      if (costData) availableVehicles[idx].costData = costData;
+    }
+    return res.json({ success: true, vehicle: availableVehicles[idx] || null });
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to update vehicle' });
   }
 });
 
@@ -300,8 +661,7 @@ app.post('/api/upload', (req, res) => {
       return res.status(400).json({ error: 'Missing fileName or fileData' });
     }
 
-    // Split base64 header if present (e.g. data:image/jpeg;base64,....)
-    const matches = fileData.match(/^data:([A-Za-z-+/]+);base64,(.+)$/);
+    const matches = fileData.match(/^data:([A-Za-z0-9+/.-]+);base64,(.+)$/);
     let buffer;
     if (matches && matches.length === 3) {
       buffer = Buffer.from(matches[2], 'base64');
@@ -309,7 +669,6 @@ app.post('/api/upload', (req, res) => {
       buffer = Buffer.from(fileData, 'base64');
     }
 
-    // Sanitize file name
     const sanitizedName = fileName.replace(/[^a-zA-Z0-9._-]/g, '_');
     const uniqueName = `${Date.now()}_${sanitizedName}`;
     const targetPath = path.join(uploadsDir, uniqueName);
@@ -339,6 +698,14 @@ app.get('/', (req, res) => {
 
 app.get('/audi', (req, res) => {
   res.sendFile(path.join(__dirname, 'audi.html'));
+});
+
+app.get('/calculator', (req, res) => {
+  res.sendFile(path.join(__dirname, 'calculator.html'));
+});
+
+app.get('/calculator.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'calculator.html'));
 });
 
 app.get('/admin', (req, res) => {

@@ -828,6 +828,251 @@ function initExperienceZoom() {
   }
 }
 
+// ==========================================================================
+// V6 TFSI Engine Exhaust Sound Synthesizer (Web Audio API)
+// ==========================================================================
+
+let audioCtx = null;
+let activeEngineSound = null;
+
+function getAudioContext() {
+  if (!audioCtx) {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (AudioContextClass) {
+      audioCtx = new AudioContextClass();
+    }
+  }
+  if (audioCtx && audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
+  return audioCtx;
+}
+
+function stopV6EngineSound() {
+  if (activeEngineSound) {
+    try {
+      activeEngineSound.stop();
+    } catch (e) {}
+    activeEngineSound = null;
+  }
+
+  const waveBars = document.getElementById("soundWaveBars");
+  const statusDot = document.getElementById("soundStatusDot");
+  const statusText = document.getElementById("soundStatusText");
+  const buttons = document.querySelectorAll(".exhaust-sound-player .sound-btn");
+
+  if (waveBars) waveBars.classList.remove("is-playing");
+  if (statusDot) statusDot.classList.remove("active");
+  buttons.forEach(b => b.classList.remove("is-active"));
+  if (statusText) statusText.textContent = "Playback stopped · System ready";
+}
+
+function playV6EngineSound(mode = "rev") {
+  stopV6EngineSound();
+  const ctx = getAudioContext();
+  if (!ctx) return;
+
+  const waveBars = document.getElementById("soundWaveBars");
+  const statusDot = document.getElementById("soundStatusDot");
+  const statusText = document.getElementById("soundStatusText");
+  const activeBtn = document.querySelector(`.exhaust-sound-player [data-mode="${mode}"]`);
+
+  if (waveBars) waveBars.classList.add("is-playing");
+  if (statusDot) statusDot.classList.add("active");
+  if (activeBtn) activeBtn.classList.add("is-active");
+
+  const now = ctx.currentTime;
+  const masterGain = ctx.createGain();
+  masterGain.connect(ctx.destination);
+
+  // V6 Engine fundamental frequency: at 800 RPM idle, V6 firing frequency = 800/60 * 3 = 40Hz
+  // Harmonic overtone profile for Audi 3.0 TFSI Hot-V Twin-Scroll exhaust rumble
+  const osc1 = ctx.createOscillator(); // Sub-bass rumble
+  const osc2 = ctx.createOscillator(); // Mid exhaust resonance
+  const osc3 = ctx.createOscillator(); // High rasp / turbo whistle
+
+  const gain1 = ctx.createGain();
+  const gain2 = ctx.createGain();
+  const gain3 = ctx.createGain();
+
+  // Noise generator for exhaust air hiss & crackle
+  const bufferSize = ctx.sampleRate * 2;
+  const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const output = noiseBuffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    output[i] = Math.random() * 2 - 1;
+  }
+  const whiteNoise = ctx.createBufferSource();
+  whiteNoise.buffer = noiseBuffer;
+  whiteNoise.loop = true;
+
+  const noiseFilter = ctx.createBiquadFilter();
+  noiseFilter.type = "bandpass";
+  noiseFilter.frequency.setValueAtTime(320, now);
+  noiseFilter.Q.setValueAtTime(3.0, now);
+
+  const noiseGain = ctx.createGain();
+  noiseGain.gain.setValueAtTime(0.04, now);
+
+  whiteNoise.connect(noiseFilter);
+  noiseFilter.connect(noiseGain);
+  noiseGain.connect(masterGain);
+
+  osc1.type = "sawtooth";
+  osc2.type = "triangle";
+  osc3.type = "sine";
+
+  // Lowpass filter for deep exhaust tone
+  const exhaustFilter = ctx.createBiquadFilter();
+  exhaustFilter.type = "lowpass";
+  exhaustFilter.frequency.setValueAtTime(220, now);
+  exhaustFilter.Q.setValueAtTime(2.5, now);
+
+  osc1.connect(gain1);
+  osc2.connect(gain2);
+  gain1.connect(exhaustFilter);
+  gain2.connect(exhaustFilter);
+  exhaustFilter.connect(masterGain);
+
+  osc3.connect(gain3);
+  gain3.connect(masterGain);
+
+  let duration = 5.0;
+
+  if (mode === "cold_start") {
+    if (statusText) statusText.textContent = "V6 TFSI Cold Start: Starter crank → 1,400 RPM roar";
+    duration = 5.5;
+
+    // Starter motor crank (0 to 0.7s)
+    osc1.frequency.setValueAtTime(28, now);
+    osc2.frequency.setValueAtTime(56, now);
+    osc3.frequency.setValueAtTime(110, now);
+    gain1.gain.setValueAtTime(0.08, now);
+    gain2.gain.setValueAtTime(0.05, now);
+    gain3.gain.setValueAtTime(0.02, now);
+    masterGain.gain.setValueAtTime(0.01, now);
+    masterGain.gain.linearRampToValueAtTime(0.12, now + 0.6);
+
+    // Ignition Roar at 0.75s (flare up to 75Hz / 1,500 RPM)
+    osc1.frequency.exponentialRampToValueAtTime(82, now + 1.1);
+    osc2.frequency.exponentialRampToValueAtTime(164, now + 1.1);
+    osc3.frequency.exponentialRampToValueAtTime(328, now + 1.1);
+    exhaustFilter.frequency.exponentialRampToValueAtTime(450, now + 1.1);
+    masterGain.gain.exponentialRampToValueAtTime(0.35, now + 1.1);
+
+    // Settle down to high-idle (55Hz / 1,100 RPM)
+    osc1.frequency.exponentialRampToValueAtTime(52, now + 3.0);
+    osc2.frequency.exponentialRampToValueAtTime(104, now + 3.0);
+    osc3.frequency.exponentialRampToValueAtTime(208, now + 3.0);
+    exhaustFilter.frequency.exponentialRampToValueAtTime(260, now + 3.0);
+    masterGain.gain.linearRampToValueAtTime(0.22, now + 3.2);
+
+    // Fade out at end
+    masterGain.gain.setValueAtTime(0.22, now + 4.8);
+    masterGain.gain.linearRampToValueAtTime(0.001, now + duration);
+
+  } else if (mode === "idle") {
+    if (statusText) statusText.textContent = "V6 TFSI Warm Idle: Steady 750 RPM quad-pipe purr";
+    duration = 6.0;
+
+    // Smooth deep idle rumble around 38Hz (760 RPM firing freq)
+    osc1.frequency.setValueAtTime(38, now);
+    osc2.frequency.setValueAtTime(76, now);
+    osc3.frequency.setValueAtTime(152, now);
+
+    gain1.gain.setValueAtTime(0.24, now);
+    gain2.gain.setValueAtTime(0.18, now);
+    gain3.gain.setValueAtTime(0.04, now);
+    exhaustFilter.frequency.setValueAtTime(180, now);
+
+    // Subtle gentle RPM fluctuation (+/- 1Hz)
+    osc1.frequency.linearRampToValueAtTime(40, now + 1.5);
+    osc1.frequency.linearRampToValueAtTime(37, now + 3.2);
+    osc1.frequency.linearRampToValueAtTime(39, now + 4.8);
+
+    masterGain.gain.setValueAtTime(0.01, now);
+    masterGain.gain.linearRampToValueAtTime(0.28, now + 0.4);
+    masterGain.gain.setValueAtTime(0.28, now + 5.3);
+    masterGain.gain.linearRampToValueAtTime(0.001, now + duration);
+
+  } else {
+    // Dynamic Rev mode with exhaust overrun pops
+    if (statusText) statusText.textContent = "V6 TFSI Dynamic Rev: Throttle burst → Overrun burble";
+    duration = 5.2;
+
+    // Start at warm idle (38Hz)
+    osc1.frequency.setValueAtTime(38, now);
+    osc2.frequency.setValueAtTime(76, now);
+    osc3.frequency.setValueAtTime(152, now);
+    masterGain.gain.setValueAtTime(0.15, now);
+
+    // Rapid throttle blip up to 180Hz (3,600 RPM)
+    osc1.frequency.exponentialRampToValueAtTime(190, now + 1.1);
+    osc2.frequency.exponentialRampToValueAtTime(380, now + 1.1);
+    osc3.frequency.exponentialRampToValueAtTime(760, now + 1.1);
+    exhaustFilter.frequency.exponentialRampToValueAtTime(680, now + 1.1);
+    masterGain.gain.linearRampToValueAtTime(0.42, now + 1.1);
+
+    // Secondary rev up to 220Hz (4,400 RPM)
+    osc1.frequency.exponentialRampToValueAtTime(235, now + 2.2);
+    osc2.frequency.exponentialRampToValueAtTime(470, now + 2.2);
+    osc3.frequency.exponentialRampToValueAtTime(940, now + 2.2);
+    exhaustFilter.frequency.exponentialRampToValueAtTime(850, now + 2.2);
+    masterGain.gain.linearRampToValueAtTime(0.48, now + 2.2);
+
+    // Overrun overrun burble & drop back to idle
+    osc1.frequency.exponentialRampToValueAtTime(42, now + 3.8);
+    osc2.frequency.exponentialRampToValueAtTime(84, now + 3.8);
+    osc3.frequency.exponentialRampToValueAtTime(168, now + 3.8);
+    exhaustFilter.frequency.exponentialRampToValueAtTime(210, now + 3.8);
+    masterGain.gain.linearRampToValueAtTime(0.22, now + 3.8);
+
+    masterGain.gain.setValueAtTime(0.22, now + 4.6);
+    masterGain.gain.linearRampToValueAtTime(0.001, now + duration);
+  }
+
+  whiteNoise.start(now);
+  osc1.start(now);
+  osc2.start(now);
+  osc3.start(now);
+
+  const stopTimer = setTimeout(() => {
+    stopV6EngineSound();
+  }, duration * 1000);
+
+  activeEngineSound = {
+    stop: () => {
+      clearTimeout(stopTimer);
+      try {
+        whiteNoise.stop();
+        osc1.stop();
+        osc2.stop();
+        osc3.stop();
+      } catch (e) {}
+    }
+  };
+}
+
+function initV6SoundPlayer() {
+  const coldStartBtn = document.getElementById("soundColdStartBtn");
+  const idleBtn = document.getElementById("soundIdleBtn");
+  const revBtn = document.getElementById("soundRevBtn");
+  const stopBtn = document.getElementById("soundStopBtn");
+
+  if (coldStartBtn) {
+    coldStartBtn.addEventListener("click", () => playV6EngineSound("cold_start"));
+  }
+  if (idleBtn) {
+    idleBtn.addEventListener("click", () => playV6EngineSound("idle"));
+  }
+  if (revBtn) {
+    revBtn.addEventListener("click", () => playV6EngineSound("rev"));
+  }
+  if (stopBtn) {
+    stopBtn.addEventListener("click", stopV6EngineSound);
+  }
+}
+
 // Dynamic Admin Configuration Loader
 async function loadDynamicConfig() {
   try {
@@ -873,6 +1118,7 @@ document.addEventListener("DOMContentLoaded", () => {
   resetOverviewCopy();
   preloadAssets();
   initExperienceZoom();
+  initV6SoundPlayer();
   loadDynamicConfig();
 });
 
@@ -882,6 +1128,7 @@ if (document.readyState === "interactive" || document.readyState === "complete")
   resetOverviewCopy();
   preloadAssets();
   initExperienceZoom();
+  initV6SoundPlayer();
   loadDynamicConfig();
 }
 

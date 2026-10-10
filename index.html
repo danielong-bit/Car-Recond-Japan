@@ -5,10 +5,10 @@
   <script>document.documentElement.classList.add('js-enabled');</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#07090b" />
-  <title>Japan Recon Car Gallery - Photo Gallery</title>
-  <meta name="description" content="Browse sample recon car photos and specifications. Open or share the separate Audi S5 Avant interactive tour." />
-  <meta property="og:title" content="Japan Recon Car Gallery - Photo Gallery" />
-  <meta property="og:description" content="Browse sample recon car photos and specifications. Open or share the separate Audi S5 Avant interactive tour." />
+  <title>Japan Recon Car Gallery — Interactive Demo</title>
+  <meta name="description" content="Interactive Japanese Recon Car Gallery & Showroom prototype featuring real vehicle details, spec explorer, and digital showroom experience." />
+  <meta property="og:title" content="Japan Recon Car Gallery — Interactive Demo" />
+  <meta property="og:description" content="Interactive Japanese Recon Car Gallery & Showroom prototype featuring real vehicle details, spec explorer, and digital showroom experience." />
 
   <link rel="stylesheet" href="style.css?v=20261007-4" />
   <link rel="stylesheet" href="enhancements.css?v=20261007-4">
@@ -29,8 +29,47 @@
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primaryNav">Menu</button>
     <nav id="primaryNav" aria-label="Primary navigation">
       <a href="#inventory">Inventory</a>
+      <a href="calculator.html" id="navCalcLink">Calculator</a>
       <a href="audi.html">Audi tour</a>
+      <a href="admin.html" id="navAdminLink" title="Manage car inventory, hotspots and leads in Admin Studio">Admin Studio ⚙️</a>
       <button class="ghost-button nav-compare-btn" id="navCompareBtn" type="button">Compare <span aria-hidden="true" class="nav-compare-count" id="navCompareBadge">0/2</span></button>
+      <div class="theme-switcher-wrap" id="themeSwitcherWrap">
+        <button type="button" class="theme-toggle-btn" id="themeToggleBtn" aria-expanded="false" aria-haspopup="true" title="Switch visual showroom design theme">
+          <span class="theme-btn-dot" aria-hidden="true"></span>
+          <span class="theme-btn-label">Theme: <strong id="currentThemeName">Tokyo Apex</strong></span>
+          <span class="theme-btn-caret" aria-hidden="true">▾</span>
+        </button>
+        <div class="theme-dropdown-menu" id="themeDropdownMenu" role="menu" hidden>
+          <button type="button" class="theme-opt-item active" data-set-theme="apex" role="menuitem">
+            <span class="theme-preview-chip chip-apex"></span>
+            <div>
+              <strong>Tokyo Apex Red</strong>
+              <small>极夜黑曜 · 赛道红 (Default)</small>
+            </div>
+          </button>
+          <button type="button" class="theme-opt-item" data-set-theme="sapphire" role="menuitem">
+            <span class="theme-preview-chip chip-sapphire"></span>
+            <div>
+              <strong>Sapphire Stealth</strong>
+              <small>深海夜空 · 冰蓝科技</small>
+            </div>
+          </button>
+          <button type="button" class="theme-opt-item" data-set-theme="gold" role="menuitem">
+            <span class="theme-preview-chip chip-gold"></span>
+            <div>
+              <strong>Kyoto Prestige</strong>
+              <small>京都极奢 · 尊爵黑金</small>
+            </div>
+          </button>
+          <button type="button" class="theme-opt-item" data-set-theme="platinum" role="menuitem">
+            <span class="theme-preview-chip chip-platinum"></span>
+            <div>
+              <strong>Platinum Pearl</strong>
+              <small>珍珠白金 · 极简典雅 (Light)</small>
+            </div>
+          </button>
+        </div>
+      </div>
       <button class="ghost-button" type="button" data-demo-action>Demo enquiry</button>
     </nav>
   </header>
@@ -43,80 +82,275 @@
         <p>Browse the photos and specifications. Open a dedicated vehicle tour when you want a closer look.</p>
         <a class="text-button browse-link" href="#inventory">Browse the gallery <span aria-hidden="true">↓</span></a>
       </div>
-      <article class="featured-vehicle">
-        <img id="featuredPhoto" src="assets/audi-s5/main-car-preview.jpg" alt="Audi S5 Avant in Daytona Grey" width="1280" height="720" fetchpriority="high" decoding="async">
-        <div class="featured-caption"><div><span>Featured tour</span><h2>Audi S5 Avant</h2></div><a class="primary-button" href="audi.html" data-interaction-link>View interaction <span aria-hidden="true">↗</span></a></div>
-      </article>
+      <div class="featured-vehicle featured-showcase-slider" id="featuredShowcaseSlider" role="region" aria-roledescription="carousel" aria-label="Featured Japan Recon Showcase Gallery">
+        <!-- Top HUD Bar -->
+        <div class="slider-hud-top">
+          <div class="slider-hud-badge">
+            <span class="slider-badge-pulse" aria-hidden="true"></span>
+            <span class="slider-badge-title">CURATED RECON SHOWCASE</span>
+          </div>
+          <div class="slider-hud-meta">
+            <span class="slider-index-counter" id="sliderCounter" aria-label="Slide 1 of 6">
+              <strong id="sliderCurrentNum">01</strong><span class="counter-sep">/</span><span>06</span>
+            </span>
+            <button type="button" class="slider-pause-btn" id="sliderPauseBtn" aria-label="Pause slide autoplay" title="Pause / Resume slide autoplay">
+              <span id="sliderPauseIcon" aria-hidden="true">⏸</span>
+              <span class="slider-pause-text" id="sliderPauseText">Pause</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Viewport & Track -->
+        <div class="showcase-slider-viewport" id="sliderViewport" tabindex="0" aria-label="Showcase slider. Use left and right arrow keys to change slides">
+          <div class="showcase-slider-track" id="sliderTrack">
+            <!-- Slide 1: Audi S5 Avant (Retains #featuredPhoto) -->
+            <article class="showcase-slide active" data-slide-index="0" data-vehicle-id="audi-s5" aria-roledescription="slide" aria-label="Slide 1 of 6: Audi S5 Avant">
+              <div class="slide-media-wrap">
+                <img id="featuredPhoto" class="slide-img" src="assets/audi-s5/main-car-preview.jpg" alt="Audi S5 Avant in Daytona Grey" width="1280" height="720" fetchpriority="high" decoding="async">
+                <div class="slide-gradient-scrim"></div>
+              </div>
+              <div class="slide-content-overlay">
+                <div class="slide-tag-row">
+                  <span class="slide-chip-accent">★ FEATURED TOUR</span>
+                  <span class="slide-chip-spec">349 HP · V6 Turbo</span>
+                  <span class="slide-chip-spec">Quattro AWD</span>
+                </div>
+                <div class="slide-title-row">
+                  <div class="slide-title-wrap">
+                    <span class="slide-brand">Audi</span>
+                    <h2 class="slide-model">S5 Avant (2025)</h2>
+                  </div>
+                  <div class="slide-price-tag">RM 438,000</div>
+                </div>
+                <div class="slide-actions-row">
+                  <a class="primary-button slide-primary-btn" href="audi.html" data-interaction-link>View 16:9 Tour <span aria-hidden="true">↗</span></a>
+                  <button type="button" class="ghost-button slide-quick-btn" data-inspect-vehicle="audi-s5">Quick Specs 🔍</button>
+                  <button type="button" class="ghost-button slide-calc-btn" data-calc-vehicle="audi-s5">Simulate Loan ↘</button>
+                </div>
+              </div>
+            </article>
+
+            <!-- Slide 2: Toyota Alphard Z -->
+            <article class="showcase-slide" data-slide-index="1" data-vehicle-id="alphard-z" aria-roledescription="slide" aria-label="Slide 2 of 6: Toyota Alphard Z">
+              <div class="slide-media-wrap">
+                <img class="slide-img" src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=1200&q=80" alt="Toyota Alphard Z Executive MPV in Pearl White" width="1200" height="675" loading="lazy" decoding="async">
+                <div class="slide-gradient-scrim"></div>
+              </div>
+              <div class="slide-content-overlay">
+                <div class="slide-tag-row">
+                  <span class="slide-chip-accent">EXECUTIVE LOUNGE</span>
+                  <span class="slide-chip-spec">205 HP · 2.5L Hybrid</span>
+                  <span class="slide-chip-spec">Captain Seats</span>
+                </div>
+                <div class="slide-title-row">
+                  <div class="slide-title-wrap">
+                    <span class="slide-brand">Toyota</span>
+                    <h2 class="slide-model">Alphard Z (2024)</h2>
+                  </div>
+                  <div class="slide-price-tag">RM 329,000</div>
+                </div>
+                <div class="slide-actions-row">
+                  <button type="button" class="primary-button slide-primary-btn" data-inspect-vehicle="alphard-z">Inspect Details 🔍</button>
+                  <button type="button" class="ghost-button slide-calc-btn" data-calc-vehicle="alphard-z">Simulate Loan ↘</button>
+                </div>
+              </div>
+            </article>
+
+            <!-- Slide 3: Nissan GT-R Premium -->
+            <article class="showcase-slide" data-slide-index="2" data-vehicle-id="gtr-premium" aria-roledescription="slide" aria-label="Slide 3 of 6: Nissan GT-R Premium">
+              <div class="slide-media-wrap">
+                <img class="slide-img" src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80" alt="Nissan GT-R Premium in Stealth Grey" width="1200" height="675" loading="lazy" decoding="async">
+                <div class="slide-gradient-scrim"></div>
+              </div>
+              <div class="slide-content-overlay">
+                <div class="slide-tag-row">
+                  <span class="slide-chip-accent">SUPERCAR RECON</span>
+                  <span class="slide-chip-spec">565 HP · 3.8L Twin-Turbo</span>
+                  <span class="slide-chip-spec">Brembo 6-Piston</span>
+                </div>
+                <div class="slide-title-row">
+                  <div class="slide-title-wrap">
+                    <span class="slide-brand">Nissan</span>
+                    <h2 class="slide-model">GT-R Premium (2023)</h2>
+                  </div>
+                  <div class="slide-price-tag">RM 598,000</div>
+                </div>
+                <div class="slide-actions-row">
+                  <button type="button" class="primary-button slide-primary-btn" data-inspect-vehicle="gtr-premium">Inspect Details 🔍</button>
+                  <button type="button" class="ghost-button slide-calc-btn" data-calc-vehicle="gtr-premium">Simulate Loan ↘</button>
+                </div>
+              </div>
+            </article>
+
+            <!-- Slide 4: Lexus RX 500h F Sport -->
+            <article class="showcase-slide" data-slide-index="3" data-vehicle-id="rx500h" aria-roledescription="slide" aria-label="Slide 4 of 6: Lexus RX 500h F Sport">
+              <div class="slide-media-wrap">
+                <img class="slide-img" src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1200&q=80" alt="Lexus RX 500h F Sport in Sonic Chrome" width="1200" height="675" loading="lazy" decoding="async">
+                <div class="slide-gradient-scrim"></div>
+              </div>
+              <div class="slide-content-overlay">
+                <div class="slide-tag-row">
+                  <span class="slide-chip-accent">PERFORMANCE SUV</span>
+                  <span class="slide-chip-spec">371 HP · Turbo Hybrid</span>
+                  <span class="slide-chip-spec">DIRECT4 AWD</span>
+                </div>
+                <div class="slide-title-row">
+                  <div class="slide-title-wrap">
+                    <span class="slide-brand">Lexus</span>
+                    <h2 class="slide-model">RX 500h F Sport (2024)</h2>
+                  </div>
+                  <div class="slide-price-tag">RM 468,000</div>
+                </div>
+                <div class="slide-actions-row">
+                  <button type="button" class="primary-button slide-primary-btn" data-inspect-vehicle="rx500h">Inspect Details 🔍</button>
+                  <button type="button" class="ghost-button slide-calc-btn" data-calc-vehicle="rx500h">Simulate Loan ↘</button>
+                </div>
+              </div>
+            </article>
+
+            <!-- Slide 5: Honda Civic Type R -->
+            <article class="showcase-slide" data-slide-index="4" data-vehicle-id="civic-type-r" aria-roledescription="slide" aria-label="Slide 5 of 6: Honda Civic Type R">
+              <div class="slide-media-wrap">
+                <img class="slide-img" src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=80" alt="Honda Civic Type R in Championship White" width="1200" height="675" loading="lazy" decoding="async">
+                <div class="slide-gradient-scrim"></div>
+              </div>
+              <div class="slide-content-overlay">
+                <div class="slide-tag-row">
+                  <span class="slide-chip-accent">TRACK EDITION</span>
+                  <span class="slide-chip-spec">315 HP · 6-Speed Manual</span>
+                  <span class="slide-chip-spec">Brembo Brakes</span>
+                </div>
+                <div class="slide-title-row">
+                  <div class="slide-title-wrap">
+                    <span class="slide-brand">Honda</span>
+                    <h2 class="slide-model">Civic Type R FL5 (2023)</h2>
+                  </div>
+                  <div class="slide-price-tag">RM 328,000</div>
+                </div>
+                <div class="slide-actions-row">
+                  <button type="button" class="primary-button slide-primary-btn" data-inspect-vehicle="civic-type-r">Inspect Details 🔍</button>
+                  <button type="button" class="ghost-button slide-calc-btn" data-calc-vehicle="civic-type-r">Simulate Loan ↘</button>
+                </div>
+              </div>
+            </article>
+
+            <!-- Slide 6: Lexus LM 500h -->
+            <article class="showcase-slide" data-slide-index="5" data-vehicle-id="lm500h" aria-roledescription="slide" aria-label="Slide 6 of 6: Lexus LM 500h">
+              <div class="slide-media-wrap">
+                <img class="slide-img" src="https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=1200&q=80" alt="Lexus LM 500h in Graphite Black" width="1200" height="675" loading="lazy" decoding="async">
+                <div class="slide-gradient-scrim"></div>
+              </div>
+              <div class="slide-content-overlay">
+                <div class="slide-tag-row">
+                  <span class="slide-chip-accent">ULTRA LUXURY LOUNGE</span>
+                  <span class="slide-chip-spec">366 HP · Turbo Hybrid</span>
+                  <span class="slide-chip-spec">48" Rear Screen</span>
+                </div>
+                <div class="slide-title-row">
+                  <div class="slide-title-wrap">
+                    <span class="slide-brand">Lexus</span>
+                    <h2 class="slide-model">LM 500h Executive (2024)</h2>
+                  </div>
+                  <div class="slide-price-tag">RM 518,000</div>
+                </div>
+                <div class="slide-actions-row">
+                  <button type="button" class="primary-button slide-primary-btn" data-inspect-vehicle="lm500h">Inspect Details 🔍</button>
+                  <button type="button" class="ghost-button slide-calc-btn" data-calc-vehicle="lm500h">Simulate Loan ↘</button>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- Slider Left / Right Navigation Buttons -->
+          <button type="button" class="slider-nav-btn slider-prev-btn" id="sliderPrevBtn" aria-label="Previous showcase slide" title="Previous Slide (←)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <button type="button" class="slider-nav-btn slider-next-btn" id="sliderNextBtn" aria-label="Next showcase slide" title="Next Slide (→)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+
+        <!-- Slider Bottom Footer: Indicator Dots & Progress Bar -->
+        <div class="slider-footer-bar">
+          <div class="slider-indicators" id="sliderDots" role="tablist" aria-label="Select showcase slide">
+            <button type="button" class="slider-dot active" data-dot-index="0" role="tab" aria-selected="true" aria-label="Go to slide 1: Audi S5 Avant"></button>
+            <button type="button" class="slider-dot" data-dot-index="1" role="tab" aria-selected="false" aria-label="Go to slide 2: Toyota Alphard Z"></button>
+            <button type="button" class="slider-dot" data-dot-index="2" role="tab" aria-selected="false" aria-label="Go to slide 3: Nissan GT-R Premium"></button>
+            <button type="button" class="slider-dot" data-dot-index="3" role="tab" aria-selected="false" aria-label="Go to slide 4: Lexus RX 500h"></button>
+            <button type="button" class="slider-dot" data-dot-index="4" role="tab" aria-selected="false" aria-label="Go to slide 5: Honda Civic Type R"></button>
+            <button type="button" class="slider-dot" data-dot-index="5" role="tab" aria-selected="false" aria-label="Go to slide 6: Lexus LM 500h"></button>
+          </div>
+          <div class="slider-progress-track" aria-hidden="true">
+            <div class="slider-progress-bar" id="sliderProgressBar"></div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="inventory-section" id="inventory" aria-labelledby="inventory-title">
       <div class="section-heading">
         <div>
-          <h2 id="inventory-title">Browse the gallery</h2>
+          <h2 id="inventory-title">Gallery & Inventory</h2>
         </div>
-        <p>Sample vehicles and prices for demonstration. Confirm actual stock and specifications before purchase.</p>
+        <p>Explore verified recon inventory, benchmark specifications, and compare models. Calculate financing anytime via our dedicated calculator.</p>
       </div>
 
-      <div class="filters" aria-label="Inventory filters">
-        <label class="search-label">Search make or model
-          <input id="searchFilter" enterkeyhint="search" type="search" placeholder="Try Audi S5 or Toyota" autocomplete="off">
-        </label>
-        <label>Brand
-          <select id="brandFilter">
-            <option value="all">All brands</option>
-            <option value="Audi">Audi</option>
-            <option value="Toyota">Toyota</option>
-            <option value="Lexus">Lexus</option>
-            <option value="Nissan">Nissan</option>
-            <option value="Honda">Honda</option>
-          </select>
-        </label>
-        <label>Body
-          <select id="bodyFilter">
-            <option value="all">All body types</option>
-            <option value="MPV">MPV</option>
-            <option value="SUV">SUV</option>
-            <option value="Coupe">Coupe</option>
-            <option value="Sedan">Sedan</option>
-            <option value="Wagon">Wagon / estate</option>
-          </select>
-        </label>
-        <label>Sort
-          <select id="sortFilter">
-            <option value="default">Featured</option>
-            <option value="price-asc">Price: Low to High</option>
-            <option value="price-desc">Price: High to Low</option>
-            <option value="year-desc">Year: Newest First</option>
-            <option value="year-asc">Year: Oldest First</option>
-          </select>
-        </label>
-        <details class="advanced-filters"><summary>More filters<span id="advancedFilterCount" hidden></span></summary><div class="advanced-filter-fields">        <label>Year
-          <select id="yearFilter">
-            <option value="all">Any year</option>
-            <option value="2024">2024+</option>
-            <option value="2023">2023+</option>
-            <option value="2022">2022+</option>
-          </select>
-        </label>
-        <label>Mileage
-          <select id="mileageFilter"><option value="all">Any mileage</option><option value="10000">Up to 10,000 km</option><option value="20000">Up to 20,000 km</option><option value="30000">Up to 30,000 km</option></select>
-        </label>
-        <label>Power
-          <select id="powerFilter"><option value="all">Any power</option><option value="300">300 hp or more</option><option value="400">400 hp or more</option></select>
-        </label>
-</div></details>
-        <div class="filter-actions">
-        <button class="filter-reset" id="resetFilters" type="button">Reset</button>
-        <button class="filter-compare-btn" id="filterCompareBtn" type="button">
-          <span aria-hidden="true" class="compare-icon">⇄</span>
-          <span>Compare</span>
-          <span aria-hidden="true" class="compare-count-badge" id="filterCompareBadge">0/2</span>
-        </button>
-        <span id="resultCount" class="result-count" aria-live="polite"></span>
-        </div>
-      </div>
+      <div class="inventory-layout-wrapper">
+        <div class="inventory-main-col">
+          <div class="filters" aria-label="Inventory filters">
+            <label class="search-label">Search make or model
+              <input id="searchFilter" enterkeyhint="search" type="search" placeholder="Try Audi S5 or Toyota" autocomplete="off">
+            </label>
+            <label>Brand
+              <select id="brandFilter">
+                <option value="all">All brands</option>
+                <option value="Audi">Audi</option>
+                <option value="Toyota">Toyota</option>
+                <option value="Lexus">Lexus</option>
+                <option value="Nissan">Nissan</option>
+                <option value="Honda">Honda</option>
+              </select>
+            </label>
+            <label>Body
+              <select id="bodyFilter">
+                <option value="all">All body types</option>
+                <option value="MPV">MPV</option>
+                <option value="SUV">SUV</option>
+                <option value="Coupe">Coupe</option>
+                <option value="Sedan">Sedan</option>
+                <option value="Wagon">Wagon / estate</option>
+              </select>
+            </label>
+            <details class="advanced-filters"><summary>More filters<span id="advancedFilterCount" hidden></span></summary><div class="advanced-filter-fields">        <label>Year
+              <select id="yearFilter">
+                <option value="all">Any year</option>
+                <option value="2024">2024+</option>
+                <option value="2023">2023+</option>
+                <option value="2022">2022+</option>
+              </select>
+            </label>
+            <label>Mileage
+              <select id="mileageFilter"><option value="all">Any mileage</option><option value="10000">Up to 10,000 km</option><option value="20000">Up to 20,000 km</option><option value="30000">Up to 30,000 km</option></select>
+            </label>
+            <label>Power
+              <select id="powerFilter"><option value="all">Any power</option><option value="300">300 hp or more</option><option value="400">400 hp or more</option></select>
+            </label>
+    </div></details>
+            <div class="filter-actions">
+            <button class="filter-reset" id="resetFilters" type="button">Reset</button>
+            <button class="filter-compare-btn" id="filterCompareBtn" type="button">
+              <span aria-hidden="true" class="compare-icon">⇄</span>
+              <span>Compare</span>
+              <span aria-hidden="true" class="compare-count-badge" id="filterCompareBadge">0/2</span>
+            </button>
+            <span id="resultCount" class="result-count" aria-live="polite"></span>
+            </div>
+          </div>
 
-      <div class="inventory-grid" id="inventoryGrid"></div>
+          <div class="inventory-grid" id="inventoryGrid"></div>
+        </div>
+
+      </div>
     </section>
 
     <section class="catalog-note" aria-label="About the showroom">
@@ -137,7 +371,11 @@
       <div class="dialog-topline"><span>DEMO VEHICLE DETAIL</span><span>FICTIONAL DATA</span></div>
 
       <div class="vehicle-layout">
-        <div class="vehicle-media"><img id="vehiclePhoto" class="vehicle-photo" alt="" width="1280" height="720"><p class="photo-note">Sample photography. Vehicle details are unverified.</p></div>
+        <div class="vehicle-media">
+          <div class="vehicle-photo-showcase" id="vehiclePhotoShowcase">
+            <img id="vehiclePhoto" class="vehicle-photo" alt="" width="1280" height="720">
+          </div>
+        </div>
 
         <div class="vehicle-copy">
           <p class="eyebrow" id="vehicleMeta">2024 · DEMO SPEC</p>
@@ -153,9 +391,44 @@
             <div class="spec-groups" id="specGroups"></div>
           </details>
 
-          <div class="demo-action-box">
-            <p><strong>Demo boundary:</strong> this prototype does not submit a real enquiry, reservation or payment.</p>
-            <button class="primary-button wide" type="button" data-demo-action>Preview demo enquiry</button>
+          <!-- Clean Car Detail Actions & Quick Financing Callout (Calculator moved to homepage beside inventory) -->
+          <div class="vehicle-dialog-actions-card">
+            <div class="dialog-calc-callout" id="dialogCalcCallout">
+              <div class="dialog-calc-callout-text">
+                <span class="dialog-calc-pill">ESTIMATED RECON FINANCING</span>
+                <div class="dialog-calc-est-row">
+                  <span class="dialog-calc-label">Monthly Installment:</span>
+                  <strong class="dialog-calc-price" id="dialogEstMonthly">RM 4,450 / mo</strong>
+                </div>
+                <p class="dialog-calc-hint" id="dialogEstDetails">Est. 10% down · 7-year tenure · 2.50% p.a.</p>
+              </div>
+              <button type="button" class="dialog-calc-jump-btn" id="dialogJumpToCalcBtn" title="Open full interactive loan & amortization calculator for this car">
+                <span>Open in Full Financing Calculator ↘</span>
+              </button>
+            </div>
+
+            <!-- Booking and WhatsApp Direct Actions inside Vehicle Dialog -->
+            <button class="appointment-enquiry-button" id="dialogBookViewingBtn" type="button" aria-label="Book Showroom Physical Viewing Appointment">
+              <span class="action-btn-icon" aria-hidden="true">📅</span>
+              <div class="action-btn-text">
+                <strong>Book Showroom Viewing & Test Drive</strong>
+                <small id="dialogViewingSub">Reserve physical inspection slot · Glenmarie / KL / JB Branches</small>
+              </div>
+              <span class="action-btn-arrow" aria-hidden="true">→</span>
+            </button>
+
+            <button class="whatsapp-enquiry-button" id="dialogWhatsappBtn" type="button" aria-label="WhatsApp 1-Click Enquiry with Pre-filled Stock Data">
+              <span class="whatsapp-btn-icon" aria-hidden="true">💬</span>
+              <div class="whatsapp-btn-text">
+                <strong>WhatsApp 1-Click Enquiry</strong>
+                <small id="dialogWhatsappSummary">Chat with dealer · Pre-filled stock specs & quotation</small>
+              </div>
+              <span class="whatsapp-btn-arrow" aria-hidden="true">→</span>
+            </button>
+
+            <div class="demo-sub-action">
+              <button class="ghost-button demo-preview-link" type="button" data-demo-action>Prototype details & disclaimers</button>
+            </div>
           </div>
         </div>
       </div>
@@ -172,6 +445,95 @@
     </div>
   </dialog>
 
+  <!-- Showroom Viewing & Test Drive Appointment Modal -->
+  <dialog id="appointmentDialog" class="appointment-dialog" aria-labelledby="appointmentTitle">
+    <div class="appointment-dialog-box">
+      <button class="dialog-close" id="closeAppointmentDialog" type="button" aria-label="Close Appointment Booking">×</button>
+      <div class="appointment-header">
+        <span class="appointment-badge">PHYSICAL INSPECTION RESERVATION</span>
+        <h2 id="appointmentTitle">Schedule Showroom Viewing</h2>
+        <p class="appointment-sub" id="appointmentVehicleName">Audi S5 Avant · Japan Reconditioned Example</p>
+      </div>
+
+      <form class="appointment-form" id="appointmentForm" onsubmit="return false;">
+        <div class="appointment-form-grid">
+          <div class="app-field">
+            <label for="appBranchSelect">Preferred Showroom Branch</label>
+            <select id="appBranchSelect" class="calc-select" required>
+              <option value="glenmarie" selected>📍 Glenmarie HQ Showroom (Selangor)</option>
+              <option value="kl_jalan_ampang">📍 Kuala Lumpur Flagship (Jalan Ampang)</option>
+              <option value="jb_tebrau">📍 Johor Bahru Hub (Tebrau City)</option>
+              <option value="penang_autocity">📍 Penang Auto-City Hub (Juru)</option>
+            </select>
+          </div>
+
+          <div class="app-field">
+            <label for="appDateInput">Preferred Date</label>
+            <input type="date" id="appDateInput" class="calc-input" required>
+          </div>
+
+          <div class="app-field">
+            <label for="appTimeSlotSelect">Viewing Time Slot</label>
+            <select id="appTimeSlotSelect" class="calc-select" required>
+              <option value="10:00 AM">10:00 AM - 11:30 AM (Morning Slot)</option>
+              <option value="11:30 AM">11:30 AM - 01:00 PM (Noon Slot)</option>
+              <option value="02:30 PM" selected>02:30 PM - 04:00 PM (Afternoon Slot)</option>
+              <option value="04:30 PM">04:30 PM - 06:00 PM (Evening Slot)</option>
+            </select>
+          </div>
+
+          <div class="app-field">
+            <label for="appCustomerName">Full Name</label>
+            <input type="text" id="appCustomerName" class="calc-input" placeholder="e.g. Jason Tan" required>
+          </div>
+
+          <div class="app-field">
+            <label for="appCustomerPhone">WhatsApp / Mobile Number</label>
+            <input type="tel" id="appCustomerPhone" class="calc-input" placeholder="e.g. +6012-3456789" required>
+          </div>
+
+          <div class="app-field">
+            <label for="appServiceType">Appointment Goal</label>
+            <select id="appServiceType" class="calc-select">
+              <option value="viewing_testdrive" selected>Physical Inspection & Test Drive</option>
+              <option value="auction_sheet">Auction Sheet & Japan Mileage Verification</option>
+              <option value="tradein_val">Trade-In Vehicle Valuation</option>
+              <option value="loan_approval">Bank Loan Pre-Approval Consultation</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="appointment-notes">
+          <label for="appNotes">Special Requests / Questions (Optional)</label>
+          <input type="text" id="appNotes" class="calc-input" placeholder="e.g. Please ready auction sheet, engine bay start-up test">
+        </div>
+
+        <div class="appointment-footer">
+          <button type="submit" class="primary-button appointment-submit-btn" id="confirmAppointmentBtn">
+            <span>✓ Confirm & Reserve Slot</span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Confirmation state view -->
+      <div class="appointment-success-view" id="appointmentSuccessView" style="display: none;">
+        <div class="success-icon">✓</div>
+        <h3>Viewing Appointment Reserved!</h3>
+        <p id="successSummaryText">Your slot has been reserved. Our sales consultant will verify vehicle keys and preparation prior to your arrival.</p>
+        <div class="success-actions">
+          <button type="button" class="whatsapp-enquiry-button" id="sendAppConfirmationWhatsAppBtn">
+            <span class="whatsapp-btn-icon">💬</span>
+            <div class="whatsapp-btn-text">
+              <strong>Confirm via WhatsApp</strong>
+              <small>Send reservation details directly to showroom desk</small>
+            </div>
+          </button>
+          <button type="button" class="ghost-button" id="closeSuccessAppointmentBtn">Done</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
   <dialog id="compareDialog" class="compare-dialog" aria-labelledby="compareTitle">
     <div class="compare-dialog-shell">
       <div class="compare-topline">
@@ -182,7 +544,7 @@
         <div class="compare-actions-bar">
           <div class="compare-view-toggle" role="tablist" aria-label="Comparison filter">
             <button type="button" class="compare-tab-btn active" id="cmpViewAll" role="tab" aria-selected="true">All Specs</button>
-            <button type="button" class="compare-tab-btn" id="cmpViewDiff" role="tab" aria-selected="false">Highlight Differences</button>
+            <button type="button" class="compare-tab-btn" id="cmpViewDiff" role="tab" aria-selected="false">Highlight Differences <span class="diff-count-pill" id="diffCountPill"></span></button>
           </div>
           <button class="dialog-close compare-close-btn" id="closeCompareDialog" type="button" aria-label="Close vehicle comparison">×</button>
         </div>
@@ -225,6 +587,7 @@
     <span id="compareToastMsg">Maximum 2 vehicles can be compared simultaneously.</span>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="app.js?v=20261007-4"></script>
   <script src="site-ui.js?v=20261007-4"></script>
 </body>

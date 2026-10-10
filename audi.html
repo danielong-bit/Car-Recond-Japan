@@ -21,6 +21,7 @@
     <nav id="primaryNav" aria-label="Primary navigation">
       <a href="#experience">Experience</a>
       <a href="#gallery">Gallery</a>
+      <a href="calculator.html?vehicle=audi-s5" id="navCalcLink">Calculator</a>
       <a href="./#inventory">All cars</a>
     </nav>
   </header>
@@ -87,6 +88,40 @@
 
             <div class="tour-subnav" id="tourSubnav" aria-label="Detail options"></div>
             <details class="part-specification"><summary>Part details</summary><div class="tour-specs" id="tourSpecs"></div></details>
+
+            <!-- V6 TFSI Engine Exhaust Sound Player -->
+            <div class="exhaust-sound-player" id="exhaustSoundPlayer" aria-label="3.0L V6 TFSI Engine Exhaust Sound Simulator">
+              <div class="sound-player-header">
+                <div class="sound-player-titles">
+                  <span class="sound-eyebrow">ACOUSTIC DEMO</span>
+                  <strong class="sound-title">3.0L V6 TFSI Exhaust Sound</strong>
+                </div>
+                <div class="sound-wave-bars" id="soundWaveBars" aria-hidden="true">
+                  <span></span><span></span><span></span><span></span><span></span>
+                </div>
+              </div>
+              <div class="sound-controls">
+                <button type="button" class="sound-btn" id="soundColdStartBtn" data-mode="cold_start">
+                  <span class="sound-btn-icon">⚡</span>
+                  <span>Cold Start</span>
+                </button>
+                <button type="button" class="sound-btn" id="soundIdleBtn" data-mode="idle">
+                  <span class="sound-btn-icon">〰️</span>
+                  <span>Idle Purr</span>
+                </button>
+                <button type="button" class="sound-btn" id="soundRevBtn" data-mode="rev">
+                  <span class="sound-btn-icon">🔥</span>
+                  <span>Dynamic Rev</span>
+                </button>
+                <button type="button" class="sound-btn sound-stop-btn" id="soundStopBtn" aria-label="Stop sound playback" title="Stop Sound">
+                  <span>⏹</span>
+                </button>
+              </div>
+              <div class="sound-status-bar">
+                <span class="sound-status-dot" id="soundStatusDot"></span>
+                <span class="sound-status-text" id="soundStatusText">Stereo Synthesizer Ready (Hot-V Twin-Scroll V6)</span>
+              </div>
+            </div>
 
             <button class="detail-back" id="detailBack" type="button" aria-label="Back to vehicle overview">
               <span>←</span> Back to car

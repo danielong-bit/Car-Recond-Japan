@@ -227,6 +227,7 @@ const DEFAULT_CONFIG = {
 };
 
 // Studio State
+let currentVehicleId = "audi-s5";
 let currentConfig = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
 let selectedHotspotId = "engine";
 let currentMode = "edit"; // 'edit' or 'test'
@@ -275,10 +276,33 @@ const quickMainImageUpload = document.getElementById("quickMainImageUpload");
 // Inspector Tabs
 const tabHotspotBtn = document.getElementById("tabHotspotBtn");
 const tabVehicleBtn = document.getElementById("tabVehicleBtn");
+const tabLeadsBtn = document.getElementById("tabLeadsBtn");
+const tabHomepageBtn = document.getElementById("tabHomepageBtn");
+const tabHistoryBtn = document.getElementById("tabHistoryBtn");
+const tabToolsBtn = document.getElementById("tabToolsBtn");
 const tabJsonBtn = document.getElementById("tabJsonBtn");
+
 const panelHotspot = document.getElementById("panelHotspot");
 const panelVehicle = document.getElementById("panelVehicle");
+const panelLeads = document.getElementById("panelLeads");
+const panelHomepage = document.getElementById("panelHomepage");
+const panelHistory = document.getElementById("panelHistory");
+const panelTools = document.getElementById("panelTools");
 const panelJson = document.getElementById("panelJson");
+
+// Mobile Subnav
+const adminMobileNav = document.getElementById("adminMobileNav");
+const leadsTabBadge = document.getElementById("leadsTabBadge");
+const mobileLeadsBadge = document.getElementById("mobileLeadsBadge");
+
+// History Undo / Redo Elements
+const undoBtn = document.getElementById("undoBtn");
+const redoBtn = document.getElementById("redoBtn");
+const panelUndoBtn = document.getElementById("panelUndoBtn");
+const panelRedoBtn = document.getElementById("panelRedoBtn");
+const createSnapshotBtn = document.getElementById("createSnapshotBtn");
+const historyTimeline = document.getElementById("historyTimeline");
+const historyStepCountText = document.getElementById("historyStepCountText");
 
 // Hotspot Form Elements
 const hotspotForm = document.getElementById("hotspotForm");
@@ -312,14 +336,78 @@ const updateHotspotBtn = document.getElementById("updateHotspotBtn");
 const duplicateHotspotBtn = document.getElementById("duplicateHotspotBtn");
 const deleteHotspotBtn = document.getElementById("deleteHotspotBtn");
 
-// Vehicle Tab Elements
+// Vehicle Tab & Cost Margin Calculator Elements
 const mainImageUrlInput = document.getElementById("mainImageUrlInput");
 const mainImageFileUpload = document.getElementById("mainImageFileUpload");
 const mainImagePreview = document.getElementById("mainImagePreview");
 const vehicleNameInput = document.getElementById("vehicleNameInput");
 const vehiclePriceInput = document.getElementById("vehiclePriceInput");
+const vehicleYearInput = document.getElementById("vehicleYearInput");
+const vehicleMileageInput = document.getElementById("vehicleMileageInput");
+const vehicleEngineInput = document.getElementById("vehicleEngineInput");
 const vehicleSubInput = document.getElementById("vehicleSubInput");
 const saveVehicleSettingsBtn = document.getElementById("saveVehicleSettingsBtn");
+
+const fobJpyInput = document.getElementById("fobJpyInput");
+const exchangeRateInput = document.getElementById("exchangeRateInput");
+const oceanFreightInput = document.getElementById("oceanFreightInput");
+const customsDutyInput = document.getElementById("customsDutyInput");
+const apFeeInput = document.getElementById("apFeeInput");
+const portPuspakomInput = document.getElementById("portPuspakomInput");
+const reconDetailingInput = document.getElementById("reconDetailingInput");
+const targetMarginPctInput = document.getElementById("targetMarginPctInput");
+const targetMarginAmountVal = document.getElementById("targetMarginAmountVal");
+const fobMyrVal = document.getElementById("fobMyrVal");
+const totalLandedCostVal = document.getElementById("totalLandedCostVal");
+const recommendedPriceVal = document.getElementById("recommendedPriceVal");
+const applyRecommendedPriceBtn = document.getElementById("applyRecommendedPriceBtn");
+
+// Sales Consultant Assignment & Leads Elements
+const statLeadsTotal = document.getElementById("statLeadsTotal");
+const statLeadsNew = document.getElementById("statLeadsNew");
+const statLeadsConfirmed = document.getElementById("statLeadsConfirmed");
+const statLeadsContacted = document.getElementById("statLeadsContacted");
+const leadsContainer = document.getElementById("leadsContainer");
+const addLeadModalBtn = document.getElementById("addLeadModalBtn");
+const addLeadDialog = document.getElementById("addLeadDialog");
+const closeAddLeadDialogBtn = document.getElementById("closeAddLeadDialogBtn");
+const cancelAddLeadBtn = document.getElementById("cancelAddLeadBtn");
+const confirmAddLeadBtn = document.getElementById("confirmAddLeadBtn");
+const addLeadForm = document.getElementById("addLeadForm");
+
+// Duplicate Template Modal Elements
+const duplicateTemplateBtn = document.getElementById("duplicateTemplateBtn");
+const duplicateTemplateDialog = document.getElementById("duplicateTemplateDialog");
+const closeDuplicateTemplateDialogBtn = document.getElementById("closeDuplicateTemplateDialogBtn");
+const cancelDuplicateTemplateBtn = document.getElementById("cancelDuplicateTemplateBtn");
+const confirmDuplicateTemplateBtn = document.getElementById("confirmDuplicateTemplateBtn");
+const dupSourceVehicle = document.getElementById("dupSourceVehicle");
+const dupTargetVehicleSelect = document.getElementById("dupTargetVehicleSelect");
+
+// Tools: Automatic Watermark Generator Elements
+const watermarkImageUpload = document.getElementById("watermarkImageUpload");
+const watermarkTextInput = document.getElementById("watermarkTextInput");
+const watermarkPositionSelect = document.getElementById("watermarkPositionSelect");
+const watermarkOpacityRange = document.getElementById("watermarkOpacityRange");
+const watermarkScaleRange = document.getElementById("watermarkScaleRange");
+const watermarkCanvas = document.getElementById("watermarkCanvas");
+const downloadWatermarkedBtn = document.getElementById("downloadWatermarkedBtn");
+const applyWatermarkToCurrentCarBtn = document.getElementById("applyWatermarkToCurrentCarBtn");
+
+// Tools: Bulk CSV Import Elements
+const downloadSampleCsvBtn = document.getElementById("downloadSampleCsvBtn");
+const csvFileInput = document.getElementById("csvFileInput");
+const csvFileDropZone = document.getElementById("csvFileDropZone");
+const csvPreviewBox = document.getElementById("csvPreviewBox");
+const csvParsedCountText = document.getElementById("csvParsedCountText");
+const csvPreviewTbody = document.getElementById("csvPreviewTbody");
+const executeCsvImportBtn = document.getElementById("executeCsvImportBtn");
+
+// Drag & Drop Dropzones
+const mainImageDropZone = document.getElementById("mainImageDropZone");
+const forwardVideoDropZone = document.getElementById("forwardVideoDropZone");
+const reverseVideoDropZone = document.getElementById("reverseVideoDropZone");
+const imageSrcDropZone = document.getElementById("imageSrcDropZone");
 
 // JSON Tab Elements
 const jsonConfigTextarea = document.getElementById("jsonConfigTextarea");
@@ -360,26 +448,58 @@ const testCardDesc = document.getElementById("testCardDesc");
 const testCardSpecs = document.getElementById("testCardSpecs");
 const testCardCloseBtn = document.getElementById("testCardCloseBtn");
 
+// History & Leads State Variables
+let historyStack = [];
+let historyIndex = -1;
+let isPerformingHistoryAction = false;
+let currentLeads = [];
+let currentConsultants = [];
+let activeLeadFilter = 'all';
+let parsedCsvData = [];
+let watermarkImageObj = null;
+
 // ==========================================================================
 // Initialization & Data Loading
 // ==========================================================================
 
+// DOM element for vehicle selector
+const adminVehicleSelect = document.getElementById("adminVehicleSelect");
+
 async function initAdminStudio() {
+  // Check URL query param for vehicle
+  const urlParams = new URLSearchParams(window.location.search);
+  const qVehicle = urlParams.get("vehicle");
+  if (qVehicle && adminVehicleSelect) {
+    adminVehicleSelect.value = qVehicle;
+    currentVehicleId = qVehicle;
+  }
+
   await fetchConfig();
   setupEventListeners();
   renderCanvas();
   renderHotspotsStrip();
   loadHotspotIntoInspector(selectedHotspotId);
   syncVehicleSettingsTab();
+
+  // Initialize new modules
+  pushHistory("初始化加载: " + (currentConfig.vehicleName || currentVehicleId));
+  fetchLeads();
+  calculateDealerCosts();
+  initWatermarkGenerator();
+  initCsvBulkImporter();
+  initDragAndDropUploader();
+  setupMobileNavigation();
 }
 
-async function fetchConfig() {
+async function fetchConfig(vId = currentVehicleId) {
   try {
-    const res = await fetch("/api/config");
+    const res = await fetch(`/api/config?vehicleId=${encodeURIComponent(vId)}`);
     if (res.ok) {
       const data = await res.json();
       if (data && Array.isArray(data.hotspots)) {
         currentConfig = data;
+        currentConfig.vehicleId = vId;
+        selectedHotspotId = currentConfig.hotspots.length > 0 ? currentConfig.hotspots[0].id : null;
         setUnsaved(false);
         return;
       }
@@ -389,17 +509,59 @@ async function fetchConfig() {
   }
 
   // Check localStorage fallback
-  const local = localStorage.getItem("japan_recon_viewer_config");
+  const localKey = vId === "audi-s5" ? "japan_recon_viewer_config" : `japan_recon_viewer_config_${vId}`;
+  const local = localStorage.getItem(localKey);
   if (local) {
     try {
       currentConfig = JSON.parse(local);
+      currentConfig.vehicleId = vId;
+      selectedHotspotId = currentConfig.hotspots.length > 0 ? currentConfig.hotspots[0].id : null;
       setUnsaved(false);
       return;
     } catch (e) {}
   }
 
   currentConfig = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+  currentConfig.vehicleId = vId;
+  selectedHotspotId = "engine";
   setUnsaved(false);
+}
+
+async function switchVehicle(newVehicleId) {
+  if (isUnsaved) {
+    const confirmed = await new Promise(resolve => {
+      showCustomConfirm({
+        title: "未保存提示",
+        message: "当前车型有未保存的更改，切换车型将放弃未保存的更改，是否继续？",
+        confirmText: "继续切换",
+        isDanger: true,
+        onConfirm: () => resolve(true)
+      });
+      // Handle cancel button
+      const cancelBtn = document.getElementById("cancelConfirmDialogBtn");
+      const handleCancel = () => {
+        cancelBtn.removeEventListener("click", handleCancel);
+        resolve(false);
+      };
+      if (cancelBtn) cancelBtn.addEventListener("click", handleCancel, { once: true });
+    });
+    if (!confirmed) {
+      if (adminVehicleSelect) adminVehicleSelect.value = currentVehicleId;
+      return;
+    }
+  }
+
+  currentVehicleId = newVehicleId;
+  currentSubHotspotParentId = null;
+  await fetchConfig(newVehicleId);
+  renderCanvas();
+  renderHotspotsStrip();
+  loadHotspotIntoInspector(selectedHotspotId);
+  syncVehicleSettingsTab();
+  const headerCalc = document.getElementById("headerCalcLink");
+  if (headerCalc) headerCalc.href = `calculator.html?vehicle=${encodeURIComponent(newVehicleId)}`;
+  syncHomepagePanelData();
+  showToast(`已切换至车型「${currentConfig.vehicleName || newVehicleId}」！`, "success");
 }
 
 function setUnsaved(unsaved = true) {
@@ -430,10 +592,9 @@ function showCustomConfirm({ title = "确认操作", message = "确定要执行�
   const closeDialog = () => {
     try {
       if (confirmDialog.close) confirmDialog.close();
-      else confirmDialog.style.display = "none";
-    } catch (e) {
-      confirmDialog.style.display = "none";
-    }
+    } catch (e) {}
+    confirmDialog.removeAttribute("open");
+    confirmDialog.style.display = "none";
     cleanup();
   };
 
@@ -448,19 +609,16 @@ function showCustomConfirm({ title = "确认操作", message = "确定要执行�
     if (closeConfirmDialogBtn) closeConfirmDialogBtn.removeEventListener("click", closeDialog);
   };
 
+  cleanup();
   okConfirmDialogBtn.addEventListener("click", handleOk);
   cancelConfirmDialogBtn.addEventListener("click", closeDialog);
   if (closeConfirmDialogBtn) closeConfirmDialogBtn.addEventListener("click", closeDialog);
 
+  confirmDialog.setAttribute("open", "");
+  confirmDialog.style.display = "flex";
   try {
     if (confirmDialog.showModal) confirmDialog.showModal();
-    else {
-      confirmDialog.setAttribute("open", "");
-      confirmDialog.style.display = "flex";
-    }
-  } catch (e) {
-    confirmDialog.style.display = "flex";
-  }
+  } catch (e) {}
 }
 
 // ==========================================================================
@@ -1372,51 +1530,55 @@ async function handleFileUpload(fileInput, onTargetUrlReceived) {
 // ==========================================================================
 
 async function saveAllConfig() {
+  currentConfig.vehicleId = currentVehicleId;
+  const localKey = currentVehicleId === "audi-s5" ? "japan_recon_viewer_config" : `japan_recon_viewer_config_${currentVehicleId}`;
   try {
-    const res = await fetch("/api/config", {
+    const res = await fetch(`/api/config?vehicleId=${encodeURIComponent(currentVehicleId)}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(currentConfig)
     });
 
     // Also persist to localStorage for instant client reactivity
-    localStorage.setItem("japan_recon_viewer_config", JSON.stringify(currentConfig));
+    localStorage.setItem(localKey, JSON.stringify(currentConfig));
 
     if (res.ok) {
       setUnsaved(false);
-      showToast("✓ 全部配置已成功保存发布！前端页面刷新即生效。", "success");
+      showToast(`✓ 「${currentConfig.vehicleName || currentVehicleId}」配置已成功保存发布！前端即刻生效。`, "success");
     } else {
       setUnsaved(false);
       showToast("本地已保存，已缓存至浏览器。", "success");
     }
   } catch (err) {
-    localStorage.setItem("japan_recon_viewer_config", JSON.stringify(currentConfig));
+    localStorage.setItem(localKey, JSON.stringify(currentConfig));
     setUnsaved(false);
     showToast("网络请求异常，已保存至本地缓存！", "success");
   }
 }
 
 async function resetToDefaults() {
+  const vehName = currentConfig.vehicleName || currentVehicleId;
   showCustomConfirm({
-    title: "恢复出厂配置",
-    message: "确定要恢复默认预设的奥迪 S5 车辆配置吗？未保存的自定义数据将被覆盖。",
+    title: `恢复「${vehName}」出厂配置`,
+    message: `确定要恢复默认预设的 ${vehName} 车辆配置吗？未保存的自定义数据将被覆盖。`,
     confirmText: "确认恢复",
     isDanger: true,
     onConfirm: async () => {
       try {
-        await fetch("/api/reset-config", { method: "POST" });
+        await fetch(`/api/reset-config?vehicleId=${encodeURIComponent(currentVehicleId)}`, { method: "POST" });
       } catch (e) {}
 
-      localStorage.removeItem("japan_recon_viewer_config");
-      currentConfig = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
-      selectedHotspotId = "engine";
-      currentSubHotspotParentId = null;
+      const localKey = currentVehicleId === "audi-s5" ? "japan_recon_viewer_config" : `japan_recon_viewer_config_${currentVehicleId}`;
+      localStorage.removeItem(localKey);
+      await fetchConfig(currentVehicleId);
       renderCanvas();
       renderHotspotsStrip();
-      loadHotspotIntoInspector("engine");
+      if (currentConfig.hotspots.length > 0) {
+        selectHotspot(currentConfig.hotspots[0].id);
+      }
       syncVehicleSettingsTab();
       setUnsaved(false);
-      showToast("已恢复出厂默认展示配置！", "success");
+      showToast(`已恢复「${vehName}」出厂默认展示配置！`, "success");
     }
   });
 }
@@ -1434,36 +1596,1000 @@ function exportConfigJSON() {
 }
 
 function syncVehicleSettingsTab() {
-  mainImageUrlInput.value = currentConfig.mainImage || "";
-  mainImagePreview.src = currentConfig.mainImage || "";
-  vehicleNameInput.value = currentConfig.vehicleName || "Audi S5 Avant";
-  vehiclePriceInput.value = currentConfig.price || "RM 438,000";
-  vehicleSubInput.value = currentConfig.vehicleSub || "";
+  if (mainImageUrlInput) mainImageUrlInput.value = currentConfig.mainImage || "";
+  if (mainImagePreview) mainImagePreview.src = currentConfig.mainImage || "";
+  if (vehicleNameInput) vehicleNameInput.value = currentConfig.vehicleName || "Audi S5 Avant";
+  if (vehiclePriceInput) vehiclePriceInput.value = currentConfig.price || "RM 438,000";
+  if (vehicleSubInput) vehicleSubInput.value = currentConfig.vehicleSub || "";
+  if (vehicleYearInput) vehicleYearInput.value = currentConfig.year || "2021";
+  if (vehicleMileageInput) vehicleMileageInput.value = currentConfig.mileage || "18,500 km";
+  if (vehicleEngineInput) vehicleEngineInput.value = currentConfig.engine || "3.0L V6 Turbo";
+
+  calculateDealerCosts();
 }
 
 function applyVehicleSettings() {
-  currentConfig.mainImage = mainImageUrlInput.value.trim() || DEFAULT_CONFIG.mainImage;
-  currentConfig.vehicleName = vehicleNameInput.value.trim();
-  currentConfig.price = vehiclePriceInput.value.trim();
-  currentConfig.vehicleSub = vehicleSubInput.value.trim();
+  currentConfig.mainImage = (mainImageUrlInput?.value || "").trim() || DEFAULT_CONFIG.mainImage;
+  currentConfig.vehicleName = (vehicleNameInput?.value || "").trim() || "Audi S5 Avant";
+  currentConfig.price = (vehiclePriceInput?.value || "").trim() || "RM 438,000";
+  currentConfig.vehicleSub = (vehicleSubInput?.value || "").trim();
+  currentConfig.year = (vehicleYearInput?.value || "").trim() || "2021";
+  currentConfig.mileage = (vehicleMileageInput?.value || "").trim() || "18,500 km";
+  currentConfig.engine = (vehicleEngineInput?.value || "").trim() || "3.0L V6 Turbo";
+
+  // Sync to local inventoryVehicles list
+  const invV = inventoryVehicles.find(v => v.id === currentVehicleId);
+  if (invV) {
+    invV.price = currentConfig.price;
+    invV.model = currentConfig.vehicleName.replace(/^(Audi|Toyota|Lexus|Nissan|Honda)\s+/i, '');
+    invV.year = currentConfig.year;
+    invV.mileage = currentConfig.mileage;
+    invV.engine = currentConfig.engine;
+  }
+
+  // Persist to localStorage for instant homepage and calculator sync
+  try {
+    const overrides = JSON.parse(localStorage.getItem('jrcg_vehicle_overrides') || '{}');
+    overrides[currentVehicleId] = {
+      price: currentConfig.price,
+      name: currentConfig.vehicleName,
+      year: currentConfig.year,
+      mileage: currentConfig.mileage,
+      engine: currentConfig.engine
+    };
+    localStorage.setItem('jrcg_vehicle_overrides', JSON.stringify(overrides));
+  } catch (e) {}
+
+  // Also sync to backend /api/vehicles/update
+  fetch("/api/vehicles/update", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id: currentVehicleId,
+      name: currentConfig.vehicleName,
+      price: currentConfig.price,
+      year: currentConfig.year,
+      mileage: currentConfig.mileage,
+      engine: currentConfig.engine
+    })
+  }).catch(e => console.warn("Could not sync vehicle updates:", e));
 
   renderCanvas();
+  syncHomepagePanelData();
   setUnsaved(true);
-  showToast("整车与主图配置已更新！", "success");
+  pushHistory(`更新车辆信息与价格: ${currentConfig.vehicleName} (${currentConfig.price})`);
+  showToast("✓ 整车规格与价格已成功更新并关联同步至前台！", "success");
 }
 
 function switchInspectorTab(tabName) {
-  tabHotspotBtn.classList.toggle("active", tabName === "hotspot");
-  tabVehicleBtn.classList.toggle("active", tabName === "vehicle");
-  tabJsonBtn.classList.toggle("active", tabName === "json");
+  if (tabHotspotBtn) tabHotspotBtn.classList.toggle("active", tabName === "hotspot");
+  if (tabVehicleBtn) tabVehicleBtn.classList.toggle("active", tabName === "vehicle");
+  if (tabLeadsBtn) tabLeadsBtn.classList.toggle("active", tabName === "leads");
+  if (tabHomepageBtn) tabHomepageBtn.classList.toggle("active", tabName === "homepage");
+  if (tabHistoryBtn) tabHistoryBtn.classList.toggle("active", tabName === "history");
+  if (tabToolsBtn) tabToolsBtn.classList.toggle("active", tabName === "tools");
+  if (tabJsonBtn) tabJsonBtn.classList.toggle("active", tabName === "json");
 
-  panelHotspot.style.display = tabName === "hotspot" ? "" : "none";
-  panelVehicle.style.display = tabName === "vehicle" ? "" : "none";
-  panelJson.style.display = tabName === "json" ? "" : "none";
+  if (panelHotspot) panelHotspot.style.display = tabName === "hotspot" ? "" : "none";
+  if (panelVehicle) panelVehicle.style.display = tabName === "vehicle" ? "" : "none";
+  if (panelLeads) panelLeads.style.display = tabName === "leads" ? "" : "none";
+  if (panelHomepage) panelHomepage.style.display = tabName === "homepage" ? "" : "none";
+  if (panelHistory) panelHistory.style.display = tabName === "history" ? "" : "none";
+  if (panelTools) panelTools.style.display = tabName === "tools" ? "" : "none";
+  if (panelJson) panelJson.style.display = tabName === "json" ? "" : "none";
 
-  if (tabName === "json") {
+  if (tabName === "json" && jsonConfigTextarea) {
     jsonConfigTextarea.value = JSON.stringify(currentConfig, null, 2);
   }
+  if (tabName === "leads") {
+    fetchLeads();
+  }
+  if (tabName === "homepage") {
+    syncHomepagePanelData();
+  }
+  if (tabName === "history") {
+    renderHistoryTimeline();
+  }
+  if (tabName === "vehicle") {
+    calculateDealerCosts();
+  }
+  if (tabName === "tools") {
+    initWatermarkGenerator();
+  }
+}
+
+function syncHomepagePanelData() {
+  const featuredSelect = document.getElementById("featuredHeroSelect");
+  const heroTagInput = document.getElementById("heroSlideTagInput");
+  const heroActionSelect = document.getElementById("heroSlideActionSelect");
+  const previewTag = document.getElementById("previewHeroTag");
+  const previewBrand = document.getElementById("previewHeroBrand");
+  const previewTitle = document.getElementById("previewHeroTitle");
+  const previewPrice = document.getElementById("previewHeroPrice");
+  const calcPrice = document.getElementById("calcSyncPrice");
+  const calcMonthly = document.getElementById("calcSyncMonthly");
+  const calcOutlay = document.getElementById("calcSyncOutlay");
+  const openCalcBtn = document.getElementById("openDedicatedCalcBtn");
+  const headerCalc = document.getElementById("headerCalcLink");
+
+  // Load hero slider configuration
+  let heroConfig = null;
+  try {
+    heroConfig = JSON.parse(localStorage.getItem("jrcg_hero_slider") || "null");
+  } catch(e) {}
+
+  const activeHeroId = heroConfig?.featuredId || currentVehicleId || "audi-s5";
+  if (featuredSelect && !featuredSelect.dataset.userChanged) {
+    featuredSelect.value = activeHeroId;
+  }
+  if (heroTagInput && heroConfig?.tag && !heroTagInput.dataset.userChanged) {
+    heroTagInput.value = heroConfig.tag;
+  }
+  if (heroActionSelect && heroConfig?.action && !heroActionSelect.dataset.userChanged) {
+    heroActionSelect.value = heroConfig.action;
+  }
+
+  // Update preview box
+  const heroV = inventoryVehicles.find(v => v.id === (featuredSelect ? featuredSelect.value : activeHeroId)) || inventoryVehicles[0];
+  if (heroV) {
+    if (previewBrand) previewBrand.textContent = heroV.brand;
+    if (previewTitle) previewTitle.textContent = `${heroV.model} (${heroV.year})`;
+    if (previewPrice) previewPrice.textContent = heroV.price || "RM 438,000";
+    if (previewTag && heroTagInput) previewTag.textContent = heroTagInput.value || "TOP RECON SELECTION";
+  }
+
+  // Update live theme picker state
+  let currentTheme = "apex";
+  try {
+    currentTheme = localStorage.getItem("jrcg_theme") || "apex";
+  } catch(e) {}
+  document.querySelectorAll(".theme-choice-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.theme === currentTheme);
+  });
+
+  // Update dedicated calculator simulation for current vehicle
+  const targetCar = inventoryVehicles.find(v => v.id === currentVehicleId) || inventoryVehicles[0];
+  const priceNum = parseVehiclePrice(currentConfig.price || targetCar.price || "438000");
+  const principal = priceNum * 0.9;
+  const interest = principal * 0.025 * 7;
+  const monthly = Math.round((principal + interest) / 84);
+  const roadTax = calculateJpjTaxForVehicle(targetCar);
+  const insurance = Math.round(priceNum * 0.024 * 0.45 + 250);
+  const totalOutlay = Math.round(priceNum * 0.1 + roadTax + insurance + 2000);
+
+  if (calcPrice) calcPrice.textContent = `RM ${priceNum.toLocaleString()}`;
+  if (calcMonthly) calcMonthly.textContent = `RM ${monthly.toLocaleString()} / mo`;
+  if (calcOutlay) calcOutlay.textContent = `RM ${totalOutlay.toLocaleString()}`;
+
+  const calcUrl = `calculator.html?vehicle=${encodeURIComponent(currentVehicleId)}`;
+  if (openCalcBtn) openCalcBtn.href = calcUrl;
+  if (headerCalc) headerCalc.href = calcUrl;
+}
+
+function calculateJpjTaxForVehicle(vehicle) {
+  if (!vehicle) return 2120;
+  const eng = vehicle.engine || "";
+  const match = eng.match(/(\d+\.\d+)L/i);
+  const liters = match ? parseFloat(match[1]) : 3.0;
+  if (liters <= 1.6) return 90;
+  if (liters <= 2.0) return 280 + Math.round((liters * 1000 - 1800) * 0.5);
+  if (liters <= 2.5) return 380 + Math.round((liters * 1000 - 2000) * 1.0);
+  if (liters <= 3.0) return 880 + Math.round((liters * 1000 - 2500) * 2.5);
+  return 2130 + Math.round((liters * 1000 - 3000) * 4.5);
+}
+
+function initHomepageSyncEvents() {
+  const featuredSelect = document.getElementById("featuredHeroSelect");
+  const heroTagInput = document.getElementById("heroSlideTagInput");
+  const heroActionSelect = document.getElementById("heroSlideActionSelect");
+  const syncBtn = document.getElementById("syncToHomepageBtn");
+  const previewTag = document.getElementById("previewHeroTag");
+  const previewBrand = document.getElementById("previewHeroBrand");
+  const previewTitle = document.getElementById("previewHeroTitle");
+  const previewPrice = document.getElementById("previewHeroPrice");
+
+  if (featuredSelect) {
+    featuredSelect.addEventListener("change", () => {
+      featuredSelect.dataset.userChanged = "true";
+      const selId = featuredSelect.value;
+      const v = inventoryVehicles.find(item => item.id === selId);
+      if (v) {
+        if (previewBrand) previewBrand.textContent = v.brand;
+        if (previewTitle) previewTitle.textContent = `${v.model} (${v.year})`;
+        if (previewPrice) previewPrice.textContent = v.price || "RM 438,000";
+      }
+    });
+  }
+
+  if (heroTagInput) {
+    heroTagInput.addEventListener("input", () => {
+      heroTagInput.dataset.userChanged = "true";
+      if (previewTag) previewTag.textContent = heroTagInput.value || "TOP RECON SELECTION";
+    });
+  }
+
+  if (syncBtn) {
+    syncBtn.addEventListener("click", () => {
+      const heroId = featuredSelect ? featuredSelect.value : "audi-s5";
+      const tag = heroTagInput ? heroTagInput.value.trim() : "TOP RECON SELECTION · 3D INTERACTIVE TOUR";
+      const action = heroActionSelect ? heroActionSelect.value : "inspect";
+
+      const payload = { featuredId: heroId, tag, action, updatedAt: new Date().toISOString() };
+      try {
+        localStorage.setItem("jrcg_hero_slider", JSON.stringify(payload));
+      } catch(e) {}
+
+      showToast("⚡ 展厅首页轮播主推与特点标签已同步更新！", "success");
+      pushHistory(`同步首页轮播首推配置: ${heroId}`);
+    });
+  }
+
+  // Theme Choice Buttons
+  document.querySelectorAll(".theme-choice-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const targetTheme = btn.dataset.theme;
+      document.querySelectorAll(".theme-choice-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      try {
+        localStorage.setItem("jrcg_theme", targetTheme);
+      } catch(e) {}
+      showToast(`🎨 全局展厅主题已切换为 ${btn.querySelector("strong")?.textContent || targetTheme}！`, "success");
+      pushHistory(`切换全局展厅主题: ${targetTheme}`);
+    });
+  });
+}
+
+// ==========================================================================
+// 1. Activity Log & Version History (Undo / Redo)
+// ==========================================================================
+
+function pushHistory(description = "编辑操作") {
+  if (isPerformingHistoryAction) return;
+  if (historyIndex < historyStack.length - 1) {
+    historyStack = historyStack.slice(0, historyIndex + 1);
+  }
+  const snapshot = {
+    config: JSON.parse(JSON.stringify(currentConfig)),
+    vehicleId: currentVehicleId,
+    description,
+    timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })
+  };
+  historyStack.push(snapshot);
+  if (historyStack.length > 50) historyStack.shift();
+  historyIndex = historyStack.length - 1;
+  updateHistoryControls();
+}
+
+function undo() {
+  if (historyIndex <= 0) {
+    showToast("已处于最旧的历史版本", "info");
+    return;
+  }
+  historyIndex--;
+  restoreHistorySnapshot(historyStack[historyIndex]);
+  showToast(`已撤销操作: ${historyStack[historyIndex].description}`, "info");
+}
+
+function redo() {
+  if (historyIndex >= historyStack.length - 1) {
+    showToast("已处于最新的历史版本", "info");
+    return;
+  }
+  historyIndex++;
+  restoreHistorySnapshot(historyStack[historyIndex]);
+  showToast(`已重做操作: ${historyStack[historyIndex].description}`, "info");
+}
+
+function restoreHistorySnapshot(snapshot) {
+  if (!snapshot) return;
+  isPerformingHistoryAction = true;
+  currentConfig = JSON.parse(JSON.stringify(snapshot.config));
+  if (snapshot.vehicleId && snapshot.vehicleId !== currentVehicleId && adminVehicleSelect) {
+    currentVehicleId = snapshot.vehicleId;
+    adminVehicleSelect.value = snapshot.vehicleId;
+  }
+  renderCanvas();
+  renderHotspotsStrip();
+  if (currentConfig.hotspots.length > 0) {
+    selectHotspot(currentConfig.hotspots[0].id);
+  }
+  syncVehicleSettingsTab();
+  setUnsaved(true);
+  updateHistoryControls();
+  isPerformingHistoryAction = false;
+}
+
+function updateHistoryControls() {
+  const canUndo = historyIndex > 0;
+  const canRedo = historyIndex < historyStack.length - 1;
+  if (undoBtn) undoBtn.disabled = !canUndo;
+  if (redoBtn) redoBtn.disabled = !canRedo;
+  if (panelUndoBtn) panelUndoBtn.disabled = !canUndo;
+  if (panelRedoBtn) panelRedoBtn.disabled = !canRedo;
+  if (historyStepCountText) {
+    historyStepCountText.textContent = `当前第 ${historyIndex + 1} 个状态 / 共 ${historyStack.length} 步历史`;
+  }
+  renderHistoryTimeline();
+}
+
+function renderHistoryTimeline() {
+  if (!historyTimeline) return;
+  historyTimeline.innerHTML = "";
+  if (historyStack.length === 0) {
+    historyTimeline.innerHTML = '<div class="history-item"><span class="history-item-desc">暂无操作记录</span></div>';
+    return;
+  }
+  historyStack.forEach((item, idx) => {
+    const el = document.createElement("div");
+    el.className = `history-item ${idx === historyIndex ? "is-current" : ""}`;
+    el.innerHTML = `
+      <div class="history-item-left">
+        <span class="history-item-desc">${escapeHtml(item.description)}</span>
+        <span class="history-item-time">${item.timestamp} · #${idx + 1}</span>
+      </div>
+      <button type="button" class="history-revert-btn">${idx === historyIndex ? "● 当前状态" : "回退至此"}</button>
+    `;
+    const btn = el.querySelector(".history-revert-btn");
+    if (btn && idx !== historyIndex) {
+      btn.addEventListener("click", () => {
+        historyIndex = idx;
+        restoreHistorySnapshot(historyStack[idx]);
+        showToast(`已恢复至状态 #${idx + 1}: ${item.description}`, "success");
+      });
+    }
+    historyTimeline.appendChild(el);
+  });
+}
+
+// ==========================================================================
+// 2. Stock Cost & Dealer Profit Margin Calculator
+// ==========================================================================
+
+function calculateDealerCosts() {
+  const fobJpy = parseFloat(fobJpyInput?.value) || 6800000;
+  const rate = parseFloat(exchangeRateInput?.value) || 3.12;
+  const fobMyr = (fobJpy / 100) * rate;
+  const freight = parseFloat(oceanFreightInput?.value) || 4500;
+  const duty = parseFloat(customsDutyInput?.value) || 128000;
+  const ap = parseFloat(apFeeInput?.value) || 28000;
+  const port = parseFloat(portPuspakomInput?.value) || 2500;
+  const recon = parseFloat(reconDetailingInput?.value) || 3500;
+  const marginPct = parseFloat(targetMarginPctInput?.value) || 12.5;
+
+  const totalLanded = fobMyr + freight + duty + ap + port + recon;
+  const marginAmt = totalLanded * (marginPct / 100);
+  const targetPrice = totalLanded + marginAmt;
+  const roundedTargetPrice = Math.round(targetPrice / 1000) * 1000;
+
+  if (fobMyrVal) fobMyrVal.textContent = "RM " + Math.round(fobMyr).toLocaleString();
+  if (totalLandedCostVal) totalLandedCostVal.textContent = "RM " + Math.round(totalLanded).toLocaleString();
+  if (targetMarginAmountVal) targetMarginAmountVal.textContent = "RM " + Math.round(marginAmt).toLocaleString();
+  if (recommendedPriceVal) recommendedPriceVal.textContent = "RM " + roundedTargetPrice.toLocaleString();
+}
+
+function applyRecommendedPrice() {
+  if (!recommendedPriceVal || !vehiclePriceInput) return;
+  const recPrice = recommendedPriceVal.textContent.trim();
+  vehiclePriceInput.value = recPrice;
+  currentConfig.price = recPrice;
+  setUnsaved(true);
+  pushHistory(`应用成本核算推荐售价: ${recPrice}`);
+  showToast(`已将推荐价格「${recPrice}」设置为展示价格！`, "success");
+}
+
+// ==========================================================================
+// 3. Sales Consultant Assignment & Customer Leads Management
+// ==========================================================================
+
+async function fetchLeads() {
+  try {
+    const res = await fetch("/api/leads");
+    if (res.ok) {
+      const data = await res.json();
+      currentLeads = data.leads || [];
+      currentConsultants = data.consultants || [];
+      renderLeadsList();
+      updateLeadStats();
+    }
+  } catch (e) {
+    console.warn("Could not fetch leads:", e);
+  }
+}
+
+function updateLeadStats() {
+  const total = currentLeads.length;
+  const n = currentLeads.filter(l => l.status === "new").length;
+  const c = currentLeads.filter(l => l.status === "confirmed").length;
+  const cont = currentLeads.filter(l => l.status === "contacted").length;
+
+  if (statLeadsTotal) statLeadsTotal.textContent = total;
+  if (statLeadsNew) statLeadsNew.textContent = n;
+  if (statLeadsConfirmed) statLeadsConfirmed.textContent = c;
+  if (statLeadsContacted) statLeadsContacted.textContent = cont;
+  if (leadsTabBadge) leadsTabBadge.textContent = n > 0 ? n : total;
+  if (mobileLeadsBadge) mobileLeadsBadge.textContent = n > 0 ? n : total;
+}
+
+function renderLeadsList() {
+  if (!leadsContainer) return;
+  leadsContainer.innerHTML = "";
+  const filtered = activeLeadFilter === "all" ? currentLeads : currentLeads.filter(l => l.status === activeLeadFilter);
+
+  if (filtered.length === 0) {
+    leadsContainer.innerHTML = '<div class="leads-loading">暂无符合条件的客户线索</div>';
+    return;
+  }
+
+  filtered.forEach(lead => {
+    const card = document.createElement("div");
+    card.className = "lead-card";
+    const statusMap = {
+      new: { label: "🆕 待联系", class: "new" },
+      confirmed: { label: "📅 预约看车", class: "confirmed" },
+      contacted: { label: "📞 跟进中", class: "contacted" },
+      won: { label: "✅ 已预定成交", class: "confirmed" }
+    };
+    const st = statusMap[lead.status] || { label: lead.status, class: "new" };
+
+    const consultantOpts = currentConsultants.map(c => 
+      `<option value="${c.id}" ${c.id === lead.assignedConsultantId ? "selected" : ""}>${c.name} (${c.role.split(" ")[0]})</option>`
+    ).join("");
+
+    const consultantObj = currentConsultants.find(c => c.id === lead.assignedConsultantId) || currentConsultants[0];
+    const waText = encodeURIComponent(
+      `Hello ${lead.customerName}! This is ${consultantObj ? consultantObj.name : "Sales Consultant"} from Japan Recon Car Gallery. Regarding your viewing interest in the ${lead.vehicleName || "showroom vehicle"} (${lead.preferredDate || "preferred date"}), I would be glad to arrange key access & test drive. Please let me know if you have any questions!`
+    );
+    const cleanPhone = (lead.phone || "").replace(/[^0-9]/g, "");
+    const waUrl = cleanPhone ? `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${waText}` : `https://api.whatsapp.com/send?text=${waText}`;
+
+    card.innerHTML = `
+      <div class="lead-card-header">
+        <div class="lead-customer-info">
+          <h4>${escapeHtml(lead.customerName)}</h4>
+          <a href="tel:${escapeHtml(lead.phone)}" class="lead-customer-phone">📞 ${escapeHtml(lead.phone)}</a>
+        </div>
+        <span class="lead-status-badge ${st.class}">${st.label}</span>
+      </div>
+      <div class="lead-meta-row">
+        <span>🚗 <strong>${escapeHtml(lead.vehicleName || "Audi S5")}</strong> (${escapeHtml(lead.price || "")})</span>
+        <span>🏢 ${escapeHtml(lead.branch || "Glenmarie 3S")}</span>
+        <span>🗓️ ${escapeHtml(lead.preferredDate || "尽快安排")}</span>
+        <span>🎯 ${escapeHtml(lead.inquiryType || "看车")}</span>
+      </div>
+      ${lead.notes ? `<div class="lead-notes-box">📝 ${escapeHtml(lead.notes)}</div>` : ""}
+      <div class="lead-assign-row">
+        <span class="lead-assign-label">指派顾问:</span>
+        <select class="lead-consultant-select lead-assign-select" data-lead-id="${lead.id}">
+          ${consultantOpts}
+        </select>
+        <select class="lead-consultant-select lead-status-select" data-lead-id="${lead.id}" style="max-width:110px;">
+          <option value="new" ${lead.status === "new" ? "selected" : ""}>待联系</option>
+          <option value="contacted" ${lead.status === "contacted" ? "selected" : ""}>跟进中</option>
+          <option value="confirmed" ${lead.status === "confirmed" ? "selected" : ""}>已预约</option>
+          <option value="won" ${lead.status === "won" ? "selected" : ""}>已成交</option>
+        </select>
+      </div>
+      <div class="lead-actions-bar">
+        <a href="${waUrl}" target="_blank" class="lead-action-btn whatsapp">
+          <span>💬 WhatsApp 一键回复客户</span>
+        </a>
+        <a href="tel:${escapeHtml(lead.phone)}" class="lead-action-btn call">
+          <span>📞 致电</span>
+        </a>
+      </div>
+    `;
+
+    const selConsultant = card.querySelector(".lead-assign-select");
+    if (selConsultant) {
+      selConsultant.addEventListener("change", async (e) => {
+        await updateLeadAssignment(lead.id, { assignedConsultantId: e.target.value });
+      });
+    }
+
+    const selStatus = card.querySelector(".lead-status-select");
+    if (selStatus) {
+      selStatus.addEventListener("change", async (e) => {
+        await updateLeadAssignment(lead.id, { status: e.target.value });
+      });
+    }
+
+    leadsContainer.appendChild(card);
+  });
+}
+
+async function updateLeadAssignment(leadId, updates) {
+  try {
+    const res = await fetch(`/api/leads/${leadId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updates)
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const idx = currentLeads.findIndex(l => l.id === leadId);
+      if (idx >= 0 && data.lead) currentLeads[idx] = data.lead;
+      renderLeadsList();
+      updateLeadStats();
+      showToast("销售线索指派及状态已更新！", "success");
+      pushHistory(`更新销售线索顾问分配: ${data.lead?.customerName || leadId}`);
+    }
+  } catch (e) {
+    showToast("更新销售线索失败", "error");
+  }
+}
+
+async function handleConfirmAddLead() {
+  const name = document.getElementById("leadFormName")?.value.trim();
+  const phone = document.getElementById("leadFormPhone")?.value.trim();
+  const vehicle = document.getElementById("leadFormVehicle")?.value.trim() || "Audi S5 Avant";
+  const branch = document.getElementById("leadFormBranch")?.value || "Glenmarie 3S Flagship";
+  const type = document.getElementById("leadFormType")?.value || "展厅看车预约";
+  const consultantId = document.getElementById("leadFormConsultant")?.value || "kenji";
+  const notes = document.getElementById("leadFormNotes")?.value.trim() || "";
+
+  if (!name || !phone) {
+    showToast("请填写客户姓名与电话", "error");
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        customerName: name,
+        phone,
+        vehicleName: vehicle,
+        branch,
+        inquiryType: type,
+        notes,
+        assignedConsultantId: consultantId
+      })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.lead) currentLeads.unshift(data.lead);
+      if (addLeadDialog) addLeadDialog.close();
+      renderLeadsList();
+      updateLeadStats();
+      pushHistory(`录入进店线索: ${name} (${vehicle})`);
+      showToast("新客户线索已录入并指派专属销售顾问！", "success");
+    }
+  } catch (e) {
+    showToast("添加客户线索失败", "error");
+  }
+}
+
+// ==========================================================================
+// 4. Hotspot Template Duplication
+// ==========================================================================
+
+function openDuplicateTemplateDialog() {
+  if (dupSourceVehicle) {
+    dupSourceVehicle.value = `${currentConfig.vehicleName || currentVehicleId} (当前车辆)`;
+  }
+  if (duplicateTemplateDialog) duplicateTemplateDialog.showModal();
+}
+
+async function handleConfirmDuplicateTemplate() {
+  const targetId = dupTargetVehicleSelect?.value;
+  const modeRadio = document.querySelector('input[name="dupModeRadio"]:checked');
+  const mode = modeRadio ? modeRadio.value : "replace";
+
+  if (!targetId) {
+    showToast("请选择目标车辆", "error");
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/duplicate-template", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sourceVehicleId: currentVehicleId,
+        targetVehicleId: targetId,
+        mergeMode: mode
+      })
+    });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      if (duplicateTemplateDialog) duplicateTemplateDialog.close();
+      showToast(`已成功将热点模板复制至 ${targetId}！`, "success");
+      pushHistory(`复制热点模板: ${currentVehicleId} -> ${targetId}`);
+
+      showCustomConfirm({
+        title: "模板复制成功",
+        message: `已将全套热点坐标结构复制到「${targetId}」，是否立即切换至该车辆微调？`,
+        confirmText: "立即切换至目标车",
+        isDanger: false,
+        onConfirm: () => {
+          if (adminVehicleSelect) {
+            adminVehicleSelect.value = targetId;
+            switchVehicle(targetId);
+          }
+        }
+      });
+    } else {
+      showToast(data.error || "复制失败", "error");
+    }
+  } catch (e) {
+    showToast("网络请求失败，未能复制模板", "error");
+  }
+}
+
+// ==========================================================================
+// 5. Automatic Watermark Generator
+// ==========================================================================
+
+function initWatermarkGenerator() {
+  if (!watermarkCanvas) return;
+  const ctx = watermarkCanvas.getContext("2d");
+
+  function drawWatermark() {
+    ctx.clearRect(0, 0, watermarkCanvas.width, watermarkCanvas.height);
+    if (!watermarkImageObj) {
+      ctx.fillStyle = "#161c24";
+      ctx.fillRect(0, 0, watermarkCanvas.width, watermarkCanvas.height);
+      ctx.fillStyle = "#64748b";
+      ctx.font = "14px sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("请上传或拖拽车辆实拍照片查看水印效果", watermarkCanvas.width / 2, watermarkCanvas.height / 2);
+      return;
+    }
+
+    ctx.drawImage(watermarkImageObj, 0, 0, watermarkCanvas.width, watermarkCanvas.height);
+
+    const text = (watermarkTextInput?.value || "JAPAN RECON CAR GALLERY · VERIFIED STOCK").trim();
+    const pos = watermarkPositionSelect?.value || "bottom-right";
+    const opacity = (parseInt(watermarkOpacityRange?.value, 10) || 70) / 100;
+    const scale = parseInt(watermarkScaleRange?.value, 10) || 28;
+
+    ctx.save();
+    ctx.globalAlpha = opacity;
+
+    const fontSize = Math.max(10, Math.round((watermarkCanvas.width * scale) / 1000));
+    ctx.font = `bold ${fontSize}px sans-serif`;
+    const textMetrics = ctx.measureText(text);
+    const badgeW = textMetrics.width + 36;
+    const badgeH = fontSize + 16;
+
+    let x = watermarkCanvas.width - badgeW - 16;
+    let y = watermarkCanvas.height - badgeH - 16;
+
+    if (pos === "bottom-left") {
+      x = 16;
+      y = watermarkCanvas.height - badgeH - 16;
+    } else if (pos === "top-right") {
+      x = watermarkCanvas.width - badgeW - 16;
+      y = 16;
+    } else if (pos === "center") {
+      x = (watermarkCanvas.width - badgeW) / 2;
+      y = (watermarkCanvas.height - badgeH) / 2;
+    }
+
+    // Badge Background Pill with Gold Accent Border
+    ctx.fillStyle = "rgba(11, 14, 20, 0.82)";
+    ctx.beginPath();
+    ctx.roundRect(x, y, badgeW, badgeH, 6);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(229, 193, 88, 0.75)";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Icon & Text
+    ctx.fillStyle = "#e5c158";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    ctx.fillText("★", x + 10, y + badgeH / 2);
+
+    ctx.fillStyle = "#f8fafc";
+    ctx.fillText(text, x + 26, y + badgeH / 2);
+
+    ctx.restore();
+  }
+
+  if (!watermarkImageObj) {
+    const initImg = new Image();
+    initImg.crossOrigin = "anonymous";
+    initImg.onload = () => {
+      watermarkImageObj = initImg;
+      drawWatermark();
+    };
+    initImg.src = currentConfig.mainImage || "assets/audi-s5/main-car-16x9.jpg";
+  } else {
+    drawWatermark();
+  }
+
+  if (watermarkImageUpload) {
+    watermarkImageUpload.addEventListener("change", () => {
+      const file = watermarkImageUpload.files && watermarkImageUpload.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            watermarkImageObj = img;
+            drawWatermark();
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+
+  [watermarkTextInput, watermarkPositionSelect, watermarkOpacityRange, watermarkScaleRange].forEach(el => {
+    if (el) el.addEventListener("input", drawWatermark);
+  });
+
+  if (downloadWatermarkedBtn) {
+    downloadWatermarkedBtn.addEventListener("click", () => {
+      const dataUrl = watermarkCanvas.toDataURL("image/jpeg", 0.95);
+      const a = document.createElement("a");
+      a.href = dataUrl;
+      a.download = `watermarked-car-${Date.now()}.jpg`;
+      a.click();
+      showToast("加水印图片已保存并开始下载！", "success");
+    });
+  }
+
+  if (applyWatermarkToCurrentCarBtn) {
+    applyWatermarkToCurrentCarBtn.addEventListener("click", () => {
+      const dataUrl = watermarkCanvas.toDataURL("image/jpeg", 0.92);
+      currentConfig.mainImage = dataUrl;
+      if (mainImageUrlInput) mainImageUrlInput.value = dataUrl;
+      if (mainImagePreview) mainImagePreview.src = dataUrl;
+      renderCanvas();
+      setUnsaved(true);
+      pushHistory("应用防伪水印至主车图");
+      showToast("已成功将加水印照片设为当前车辆主图！", "success");
+    });
+  }
+}
+
+// ==========================================================================
+// 6. Bulk Vehicle Import via CSV / Excel
+// ==========================================================================
+
+function initCsvBulkImporter() {
+  if (downloadSampleCsvBtn) {
+    downloadSampleCsvBtn.addEventListener("click", () => {
+      const sampleCsv = [
+        "id,brand,model,year,price,mileage,engine,grade",
+        "porsche-macan-s,Porsche,Macan S 2.9 V6,2022,RM 468000,12800 km,2.9L Twin-Turbo,4.5",
+        "bmw-m340i,BMW,M340i xDrive Touring,2021,RM 398000,24500 km,3.0L B58 Turbo,5.0",
+        "lexus-rx300,Lexus,RX 300 F Sport,2020,RM 298000,31200 km,2.0L Turbo,4.5",
+        "amg-c43-estate,Mercedes-AMG,C 43 4MATIC Estate,2021,RM 378000,19500 km,3.0L V6 BiTurbo,4.5"
+      ].join("\n");
+      const blob = new Blob([sampleCsv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "sample-recon-inventory.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast("CSV 标准导入模板已下载！", "success");
+    });
+  }
+
+  if (csvFileInput) {
+    csvFileInput.addEventListener("change", () => {
+      const file = csvFileInput.files && csvFileInput.files[0];
+      if (file) parseCsvFile(file);
+    });
+  }
+
+  if (executeCsvImportBtn) {
+    executeCsvImportBtn.addEventListener("click", async () => {
+      if (!parsedCsvData || parsedCsvData.length === 0) return;
+      try {
+        const res = await fetch("/api/vehicles/import", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ vehicles: parsedCsvData })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          showToast(`已成功批量导入 ${data.importedCount} 辆车！`, "success");
+          pushHistory(`批量导入 ${data.importedCount} 辆库存车辆`);
+          if (adminVehicleSelect && data.vehicles) {
+            adminVehicleSelect.innerHTML = data.vehicles.map(v => 
+              `<option value="${v.id}">${v.name} (${v.price})</option>`
+            ).join("");
+            if (parsedCsvData[0] && parsedCsvData[0].id) {
+              adminVehicleSelect.value = parsedCsvData[0].id;
+              switchVehicle(parsedCsvData[0].id);
+            }
+          }
+          if (csvPreviewBox) csvPreviewBox.style.display = "none";
+        }
+      } catch (e) {
+        showToast("批量导入失败", "error");
+      }
+    });
+  }
+}
+
+function parseCsvFile(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const text = e.target.result;
+    const lines = text.split(/\r?\n/).filter(line => line.trim().length > 0);
+    if (lines.length < 2) {
+      showToast("CSV 内容行数不足", "error");
+      return;
+    }
+    const headers = lines[0].split(",").map(h => h.trim().toLowerCase());
+    parsedCsvData = [];
+
+    for (let i = 1; i < lines.length; i++) {
+      const parts = lines[i].split(",").map(p => p.trim());
+      if (parts.length < 3) continue;
+      const row = {};
+      headers.forEach((h, colIdx) => {
+        row[h] = parts[colIdx] || "";
+      });
+      parsedCsvData.push(row);
+    }
+
+    if (parsedCsvData.length > 0 && csvPreviewBox && csvPreviewTbody) {
+      csvParsedCountText.textContent = `解析完成: 找到 ${parsedCsvData.length} 辆车`;
+      csvPreviewTbody.innerHTML = parsedCsvData.map(r => `
+        <tr>
+          <td><code>${escapeHtml(r.id || "-")}</code></td>
+          <td>${escapeHtml(r.brand || "-")}</td>
+          <td><strong>${escapeHtml(r.model || r.name || "-")}</strong></td>
+          <td>${escapeHtml(r.year || "2022")}</td>
+          <td>${escapeHtml(r.price || "-")}</td>
+          <td>${escapeHtml(r.mileage || "-")}</td>
+          <td>${escapeHtml(r.engine || "-")}</td>
+        </tr>
+      `).join("");
+      csvPreviewBox.style.display = "flex";
+      showToast(`成功解析 CSV，包含 ${parsedCsvData.length} 辆库存车辆！`, "success");
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ==========================================================================
+// 7. Drag-and-Drop Image & Video Upload
+// ==========================================================================
+
+function initDragAndDropUploader() {
+  const dropZones = [
+    { el: adminStage, onDrop: (file) => uploadAndSetMainImage(file) },
+    { el: mainImageDropZone, onDrop: (file) => uploadAndSetMainImage(file) },
+    { el: forwardVideoDropZone, onDrop: (file) => uploadAndSetHotspotVideo(file, "forward") },
+    { el: reverseVideoDropZone, onDrop: (file) => uploadAndSetHotspotVideo(file, "reverse") },
+    { el: imageSrcDropZone, onDrop: (file) => uploadAndSetHotspotImage(file) },
+    { el: csvFileDropZone, onDrop: (file) => parseCsvFile(file) }
+  ];
+
+  dropZones.forEach(({ el, onDrop }) => {
+    if (!el) return;
+    el.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      el.classList.add("is-dragover");
+    });
+    el.addEventListener("dragleave", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      el.classList.remove("is-dragover");
+    });
+    el.addEventListener("drop", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      el.classList.remove("is-dragover");
+      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+        onDrop(e.dataTransfer.files[0]);
+      }
+    });
+  });
+}
+
+function uploadAndSetMainImage(file) {
+  if (!file.type.startsWith("image/")) {
+    showToast("请拖拽有效的图片文件 (JPG / PNG / WebP)", "error");
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    currentConfig.mainImage = dataUrl;
+    if (mainImageUrlInput) mainImageUrlInput.value = dataUrl;
+    if (mainImagePreview) mainImagePreview.src = dataUrl;
+    renderCanvas();
+    setUnsaved(true);
+    pushHistory("拖拽上传更新主车图");
+    showToast("主车图已通过拖拽更新！", "success");
+  };
+  reader.readAsDataURL(file);
+}
+
+function uploadAndSetHotspotImage(file) {
+  if (!file.type.startsWith("image/")) {
+    showToast("请拖拽图片文件", "error");
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    if (detailImageInput) detailImageInput.value = dataUrl;
+    if (detailImagePreview) detailImagePreview.src = dataUrl;
+    const item = currentConfig.hotspots.find(h => h.id === selectedHotspotId);
+    if (item) {
+      item.imageSrc = dataUrl;
+      renderCanvas();
+      setUnsaved(true);
+      pushHistory(`更新热点图片: ${item.label}`);
+      showToast(`已更新「${item.label}」特写图片！`, "success");
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function uploadAndSetHotspotVideo(file, type = "forward") {
+  if (!file.type.startsWith("video/")) {
+    showToast("请拖拽 MP4 / WebM 视频文件", "error");
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    const item = currentConfig.hotspots.find(h => h.id === selectedHotspotId);
+    if (type === "forward") {
+      if (forwardVideoInput) forwardVideoInput.value = dataUrl;
+      if (forwardVideoPreview) forwardVideoPreview.src = dataUrl;
+      if (item) item.forwardVideo = dataUrl;
+    } else {
+      if (reverseVideoInput) reverseVideoInput.value = dataUrl;
+      if (reverseVideoPreview) reverseVideoPreview.src = dataUrl;
+      if (item) item.reverseVideo = dataUrl;
+    }
+    setUnsaved(true);
+    pushHistory(`更新热点视频 (${type}): ${item ? item.label : ""}`);
+    showToast(`已成功上传热点 ${type === "forward" ? "正向" : "逆向"} 视频！`, "success");
+  };
+  reader.readAsDataURL(file);
+}
+
+// ==========================================================================
+// 8. Mobile Navigation Setup
+// ==========================================================================
+
+function setupMobileNavigation() {
+  if (!adminMobileNav) return;
+  adminMobileNav.querySelectorAll(".mobile-nav-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      adminMobileNav.querySelectorAll(".mobile-nav-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      const view = btn.dataset.view;
+
+      const canvasSection = document.querySelector(".admin-canvas-section");
+      const inspectorPanel = document.querySelector(".admin-inspector-panel");
+
+      if (view === "canvas") {
+        if (canvasSection) canvasSection.style.display = "";
+        if (inspectorPanel) inspectorPanel.style.display = "none";
+      } else {
+        if (canvasSection) canvasSection.style.display = "none";
+        if (inspectorPanel) inspectorPanel.style.display = "";
+        switchInspectorTab(view);
+      }
+    });
+  });
+
+  // Adjust display when resizing back to desktop
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 900) {
+      const canvasSection = document.querySelector(".admin-canvas-section");
+      const inspectorPanel = document.querySelector(".admin-inspector-panel");
+      if (canvasSection) canvasSection.style.display = "";
+      if (inspectorPanel) inspectorPanel.style.display = "";
+    }
+  });
 }
 
 // Quick Preset Adder
@@ -1766,9 +2892,85 @@ function setupEventListeners() {
   });
 
   // Inspector Tabs
-  tabHotspotBtn.addEventListener("click", () => switchInspectorTab("hotspot"));
-  tabVehicleBtn.addEventListener("click", () => switchInspectorTab("vehicle"));
-  tabJsonBtn.addEventListener("click", () => switchInspectorTab("json"));
+  if (tabHotspotBtn) tabHotspotBtn.addEventListener("click", () => switchInspectorTab("hotspot"));
+  if (tabVehicleBtn) tabVehicleBtn.addEventListener("click", () => switchInspectorTab("vehicle"));
+  if (tabLeadsBtn) tabLeadsBtn.addEventListener("click", () => switchInspectorTab("leads"));
+  if (tabHomepageBtn) tabHomepageBtn.addEventListener("click", () => switchInspectorTab("homepage"));
+  if (tabHistoryBtn) tabHistoryBtn.addEventListener("click", () => switchInspectorTab("history"));
+  if (tabToolsBtn) tabToolsBtn.addEventListener("click", () => switchInspectorTab("tools"));
+  if (tabJsonBtn) tabJsonBtn.addEventListener("click", () => switchInspectorTab("json"));
+
+  initHomepageSyncEvents();
+
+  // History Undo & Redo Actions
+  if (undoBtn) undoBtn.addEventListener("click", undo);
+  if (redoBtn) redoBtn.addEventListener("click", redo);
+  if (panelUndoBtn) panelUndoBtn.addEventListener("click", undo);
+  if (panelRedoBtn) panelRedoBtn.addEventListener("click", redo);
+  if (createSnapshotBtn) {
+    createSnapshotBtn.addEventListener("click", () => {
+      pushHistory("手动创建恢复快照");
+      showToast("已成功创建当前状态快照备份！", "success");
+    });
+  }
+
+  // Cost Margin Calculator Inputs & Button
+  [fobJpyInput, exchangeRateInput, oceanFreightInput, customsDutyInput, apFeeInput, portPuspakomInput, reconDetailingInput, targetMarginPctInput].forEach(el => {
+    if (el) el.addEventListener("input", calculateDealerCosts);
+  });
+  if (applyRecommendedPriceBtn) {
+    applyRecommendedPriceBtn.addEventListener("click", applyRecommendedPrice);
+  }
+
+  // Template Duplication Modal
+  if (duplicateTemplateBtn) duplicateTemplateBtn.addEventListener("click", openDuplicateTemplateDialog);
+  if (closeDuplicateTemplateDialogBtn) closeDuplicateTemplateDialogBtn.addEventListener("click", () => duplicateTemplateDialog.close());
+  if (cancelDuplicateTemplateBtn) cancelDuplicateTemplateBtn.addEventListener("click", () => duplicateTemplateDialog.close());
+  if (confirmDuplicateTemplateBtn) confirmDuplicateTemplateBtn.addEventListener("click", handleConfirmDuplicateTemplate);
+
+  // Leads Modal & Filter Actions
+  if (addLeadModalBtn && addLeadDialog) {
+    addLeadModalBtn.addEventListener("click", () => addLeadDialog.showModal());
+  }
+  if (closeAddLeadDialogBtn && addLeadDialog) {
+    closeAddLeadDialogBtn.addEventListener("click", () => addLeadDialog.close());
+  }
+  if (cancelAddLeadBtn && addLeadDialog) {
+    cancelAddLeadBtn.addEventListener("click", () => addLeadDialog.close());
+  }
+  if (confirmAddLeadBtn) {
+    confirmAddLeadBtn.addEventListener("click", handleConfirmAddLead);
+  }
+
+  document.querySelectorAll(".lead-stat-pill").forEach(pill => {
+    pill.addEventListener("click", () => {
+      document.querySelectorAll(".lead-stat-pill").forEach(p => p.classList.remove("active"));
+      pill.classList.add("active");
+      activeLeadFilter = pill.dataset.filter || "all";
+      renderLeadsList();
+    });
+  });
+
+  // Global Keyboard Shortcuts (Undo: Ctrl+Z / Cmd+Z, Redo: Ctrl+Y / Cmd+Shift+Z)
+  window.addEventListener("keydown", (e) => {
+    const isCtrlOrCmd = e.ctrlKey || e.metaKey;
+    if (!isCtrlOrCmd) return;
+    const activeEl = document.activeElement;
+    if (activeEl && (activeEl.tagName === "INPUT" || activeEl.tagName === "TEXTAREA")) return;
+
+    if (e.key === "z" || e.key === "Z") {
+      if (e.shiftKey) {
+        e.preventDefault();
+        redo();
+      } else {
+        e.preventDefault();
+        undo();
+      }
+    } else if (e.key === "y" || e.key === "Y") {
+      e.preventDefault();
+      redo();
+    }
+  });
 
   // Hotspot Form Coordinate Sliders & Inputs
   coordXRange.addEventListener("input", () => {
@@ -2024,6 +3226,13 @@ function setupEventListeners() {
       showToast("JSON 语法解析错误，请检查格式", "error");
     }
   });
+
+  // Vehicle Switcher
+  if (adminVehicleSelect) {
+    adminVehicleSelect.addEventListener("change", (e) => {
+      switchVehicle(e.target.value);
+    });
+  }
 
   // Global Header Actions
   saveConfigBtn.addEventListener("click", saveAllConfig);
